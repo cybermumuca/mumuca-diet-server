@@ -1,7 +1,7 @@
 package com.mumuca.diet.config;
 
 import com.mumuca.diet.model.Role;
-import com.mumuca.diet.repository.RolesRepository;
+import com.mumuca.diet.repository.RoleRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RoleConfig implements CommandLineRunner {
 
-    private final RolesRepository rolesRepository;
+    private final RoleRepository roleRepository;
 
     @Override
     @Transactional
@@ -21,8 +21,8 @@ public class RoleConfig implements CommandLineRunner {
         List<String> roleAuthorities = List.of("USER", "ADMIN");
 
         for (String roleAuthority : roleAuthorities) {
-            rolesRepository.findByAuthority(roleAuthority)
-                    .orElseGet(() -> rolesRepository.save(new Role(null, roleAuthority)));
+            roleRepository.findByAuthority(roleAuthority)
+                    .orElseGet(() -> roleRepository.save(new Role(null, roleAuthority)));
         }
     }
 }

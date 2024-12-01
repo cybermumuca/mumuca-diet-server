@@ -7,9 +7,9 @@ import com.mumuca.diet.exception.UserAlreadyExistsException;
 import com.mumuca.diet.dto.SignUpDTO;
 import com.mumuca.diet.model.Role;
 import com.mumuca.diet.model.User;
-import com.mumuca.diet.repository.RolesRepository;
-import com.mumuca.diet.repository.UsersRepository;
-import com.mumuca.diet.service.UsersService;
+import com.mumuca.diet.repository.RoleRepository;
+import com.mumuca.diet.repository.UserRepository;
+import com.mumuca.diet.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -24,22 +24,22 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
-public class UsersServiceImpl implements UsersService {
+public class UserServiceImpl implements UserService {
 
-    private final UsersRepository usersRepository;
-    private final RolesRepository rolesRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtEncoder jwtEncoder;
 
     @Override
     public void signUp(SignUpDTO signUpDTO) {
-        Optional<User> optionalUser = usersRepository.findByEmail(signUpDTO.email());
+        Optional<User> optionalUser = userRepository.findByEmail(signUpDTO.email());
 
         if (optionalUser.isPresent()) {
             throw new UserAlreadyExistsException("User already registered with email: " + signUpDTO.email());
         }
 
-        Role userRole = rolesRepository.findByAuthority("USER")
+        Role userRole = roleRepository.findByAuthority("USER")
                 .orElseThrow();
 
         User user = new User();
@@ -50,12 +50,12 @@ public class UsersServiceImpl implements UsersService {
         user.setEmail(signUpDTO.email());
         user.setPassword(passwordEncoder.encode(signUpDTO.password()));
 
-        usersRepository.save(user);
+        userRepository.save(user);
     }
 
     @Override
     public SignInResponseDTO signIn(SignInDTO signInDTO) {
-        var user = usersRepository.findByEmail(signInDTO.email());
+        var user = userRepository.findByEmail(signInDTO.email());
 
         if (user.isEmpty() || !passwordEncoder.matches(signInDTO.password(), user.get().getPassword())) {
             throw new CredentialsMismatchException("Email or password is invalid");

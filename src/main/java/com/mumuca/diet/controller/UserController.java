@@ -3,7 +3,7 @@ package com.mumuca.diet.controller;
 import com.mumuca.diet.dto.SignInDTO;
 import com.mumuca.diet.dto.SignInResponseDTO;
 import com.mumuca.diet.dto.SignUpDTO;
-import com.mumuca.diet.service.UsersService;
+import com.mumuca.diet.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/api")
 @AllArgsConstructor
-public class UsersController {
+public class UserController {
 
-    private final UsersService usersService;
+    private final UserService userService;
 
     @PostMapping(path = "/v1/auth/sign-up")
     public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpDTO signUpDTO) {
-        usersService.signUp(signUpDTO);
+        userService.signUp(signUpDTO);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -31,7 +31,7 @@ public class UsersController {
 
     @PostMapping(path = "/v1/auth/sign-in")
     public ResponseEntity<SignInResponseDTO> signIn(@RequestBody SignInDTO signInDTO) {
-        var signInResponse = usersService.signIn(signInDTO);
+        var signInResponse = userService.signIn(signInDTO);
         return ResponseEntity.ok(signInResponse);
     }
 }
