@@ -1,5 +1,7 @@
 package com.mumuca.diet.controller;
 
+import com.mumuca.diet.dto.SignInDTO;
+import com.mumuca.diet.dto.SignInResponseDTO;
 import com.mumuca.diet.dto.SignUpDTO;
 import com.mumuca.diet.service.UsersService;
 import jakarta.validation.Valid;
@@ -18,12 +20,18 @@ public class UsersController {
 
     private final UsersService usersService;
 
-    @PostMapping("/v1/auth/sign-up")
+    @PostMapping(path = "/v1/auth/sign-up")
     public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpDTO signUpDTO) {
         usersService.signUp(signUpDTO);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
+    }
+
+    @PostMapping(path = "/v1/auth/sign-in")
+    public ResponseEntity<SignInResponseDTO> signIn(@RequestBody SignInDTO signInDTO) {
+        var signInResponse = usersService.signIn(signInDTO);
+        return ResponseEntity.ok(signInResponse);
     }
 }

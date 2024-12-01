@@ -69,4 +69,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(CredentialsMismatchException.class)
+    public ResponseEntity<ErrorResponseDTO> handleCredentialsMismatchException(
+            CredentialsMismatchException ex,
+            WebRequest request
+    ) {
+        var errorResponseDTO = new ErrorResponseDTO(
+                request.getDescription(false).replace("uri=", ""),
+                HttpStatus.UNAUTHORIZED.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(errorResponseDTO, HttpStatus.UNAUTHORIZED);
+    }
 }
