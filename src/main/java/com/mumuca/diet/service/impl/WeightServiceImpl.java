@@ -2,6 +2,7 @@ package com.mumuca.diet.service.impl;
 
 import com.mumuca.diet.dto.WeightDTO;
 import com.mumuca.diet.dto.WeightRegistryDTO;
+import com.mumuca.diet.dto.WeightUpdateDTO;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.model.User;
 import com.mumuca.diet.model.Weight;
@@ -39,5 +40,23 @@ public class WeightServiceImpl implements WeightService {
         return weightRepository.findByIdAndUserId(weightId, userId)
                 .map((weight -> new WeightDTO(weight.getId(), weight.getRegistry(), weight.getDateTime())))
                 .orElseThrow(() -> new ResourceNotFoundException("Weight Registry not found."));
+    }
+
+    @Override
+    public WeightDTO updateRegistry(String weightId, WeightUpdateDTO weightUpdateDTO, String userId) {
+        Weight weightToUpdate = weightRepository.findByIdAndUserId(weightId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Weight Registry not found."));
+
+        if (weightUpdateDTO.registry() != null) {
+            weightToUpdate.setRegistry(weightUpdateDTO.registry());
+        }
+
+        if (weightUpdateDTO.dateTime() != null) {
+            weightToUpdate.setDateTime(weightUpdateDTO.dateTime());
+        }
+
+        weightRepository.save(weightToUpdate);
+
+        return new WeightDTO(weightId, weightToUpdate.getRegistry(), weightToUpdate.getDateTime());
     }
 }

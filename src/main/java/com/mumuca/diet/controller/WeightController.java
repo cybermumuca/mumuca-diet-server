@@ -2,6 +2,7 @@ package com.mumuca.diet.controller;
 
 import com.mumuca.diet.dto.WeightDTO;
 import com.mumuca.diet.dto.WeightRegistryDTO;
+import com.mumuca.diet.dto.WeightUpdateDTO;
 import com.mumuca.diet.service.WeightService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,20 @@ public class WeightController {
             @AuthenticationPrincipal Jwt jwt
     ) {
         WeightDTO weightDTO = weightService.getRegistry(id, jwt.getSubject());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(weightDTO);
+    }
+
+
+    @PutMapping(path = "/v1/weights/{id}")
+    public ResponseEntity<WeightDTO> updateWeight(
+            @PathVariable(value = "id") String weightId,
+            @Valid @RequestBody WeightUpdateDTO weightUpdateDTO,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        WeightDTO weightDTO = weightService.updateRegistry(weightId, weightUpdateDTO, jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
