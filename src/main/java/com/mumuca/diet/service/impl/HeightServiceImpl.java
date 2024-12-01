@@ -1,7 +1,7 @@
 package com.mumuca.diet.service.impl;
 
-import com.mumuca.diet.dto.HeightDTO;
-import com.mumuca.diet.dto.HeightRegistryDTO;
+import com.mumuca.diet.dto.*;
+import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.model.Height;
 import com.mumuca.diet.model.User;
 import com.mumuca.diet.repository.HeightRepository;
@@ -31,5 +31,39 @@ public class HeightServiceImpl implements HeightService {
         Height heightSaved = heightRepository.save(height);
 
         return new HeightDTO(heightSaved.getId(), heightSaved.getRegistry(), heightSaved.getDateTime());
+    }
+
+    @Override
+    public HeightDTO getHeightRegistry(String heightId, String userId) {
+        return heightRepository.findByIdAndUserId(heightId, userId)
+                .map((height -> new HeightDTO(height.getId(), height.getRegistry(), height.getDateTime())))
+                .orElseThrow(() -> new ResourceNotFoundException("Height Registry not found."));
+    }
+
+    @Override
+    public HeightDTO updateHeightRegistry(String heightId, HeightUpdateDTO heightUpdateDTO, String userId) {
+        Height heightToUpdate = heightRepository.findByIdAndUserId(heightId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Height Registry not found."));
+
+        if (heightUpdateDTO.registry() != null) {
+            heightToUpdate.setRegistry(heightUpdateDTO.registry());
+        }
+
+        if (heightUpdateDTO.dateTime() != null) {
+            heightToUpdate.setDateTime(heightUpdateDTO.dateTime());
+        }
+
+        heightRepository.save(heightToUpdate);
+
+        return new HeightDTO(heightId, heightToUpdate.getRegistry(), heightToUpdate.getDateTime());
+    }
+
+
+    @Override
+    public void deleteHeightRegistry(String heightId, String userId) {
+        Height heightToDelete = heightRepository.findByIdAndUserId(heightId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Height Registry not found."));
+
+        heightRepository.deleteById(heightToDelete.getId());
     }
 }
