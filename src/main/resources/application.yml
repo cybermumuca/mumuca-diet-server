@@ -13,6 +13,7 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
     defer-datasource-initialization: true
+    open-in-view: false
   sql:
     init:
       mode: always
@@ -22,3 +23,6 @@ jwt:
     key: classpath:app.pub
   private:
     key: classpath:app.key
+
+bcrypt:
+  salt: 13
