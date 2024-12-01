@@ -59,4 +59,12 @@ public class WeightServiceImpl implements WeightService {
 
         return new WeightDTO(weightId, weightToUpdate.getRegistry(), weightToUpdate.getDateTime());
     }
+
+    @Override
+    public void deleteRegistry(String weightId, String userId) {
+        Weight weightToDelete = weightRepository.findByIdAndUserId(weightId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Weight Registry not found."));
+
+        weightRepository.deleteById(weightToDelete.getId());
+    }
 }

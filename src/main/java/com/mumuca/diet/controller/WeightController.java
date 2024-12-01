@@ -56,4 +56,16 @@ public class WeightController {
                 .status(HttpStatus.OK)
                 .body(weightDTO);
     }
+
+    @DeleteMapping(path = "/v1/weights/{id}")
+    public ResponseEntity<Void> deleteWeight(
+            @PathVariable(value = "id") String weightId,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        weightService.deleteRegistry(weightId, jwt.getSubject());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
 }
