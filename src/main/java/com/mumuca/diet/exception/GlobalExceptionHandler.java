@@ -45,6 +45,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             Exception exception,
             WebRequest webRequest
     ) {
+        System.out.println(exception);
+
         var errorResponseDTO = new ErrorResponseDTO(
                 webRequest.getDescription(false).replace("uri=", ""),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),

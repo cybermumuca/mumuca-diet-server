@@ -34,6 +34,9 @@ public class SecurityConfig {
     @Value("${jwt.private.key}")
     private RSAPrivateKey privateKey;
 
+    @Value("${bcrypt.salt}")
+    private int bcryptSalt;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -54,7 +57,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(13);
+        return new BCryptPasswordEncoder(bcryptSalt);
     }
 
     @Bean
