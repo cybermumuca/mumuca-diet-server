@@ -1,16 +1,21 @@
 package com.mumuca.diet.service.impl;
 
 import com.mumuca.diet.dto.food.*;
+import com.mumuca.diet.dto.meal.MealDTO;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.model.Food;
+import com.mumuca.diet.model.Meal;
 import com.mumuca.diet.model.NutritionalInformation;
 import com.mumuca.diet.model.User;
 import com.mumuca.diet.repository.FoodRepository;
+import com.mumuca.diet.repository.MealRepository;
 import com.mumuca.diet.repository.UserRepository;
 import com.mumuca.diet.service.FoodService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -18,6 +23,7 @@ public class FoodServiceImpl implements FoodService {
 
     private final FoodRepository foodRepository;
     private final UserRepository userRepository;
+    private final MealRepository mealRepository;
 
     @Override
     @Transactional
@@ -286,12 +292,23 @@ public class FoodServiceImpl implements FoodService {
         }
     }
 
-
     @Override
     public void deleteFood(String foodId, String userId) {
         Food foodToDelete = foodRepository.findByIdAndUserId(foodId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Food not found."));
 
         foodRepository.deleteById(foodToDelete.getId());
+    }
+
+    @Override
+    public List<MealDTO> getFoodMeals(String foodId, String userId) {
+        return mealRepository.findByFoodsIdAndUserId(foodId, userId)
+                .stream()
+                .map(meal -> new MealDTO(
+                        meal.getId(),
+                        meal.getTitle(),
+                        meal.getDescription(),
+                        meal.getType()
+                )).toList();
     }
 }

@@ -5,6 +5,7 @@ import com.mumuca.diet.dto.food.CreateFoodDTO;
 import com.mumuca.diet.dto.food.FoodDTO;
 import com.mumuca.diet.dto.food.NutritionalInformationDTO;
 import com.mumuca.diet.dto.food.UpdateFoodDTO;
+import com.mumuca.diet.dto.meal.MealDTO;
 import com.mumuca.diet.service.FoodService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -55,6 +58,18 @@ public class FoodController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(nutritionalInformationDTO);
+    }
+
+    @GetMapping(path = "/v1/foods/{id}/meals")
+    public ResponseEntity<List<MealDTO>> getFoodMeals(
+            @PathVariable("id") String foodId,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        List<MealDTO> mealDTOList = foodService.getFoodMeals(foodId, jwt.getSubject());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(mealDTOList);
     }
 
     @PutMapping(path = "/v1/foods/{id}")
