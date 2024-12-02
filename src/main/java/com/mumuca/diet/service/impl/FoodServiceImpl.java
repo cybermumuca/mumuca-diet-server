@@ -6,7 +6,6 @@ import com.mumuca.diet.model.Food;
 import com.mumuca.diet.model.NutritionalInformation;
 import com.mumuca.diet.model.User;
 import com.mumuca.diet.repository.FoodRepository;
-import com.mumuca.diet.repository.NutritionalInformationRepository;
 import com.mumuca.diet.repository.UserRepository;
 import com.mumuca.diet.service.FoodService;
 import jakarta.transaction.Transactional;

@@ -10,13 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "foods")
+@Table(name = "meals")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Food {
-
+public class Meal {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -25,19 +24,21 @@ public class Food {
     private String title;
 
     @Column
-    private String brand;
-
-    @Column
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "nutritional_information_id", referencedColumnName = "id", unique = true)
-    private NutritionalInformation nutritionalInformation;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MealType type;
+
+    @ManyToMany
+    @JoinTable(
+            name = "meal_foods",
+            joinColumns = @JoinColumn(name = "meal_id"),
+            inverseJoinColumns = @JoinColumn(name = "food_id")
+    )
+    private List<Food> foods = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    @ManyToMany(mappedBy = "foods")
-    private List<Meal> meals = new ArrayList<>();
 }
