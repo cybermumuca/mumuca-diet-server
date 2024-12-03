@@ -1,6 +1,7 @@
 package com.mumuca.diet.service.impl;
 
 import com.mumuca.diet.dto.CompleteRegistrationDTO;
+import com.mumuca.diet.dto.DiagnosisDTO;
 import com.mumuca.diet.dto.RegistrationCompletedDTO;
 import com.mumuca.diet.exception.UserAlreadyRegisteredException;
 import com.mumuca.diet.model.*;
@@ -9,6 +10,7 @@ import com.mumuca.diet.repository.GoalRepository;
 import com.mumuca.diet.repository.ProfileRepository;
 import com.mumuca.diet.repository.UserRepository;
 import com.mumuca.diet.service.UserService;
+import com.mumuca.diet.util.NutritionalCalculator;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -65,17 +67,19 @@ public class UserServiceImpl implements UserService {
         goal.setTargetWeight(completeRegistrationDTO.targetWeight());
 
         int targetCalories = this.calculateTargetCalories(
-                completeRegistrationDTO.goal(),
-                body,
-                profile,
-                completeRegistrationDTO.activityLevel()
+                body.getWeight(),
+                body.getHeight(),
+                profile.getAge(),
+                profile.getGender(),
+                profile.getActivityLevel(),
+                goal.getGoalType()
         );
 
         goal.setTargetCalories(targetCalories);
 
         this.setMacronutrientAndWaterTargets(goal, body);
 
-        LocalDate deadLine = this.calculateDeadline(
+        LocalDate deadLine = NutritionalCalculator.calculateDeadline(
                 goal.getGoalType(),
                 body.getWeight(),
                 completeRegistrationDTO.targetWeight()
@@ -102,45 +106,28 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @Override
+    public DiagnosisDTO generateDiagnosis(DiagnosisDTO diagnosisDTO, String userId) {
+        return null;
+    }
+
     private int calculateTargetCalories(
-            GoalType goalType,
-            Body body,
-            Profile profile,
-            ActivityLevel activityLevel
+            BigDecimal weight,
+            BigDecimal height,
+            int age,
+            Gender gender,
+            ActivityLevel activityLevel,
+            GoalType goalType
     ) {
-        BigDecimal bmr;
+        BigDecimal bmr = NutritionalCalculator.calculateBMR(
+                weight,
+                height,
+                age,
+                gender
+        );
 
-        int age = profile.getAge();
-
-        if (profile.getGender() == Gender.MALE) {
-            bmr = BigDecimal.valueOf(88.362)
-                    .add(BigDecimal.valueOf(13.397).multiply(body.getWeight()))
-                    .add(BigDecimal.valueOf(4.799).multiply(body.getHeight().multiply(BigDecimal.valueOf(100))))
-                    .subtract(BigDecimal.valueOf(5.677).multiply(BigDecimal.valueOf(age)));
-        } else {
-            bmr = BigDecimal.valueOf(447.6)
-                    .add(BigDecimal.valueOf(9.2).multiply(body.getWeight()))
-                    .add(BigDecimal.valueOf(3.1).multiply(body.getHeight().multiply(BigDecimal.valueOf(100))))
-                    .subtract(BigDecimal.valueOf(4.3).multiply(BigDecimal.valueOf(age)));
-        }
-
-        BigDecimal activityFactor = switch (activityLevel) {
-            case SEDENTARY -> BigDecimal.valueOf(1.2);
-            case LIGHTLY_ACTIVE -> BigDecimal.valueOf(1.375);
-            case MODERATELY_ACTIVE -> BigDecimal.valueOf(1.55);
-            case VERY_ACTIVE -> BigDecimal.valueOf(1.725);
-            case EXTRA_ACTIVE -> BigDecimal.valueOf(1.9);
-        };
-
-        BigDecimal totalCalories = bmr.multiply(activityFactor);
-
-        BigDecimal adjustedCalories = switch (goalType) {
-            case LOSE_WEIGHT -> totalCalories.multiply(BigDecimal.valueOf(0.8));
-            case GAIN_WEIGHT -> totalCalories.multiply(BigDecimal.valueOf(1.2));
-            case MAINTAIN_WEIGHT -> totalCalories;
-        };
-
-        return adjustedCalories.setScale(0, RoundingMode.HALF_UP).intValue();
+        BigDecimal caloriesAdjustedForActivity = NutritionalCalculator.adjustCaloriesForActivity(bmr, activityLevel);
+        return NutritionalCalculator.adjustCaloriesForGoal(caloriesAdjustedForActivity, goalType).intValue();
     }
 
     // TODO: Improve this
@@ -166,29 +153,4 @@ public class UserServiceImpl implements UserService {
 
         goal.setWaterIntakeTarget(waterInLiters);
     }
-
-    private LocalDate calculateDeadline(GoalType goalType, BigDecimal currentWeight, BigDecimal targetWeight) {
-        long weeksToAchieveGoal;
-
-        switch (goalType) {
-            case LOSE_WEIGHT -> {
-                // Perda de peso: 0.75 kg/semana
-                BigDecimal weightToLose = currentWeight.subtract(targetWeight);
-                weeksToAchieveGoal = weightToLose.divide(BigDecimal.valueOf(0.75), RoundingMode.CEILING).longValue();
-            }
-            case GAIN_WEIGHT -> {
-                // Ganho de peso: 0.375 kg/semana
-                BigDecimal weightToGain = targetWeight.subtract(currentWeight);
-                weeksToAchieveGoal = weightToGain.divide(BigDecimal.valueOf(0.375), RoundingMode.CEILING).longValue();
-            }
-            default -> {
-                // Manutenção de peso: Prazo padrão (ex: 6 meses)
-                weeksToAchieveGoal = 26;
-            }
-        }
-
-        // Calcula a data final com base nas semanas
-        return LocalDate.now().plusWeeks(weeksToAchieveGoal);
-    }
-
 }
