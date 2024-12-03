@@ -1,5 +1,8 @@
 package com.mumuca.diet.service;
 
-public interface UserService {
+import com.mumuca.diet.dto.CompleteRegistrationDTO;
+import com.mumuca.diet.dto.RegistrationCompletedDTO;
 
+public interface UserService {
+    RegistrationCompletedDTO completeRegistration(CompleteRegistrationDTO completeRegistrationDTO, String userId);
 }

@@ -1,6 +1,9 @@
-package com.mumuca.diet.exception;
+package com.mumuca.diet.exception.handler;
 
 import com.mumuca.diet.dto.ErrorResponseDTO;
+import com.mumuca.diet.exception.CredentialsMismatchException;
+import com.mumuca.diet.exception.ResourceNotFoundException;
+import com.mumuca.diet.exception.UserAlreadyExistsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
