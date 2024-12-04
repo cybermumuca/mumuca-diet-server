@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface BodyRepository extends JpaRepository<Body, String> {
     Optional<Body> findByIdAndUserId(String id, String userId);
+    Optional<Body> findFirstByUserIdOrderByDateDesc(String userId);
 }

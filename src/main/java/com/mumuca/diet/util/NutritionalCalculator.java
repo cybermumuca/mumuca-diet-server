@@ -8,6 +8,8 @@ import com.mumuca.diet.model.GoalType;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NutritionalCalculator {
     /**
@@ -222,5 +224,40 @@ public class NutritionalCalculator {
 
         // Calcula a data final com base nas semanas
         return LocalDate.now().plusWeeks(weeksToAchieveGoal);
+    }
+
+    /**
+     * Calcula o peso ideal mínimo e máximo com base no IMC (Índice de Massa Corporal)
+     * para uma pessoa de determinada altura.
+     *
+     * @param height A altura em metros.
+     * @return Um array contendo o peso mínimo e o peso máximo ideal para a altura fornecida.
+     */
+    public static List<BigDecimal> calculateIdealWeight(BigDecimal height) {
+        BigDecimal minWeight = BigDecimal.valueOf(18.5).multiply(height.pow(2)).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal maxWeight = BigDecimal.valueOf(24.9).multiply(height.pow(2)).setScale(2, RoundingMode.HALF_UP);
+
+        return List.of(minWeight, maxWeight);
+    }
+
+    /**
+     * Estima o percentual de gordura corporal com base no IMC e idade.
+     * A fórmula utilizada varia para homens e mulheres.
+     *
+     * @param weight Peso em kg.
+     * @param height Altura em metros.
+     * @param age Idade em anos.
+     * @param gender Gênero da pessoa (MALE, FEMALE).
+     * @return Estimativa do percentual de gordura corporal.
+     */
+    public static BigDecimal calculateBodyFat(BigDecimal weight, BigDecimal height, int age, Gender gender) {
+        BigDecimal bmi = calculateBMI(weight, height);
+
+        BigDecimal genderConstant = gender == Gender.MALE ? BigDecimal.valueOf(16.2) : BigDecimal.valueOf(5.4);
+
+        return bmi.multiply(BigDecimal.valueOf(1.20))
+                .add(BigDecimal.valueOf(0.23).multiply(BigDecimal.valueOf(age)))
+                .subtract(genderConstant)
+                .setScale(2, RoundingMode.HALF_UP);
     }
 }

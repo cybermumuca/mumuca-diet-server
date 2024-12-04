@@ -1,5 +1,6 @@
 package com.mumuca.diet.service.impl;
 
+import com.mumuca.diet.dto.BmiDTO;
 import com.mumuca.diet.dto.CompleteRegistrationDTO;
 import com.mumuca.diet.dto.DiagnosisDTO;
 import com.mumuca.diet.dto.RegistrationCompletedDTO;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+
+import static com.mumuca.diet.util.NutritionalCalculator.*;
 
 @Service
 @AllArgsConstructor
@@ -58,7 +61,9 @@ public class UserServiceImpl implements UserService {
         profile.setActivityLevel(completeRegistrationDTO.activityLevel());
         profile.setUser(user);
 
-        profileRepository.save(profile);
+        user.setProfile(profile);
+
+        userRepository.save(user);
 
         Goal goal = new Goal();
 
@@ -107,8 +112,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public DiagnosisDTO generateDiagnosis(DiagnosisDTO diagnosisDTO, String userId) {
-        return null;
+    public DiagnosisDTO generateDiagnosis(String userId) {
+        Body body = bodyRepository.findFirstByUserIdOrderByDateDesc(userId)
+                        .orElseThrow(() -> new RuntimeException("Body not found."));
+
+        Profile profile = profileRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Profile not found."));
+
+        BigDecimal bmiValue = calculateBMI(body.getWeight(), body.getHeight());
+        String bmiClassification = classifyBMI(bmiValue);
+        var bmi = new BmiDTO(bmiValue.floatValue(), bmiClassification);
+
+        var idealWeight = calculateIdealWeight(body.getHeight());
+        String fatRate = "%.1f%%".formatted(calculateBodyFat(body.getWeight(), body.getHeight(), profile.getAge(), profile.getGender()));
+
+        return new DiagnosisDTO(
+                bmi,
+                idealWeight.getFirst().floatValue(),
+                idealWeight.getLast().floatValue(),
+                fatRate
+        );
     }
 
     private int calculateTargetCalories(
