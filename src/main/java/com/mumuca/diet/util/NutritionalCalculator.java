@@ -8,7 +8,6 @@ import com.mumuca.diet.model.GoalType;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class NutritionalCalculator {
@@ -55,13 +54,13 @@ public class NutritionalCalculator {
                     .add(BigDecimal.valueOf(13.397).multiply(weight))
                     .add(BigDecimal.valueOf(4.799).multiply(heightInCm))
                     .subtract(BigDecimal.valueOf(5.677).multiply(BigDecimal.valueOf(age)))
-                    .setScale(2, RoundingMode.HALF_UP);
+                    .setScale(0, RoundingMode.HALF_UP);
         } else {
             return BigDecimal.valueOf(447.593)
                     .add(BigDecimal.valueOf(9.247).multiply(weight))
                     .add(BigDecimal.valueOf(3.098).multiply(heightInCm))
                     .subtract(BigDecimal.valueOf(4.330).multiply(BigDecimal.valueOf(age)))
-                    .setScale(2, RoundingMode.HALF_UP);
+                    .setScale(0, RoundingMode.HALF_UP);
         }
     }
 
@@ -85,7 +84,7 @@ public class NutritionalCalculator {
             case EXTRA_ACTIVE -> BigDecimal.valueOf(1.9);
         };
 
-        return bmr.multiply(activityFactor).setScale(2, RoundingMode.HALF_UP);
+        return bmr.multiply(activityFactor).setScale(0, RoundingMode.HALF_UP);
     }
 
 
