@@ -25,10 +25,10 @@ public class Goal {
     private GoalType goalType;
 
     @Column(name = "target_calories", nullable = false)
-    private int targetCalories;
+    private int targetCalories; // kcal
 
     @Column(name = "target_weight", nullable = false)
-    private BigDecimal targetWeight;
+    private BigDecimal targetWeight; // kg
 
     @Column(name = "protein_target", nullable = false)
     private BigDecimal proteinTarget; // g

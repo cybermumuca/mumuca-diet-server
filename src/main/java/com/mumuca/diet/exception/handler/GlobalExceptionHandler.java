@@ -4,6 +4,7 @@ import com.mumuca.diet.dto.ErrorResponseDTO;
 import com.mumuca.diet.exception.CredentialsMismatchException;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.exception.UserAlreadyExistsException;
+import com.mumuca.diet.exception.UserNotRegisteredYetException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -103,5 +104,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         );
 
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserNotRegisteredYetException.class)
+    public ResponseEntity<ErrorResponseDTO> handleUserNotRegisteredYetException(
+            UserNotRegisteredYetException ex,
+            WebRequest request
+    ) {
+        var errorResponseDTO = new ErrorResponseDTO(
+                request.getDescription(false).replace("uri=", ""),
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(errorResponseDTO, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 }

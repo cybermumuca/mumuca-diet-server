@@ -5,6 +5,7 @@ import com.mumuca.diet.dto.CompleteRegistrationDTO;
 import com.mumuca.diet.dto.DiagnosisDTO;
 import com.mumuca.diet.dto.RegistrationCompletedDTO;
 import com.mumuca.diet.exception.UserAlreadyRegisteredException;
+import com.mumuca.diet.exception.UserNotRegisteredYetException;
 import com.mumuca.diet.model.*;
 import com.mumuca.diet.repository.BodyRepository;
 import com.mumuca.diet.repository.GoalRepository;
@@ -114,10 +115,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public DiagnosisDTO generateDiagnosis(String userId) {
         Body body = bodyRepository.findFirstByUserIdOrderByDateDesc(userId)
-                        .orElseThrow(() -> new RuntimeException("Body not found."));
+                        .orElseThrow(() -> new UserNotRegisteredYetException("Body not found."));
 
         Profile profile = profileRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Profile not found."));
+                .orElseThrow(() -> new UserNotRegisteredYetException("Profile not found."));
 
         BigDecimal bmiValue = calculateBMI(body.getWeight(), body.getHeight());
         String bmiClassification = classifyBMI(bmiValue);
