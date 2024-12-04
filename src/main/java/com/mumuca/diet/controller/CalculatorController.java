@@ -6,6 +6,10 @@ import com.mumuca.diet.model.ActivityLevel;
 import com.mumuca.diet.model.Gender;
 import com.mumuca.diet.model.GoalType;
 import com.mumuca.diet.util.NutritionalCalculator;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +26,15 @@ public class CalculatorController {
 
     @GetMapping(path = "/v1/calculator/bmi")
     public ResponseEntity<BmiDTO> calculateBMI(
-            @RequestParam("weight") BigDecimal weight,
-            @RequestParam("height") BigDecimal height
+            @RequestParam("weight")
+            @NotNull(message = "The weight cannot be null.")
+            @Positive(message = "The weight must be a positive value.")
+            BigDecimal weight,
+
+            @RequestParam("height")
+            @NotNull(message = "The height cannot be null.")
+            @Positive(message = "The height must be a positive value.")
+            BigDecimal height
     ) {
         var bmiValue = NutritionalCalculator.calculateBMI(weight, height);
         var bmiClassification = NutritionalCalculator.classifyBMI(bmiValue);
@@ -35,8 +46,15 @@ public class CalculatorController {
 
     @GetMapping(path = "/v1/calculator/bmi/value")
     public ResponseEntity<Map<String, Float>> calculateBMIValue(
-            @RequestParam("weight") BigDecimal weight,
-            @RequestParam("height") BigDecimal height
+            @RequestParam("weight")
+            @NotNull(message = "The weight cannot be null.")
+            @Positive(message = "The weight must be a positive value.")
+            BigDecimal weight,
+
+            @RequestParam("height")
+            @NotNull(message = "The height cannot be null.")
+            @Positive(message = "The height must be a positive value.")
+            BigDecimal height
     ) {
         var bmiValue = NutritionalCalculator.calculateBMI(weight, height);
 
@@ -60,7 +78,10 @@ public class CalculatorController {
 
     @GetMapping(path = "/v1/calculator/ideal-weight")
     public ResponseEntity<Map<String, Float>> calculateIdealWeight(
-            @RequestParam("height") BigDecimal height
+            @RequestParam("height")
+            @NotNull(message = "The height cannot be null.")
+            @Positive(message = "The height must be a positive value.")
+            BigDecimal height
     ) {
         var idealWeight = NutritionalCalculator.calculateIdealWeight(height);
 
@@ -76,11 +97,27 @@ public class CalculatorController {
 
     @GetMapping(path = "/v1/calculator/bmr")
     public ResponseEntity<Map<String, Integer>> calculateBMR(
-            @RequestParam("weight") BigDecimal weight,
-            @RequestParam("height") BigDecimal height,
-            @RequestParam("age") int age,
-            @RequestParam("gender") Gender gender,
-            @RequestParam("activityLevel") ActivityLevel activity
+            @RequestParam("weight")
+            @NotNull(message = "The weight cannot be null.")
+            @Positive(message = "The weight must be a positive value.")
+            BigDecimal weight,
+
+            @RequestParam("height")
+            @NotNull(message = "The height cannot be null.")
+            @Positive(message = "The height must be a positive value.")
+            BigDecimal height,
+
+            @RequestParam("age")
+            @NotNull(message = "The age cannot be null.")
+            int age,
+
+            @RequestParam("gender")
+            @NotNull(message = "The gender cannot be null.")
+            Gender gender,
+
+            @RequestParam("activityLevel")
+            @NotNull(message = "The activity level cannot be null.")
+            ActivityLevel activity
     ) {
         BigDecimal bmr = NutritionalCalculator.calculateBMR(weight, height, age, gender);
         BigDecimal bmrWithActivity = NutritionalCalculator.adjustCaloriesForActivity(bmr, activity);
@@ -104,10 +141,23 @@ public class CalculatorController {
 
     @GetMapping(path = "/v1/calculator/body-fat")
     public ResponseEntity<Map<String, Float>> calculateBodyFat(
-            @RequestParam("weight") BigDecimal weight,
-            @RequestParam("height") BigDecimal height,
-            @RequestParam("age") int age,
-            @RequestParam("gender") Gender gender
+            @RequestParam("weight")
+            @NotNull(message = "The weight cannot be null.")
+            @Positive(message = "The weight must be a positive value.")
+            BigDecimal weight,
+
+            @RequestParam("height")
+            @NotNull(message = "The height cannot be null.")
+            @Positive(message = "The height must be a positive value.")
+            BigDecimal height,
+
+            @RequestParam("age")
+            @NotNull(message = "The age cannot be null.")
+            int age,
+
+            @RequestParam("gender")
+            @NotNull(message = "The gender cannot be null.")
+            Gender gender
     ) {
         BigDecimal bodyFat = NutritionalCalculator.calculateBodyFat(weight, height, age, gender);
         return ResponseEntity
@@ -117,10 +167,25 @@ public class CalculatorController {
 
     @GetMapping(path = "/v1/calculator/macronutrient")
     public ResponseEntity<MacronutrientDTO> calculateMacronutrients(
-            @RequestParam("targetCalories") BigDecimal targetCalories,
-            @RequestParam("proteinPercentage") BigDecimal proteinPercentage,
-            @RequestParam("carbsPercentage") BigDecimal carbsPercentage,
-            @RequestParam("fatPercentage") BigDecimal fatPercentage
+            @RequestParam("targetCalories")
+            @NotNull(message = "Target calories cannot be null.")
+            @Positive(message = "The target calories must be a positive value.")
+            BigDecimal targetCalories,
+
+            @RequestParam("proteinPercentage")
+            @NotNull(message = "Protein percentage cannot be null.")
+            @Positive(message = "The protein percentage must be a positive value.")
+            BigDecimal proteinPercentage,
+
+            @RequestParam("carbsPercentage")
+            @NotNull(message = "Carbohydrates percentage cannot be null.")
+            @Positive(message = "The carbohydrates percentage must be a positive value.")
+            BigDecimal carbsPercentage,
+
+            @RequestParam("fatPercentage")
+            @NotNull(message = "Fat percentage cannot be null.")
+            @Positive(message = "The fat percentage must be a positive value.")
+            BigDecimal fatPercentage
     ) {
         var macronutrientDTO = NutritionalCalculator.calculateMacronutrients(
                 targetCalories,
@@ -136,7 +201,10 @@ public class CalculatorController {
 
     @GetMapping(path = "/v1/calculator/water-intake")
     public ResponseEntity<Map<String, Float>> calculateWaterIntake(
-            @RequestParam("weight") BigDecimal weight
+            @RequestParam("weight")
+            @NotNull(message = "The weight cannot be null.")
+            @Positive(message = "The weight must be a positive value.")
+            BigDecimal weight
     ) {
         var waterIntake = NutritionalCalculator.calculateWaterIntake(weight);
 
