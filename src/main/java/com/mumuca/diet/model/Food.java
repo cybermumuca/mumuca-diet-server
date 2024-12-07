@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "foods")
@@ -39,5 +39,8 @@ public class Food {
     private User user;
 
     @ManyToMany(mappedBy = "foods")
-    private List<Meal> meals = new ArrayList<>();
+    private Set<Meal> meals = new LinkedHashSet<>();
+
+    @ManyToMany(mappedBy = "foods")
+    private Set<MealLog> mealLogs = new LinkedHashSet<>();
 }

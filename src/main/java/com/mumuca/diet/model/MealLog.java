@@ -6,40 +6,50 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "meals")
+@Table(name = "meal_logs")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Meal {
+public class MealLog {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @Column(nullable = false)
-    private String title;
-
-    @Column
-    private String description;
-
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private MealType type;
 
+    @Column(nullable = false)
+    private LocalDate date;
+
+    @Column(nullable = false)
+    private LocalTime time;
+
+    @Column(nullable = false)
+    private Integer caloriesGoal;
+
     @ManyToMany
     @JoinTable(
-            name = "meal_foods",
-            joinColumns = @JoinColumn(name = "meal_id"),
+            name = "meal_log_meals",
+            joinColumns = @JoinColumn(name = "meal_log_id"),
+            inverseJoinColumns = @JoinColumn(name = "meal_id")
+    )
+    private Set<Meal> meals = new LinkedHashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "meal_log_foods",
+            joinColumns = @JoinColumn(name = "meal_log_id"),
             inverseJoinColumns = @JoinColumn(name = "food_id")
     )
     private Set<Food> foods = new LinkedHashSet<>();
-
-    @ManyToMany(mappedBy = "meals")
-    private Set<MealLog> mealLogs = new LinkedHashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
