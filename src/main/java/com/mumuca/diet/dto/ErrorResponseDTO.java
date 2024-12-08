@@ -1,13 +1,11 @@
 package com.mumuca.diet.dto;
 
-import lombok.Builder;
-
 import java.time.LocalDateTime;
 
-@Builder
-public record ErrorResponseDTO(
+public record ErrorResponseDTO<T>(
         String apiPath,
         int statusCode,
         String errorMessage,
+        T details,
         LocalDateTime errorTime
 ) {}

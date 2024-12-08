@@ -18,21 +18,22 @@ import java.time.LocalDateTime;
 public class UserControllerExceptionHandler {
 
     @ExceptionHandler(UserAlreadyRegisteredException.class)
-    public ResponseEntity<ErrorResponseDTO> handleUserAlreadyRegisteredException(
+    public ResponseEntity<ErrorResponseDTO<String>> handleUserAlreadyRegisteredException(
             UserAlreadyRegisteredException ex,
             WebRequest request
     ) {
-        var errorResponseDTO = ErrorResponseDTO.builder()
-                .errorMessage(ex.getMessage())
-                .errorTime(LocalDateTime.now())
-                .statusCode(HttpStatus.CONFLICT.value())
-                .apiPath(request.getDescription(false)
-                        .replace("uri=", "")
-                )
-                .build();
+        var statusCode = HttpStatus.CONFLICT;
+
+        var errorResponseDTO = new ErrorResponseDTO<>(
+                request.getDescription(false).replace("uri=", ""),
+                statusCode.value(),
+                ex.getMessage(),
+                "This action can only be performed once.",
+                LocalDateTime.now()
+        );
 
         return ResponseEntity
-                .status(HttpStatus.CONFLICT)
+                .status(statusCode)
                 .body(errorResponseDTO);
     }
 }

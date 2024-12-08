@@ -4,12 +4,14 @@ import com.mumuca.diet.dto.body.BodyDTO;
 import com.mumuca.diet.dto.body.BodyRegistryDTO;
 import com.mumuca.diet.dto.body.BodyRegistryUpdateDTO;
 import com.mumuca.diet.service.BodyService;
+import com.mumuca.diet.validator.ValidUUID;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,7 +35,7 @@ public class BodyController {
 
     @GetMapping(path = "/v1/bodies/{id}")
     public ResponseEntity<BodyDTO> getBodyRegistry(
-            @PathVariable("id") String bodyId,
+            @PathVariable("id") @Valid @ValidUUID String bodyId,
             @AuthenticationPrincipal Jwt jwt
     ) {
         BodyDTO bodyDTO = bodyService.getBodyRegistry(bodyId, jwt.getSubject());
@@ -45,7 +47,7 @@ public class BodyController {
 
     @PutMapping(path = "/v1/bodies/{id}")
     public ResponseEntity<Void> updateBodyRegistry(
-            @PathVariable("id") String bodyId,
+            @PathVariable("id") @Valid @ValidUUID String bodyId,
             @Valid @RequestBody BodyRegistryUpdateDTO bodyRegistryUpdateDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
@@ -58,7 +60,7 @@ public class BodyController {
 
     @DeleteMapping(path = "/v1/bodies/{id}")
     public ResponseEntity<Void> deleteBodyRegistry(
-            @PathVariable("id") String bodyId,
+            @PathVariable("id") @Valid @ValidUUID String bodyId,
             @AuthenticationPrincipal Jwt jwt
     ) {
         bodyService.deleteBodyRegistry(bodyId, jwt.getSubject());
