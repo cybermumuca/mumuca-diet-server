@@ -7,6 +7,7 @@ import com.mumuca.diet.dto.food.NutritionalInformationDTO;
 import com.mumuca.diet.dto.food.UpdateFoodDTO;
 import com.mumuca.diet.dto.meal.MealDTO;
 import com.mumuca.diet.service.FoodService;
+import com.mumuca.diet.validator.ValidUUID;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ public class FoodController {
 
     @GetMapping(path = "/v1/foods/{id}")
     public ResponseEntity<FoodDTO> getFood(
-            @PathVariable("id") String foodId,
+            @PathVariable("id") @Valid @ValidUUID String foodId,
             @AuthenticationPrincipal Jwt jwt
     ) {
         FoodDTO foodDTO = foodService.getFood(foodId, jwt.getSubject());
@@ -50,7 +51,7 @@ public class FoodController {
 
     @GetMapping(path = "/v1/foods/{id}/nutritional-info")
     public ResponseEntity<NutritionalInformationDTO> getFoodNutritionalInformation(
-            @PathVariable("id") String foodId,
+            @PathVariable("id") @Valid @ValidUUID String foodId,
             @AuthenticationPrincipal Jwt jwt
     ) {
         NutritionalInformationDTO nutritionalInformationDTO = foodService.getFoodNutritionalInformation(foodId, jwt.getSubject());
@@ -62,7 +63,7 @@ public class FoodController {
 
     @GetMapping(path = "/v1/foods/{id}/meals")
     public ResponseEntity<List<MealDTO>> getFoodMeals(
-            @PathVariable("id") String foodId,
+            @PathVariable("id") @Valid @ValidUUID String foodId,
             @AuthenticationPrincipal Jwt jwt
     ) {
         List<MealDTO> mealDTOList = foodService.getFoodMeals(foodId, jwt.getSubject());
@@ -74,7 +75,7 @@ public class FoodController {
 
     @PutMapping(path = "/v1/foods/{id}")
     public ResponseEntity<FoodDTO> updateFood(
-            @PathVariable("id") String foodId,
+            @PathVariable("id") @Valid @ValidUUID String foodId,
             @Valid @RequestBody UpdateFoodDTO updateFoodDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
@@ -87,7 +88,7 @@ public class FoodController {
 
     @DeleteMapping(path = "/v1/foods/{id}")
     public ResponseEntity<Void> deleteFood(
-            @PathVariable("id") String foodId,
+            @PathVariable("id") @Valid @ValidUUID String foodId,
             @AuthenticationPrincipal Jwt jwt
     ) {
         foodService.deleteFood(foodId, jwt.getSubject());
