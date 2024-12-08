@@ -6,6 +6,7 @@ import com.mumuca.diet.dto.meal.MealNutritionalInformationDTO;
 import com.mumuca.diet.dto.meal.MealWithFoodsDTO;
 import com.mumuca.diet.dto.meallog.*;
 import com.mumuca.diet.service.MealLogService;
+import com.mumuca.diet.validator.ValidUUID;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class MealLogController {
 
     @GetMapping(path = "/v1/meal-logs/{id}")
     public ResponseEntity<MealLogDTO> getMealLog(
-            @PathVariable("id") String mealLogId,
+            @PathVariable("id") @Valid @ValidUUID String mealLogId,
             @AuthenticationPrincipal Jwt jwt
     ) {
         MealLogDTO mealLogDTO = mealLogService.getMealLog(mealLogId, jwt.getSubject());
@@ -56,7 +57,7 @@ public class MealLogController {
 
     @GetMapping(path = "/v1/meal-logs/{id}/foods")
     public ResponseEntity<List<FoodDTO>> getMealLogFoods(
-            @PathVariable("id") String mealLogId,
+            @PathVariable("id") @Valid @ValidUUID String mealLogId,
             @AuthenticationPrincipal Jwt jwt
     ) {
         List<FoodDTO> foodDTOList = mealLogService.getMealLogFoods(mealLogId, jwt.getSubject());
@@ -68,7 +69,7 @@ public class MealLogController {
 
     @GetMapping(path = "/v1/meal-logs/{id}/meals")
     public ResponseEntity<List<MealWithFoodsDTO>> getMealLogMeals(
-            @PathVariable("id") String mealLogId,
+            @PathVariable("id") @Valid @ValidUUID String mealLogId,
             @AuthenticationPrincipal Jwt jwt
     ) {
         List<MealWithFoodsDTO> mealWithFoodsDTOList = mealLogService.getMealLogMeals(mealLogId, jwt.getSubject());
@@ -80,7 +81,7 @@ public class MealLogController {
 
     @GetMapping(path = "/v1/meal-logs/{id}/nutritional-info")
     public ResponseEntity<MealNutritionalInformationDTO> getMealLogNutritionalInformation(
-            @PathVariable("id") String mealLogId,
+            @PathVariable("id") @Valid @ValidUUID String mealLogId,
             @AuthenticationPrincipal Jwt jwt
     ) {
         MealNutritionalInformationDTO mealNutritionalInformationDTO = mealLogService.getMealLogNutritionalInformation(mealLogId, jwt.getSubject());
@@ -105,7 +106,7 @@ public class MealLogController {
 
     @PostMapping(path = "/v1/meal-logs/{id}/foods")
     public ResponseEntity<Void> addFoodsToMealLog(
-            @PathVariable("id") String mealLogId,
+            @PathVariable("id") @Valid @ValidUUID String mealLogId,
             @Valid @RequestBody AddFoodsToMealLogDTO addFoodsToMealLogDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
@@ -118,7 +119,7 @@ public class MealLogController {
 
     @PostMapping(path = "/v1/meal-logs/{id}/meals")
     public ResponseEntity<Void> addMealsToMealLog(
-            @PathVariable("id") String mealLogId,
+            @PathVariable("id") @Valid @ValidUUID String mealLogId,
             @Valid @RequestBody AddMealsToMealLogDTO addMealsToMealLogDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
@@ -132,7 +133,7 @@ public class MealLogController {
 
     @PutMapping(path = "/v1/meal-logs/{id}")
     public ResponseEntity<Void> updateMealLog(
-            @PathVariable("id") String mealLogId,
+            @PathVariable("id") @Valid @ValidUUID String mealLogId,
             @Valid @RequestBody UpdateMealLogDTO updateMealLogDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
@@ -145,7 +146,7 @@ public class MealLogController {
 
     @DeleteMapping(path = "/v1/meal-logs/{id}")
     public ResponseEntity<Void> deleteMealLog(
-            @PathVariable("id") String mealLogId,
+            @PathVariable("id") @Valid @ValidUUID String mealLogId,
             @AuthenticationPrincipal Jwt jwt
     ) {
         mealLogService.deleteMealLog(mealLogId, jwt.getSubject());
@@ -157,7 +158,7 @@ public class MealLogController {
 
     @DeleteMapping(path = "/v1/meal-logs/{id}/foods")
     public ResponseEntity<Void> deleteMealLogFoods(
-            @PathVariable("id") String mealLogId,
+            @PathVariable("id") @Valid @ValidUUID String mealLogId,
             @Valid @RequestBody DeleteMealLogFoodsDTO deleteMealLogFoodsDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
@@ -170,7 +171,7 @@ public class MealLogController {
 
     @DeleteMapping(path = "/v1/meal-logs/{id}/meals")
     public ResponseEntity<Void> deleteMealLogMeals(
-            @PathVariable("id") String mealLogId,
+            @PathVariable("id") @Valid @ValidUUID String mealLogId,
             @Valid @RequestBody DeleteMealLogMealsDTO deleteMealLogMealsDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
