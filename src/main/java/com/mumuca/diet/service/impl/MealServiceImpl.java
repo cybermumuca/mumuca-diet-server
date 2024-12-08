@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -40,7 +41,7 @@ public class MealServiceImpl implements MealService {
 
         List<Food> foods = foodRepository.findAllByIdsAndUserId(createMealDTO.foodIds(), userId);
 
-        meal.setFoods(foods);
+        meal.setFoods(Set.copyOf(foods));
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
