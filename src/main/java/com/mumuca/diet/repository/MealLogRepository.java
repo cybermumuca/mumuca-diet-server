@@ -87,8 +87,4 @@ public interface MealLogRepository extends JpaRepository<MealLog, String> {
     );
 
     List<MealLog> findByDateAndUserId(LocalDate date, String userId);
-
-    // TODO: Test this later
-    @Query("SELECT m FROM MealLog m WHERE m.date = (SELECT MAX(m2.date) FROM MealLog m2 WHERE m2.user.id = :userId) AND m.user.id = :userId")
-    List<MealLog> findAllMealLogsFromLastDay(@Param("userId") String userId);
 }

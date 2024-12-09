@@ -1,7 +1,6 @@
 package com.mumuca.diet.controller;
 
 import com.mumuca.diet.dto.food.FoodDTO;
-import com.mumuca.diet.dto.meal.MealDTO;
 import com.mumuca.diet.dto.meal.MealNutritionalInformationDTO;
 import com.mumuca.diet.dto.meal.MealWithFoodsDTO;
 import com.mumuca.diet.dto.meallog.*;
@@ -47,7 +46,14 @@ public class MealLogController {
             LocalDate date,
             @AuthenticationPrincipal Jwt jwt
     ) {
-        List<MealLogDTO> mealLogDTOList = mealLogService.findOrCreateMealLogsByDate(date, jwt.getSubject());
+        List<MealLogDTO> mealLogDTOList = mealLogService
+                .findMealLogsByDate(date, jwt.getSubject());
+
+        if (mealLogDTOList.isEmpty()) {
+            return ResponseEntity
+                    .noContent()
+                    .build();
+        }
 
         return ResponseEntity
                 .status(HttpStatus.OK)

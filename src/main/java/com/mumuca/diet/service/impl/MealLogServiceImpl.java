@@ -7,10 +7,7 @@ import com.mumuca.diet.dto.meal.MealWithFoodsDTO;
 import com.mumuca.diet.dto.meallog.*;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.model.*;
-import com.mumuca.diet.repository.FoodRepository;
-import com.mumuca.diet.repository.MealLogRepository;
-import com.mumuca.diet.repository.MealRepository;
-import com.mumuca.diet.repository.UserRepository;
+import com.mumuca.diet.repository.*;
 import com.mumuca.diet.service.MealLogService;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
@@ -75,48 +72,21 @@ public class MealLogServiceImpl implements MealLogService {
                 .orElseThrow(() -> new ResourceNotFoundException("Meal Log not found."));
     }
 
-    // TODO: Review later, the user should store MealLog preferences, probably a new entity
     @Override
     @Transactional
-    public List<MealLogDTO> findOrCreateMealLogsByDate(LocalDate date, String userId) {
+    public List<MealLogDTO> findMealLogsByDate(LocalDate date, String userId) {
         List<MealLog> mealLogs = mealLogRepository.findByDateAndUserId(date, userId);
 
-        if (!mealLogs.isEmpty()) {
-            return mealLogs
-                    .stream()
-                    .map(mealLog -> new MealLogDTO(
-                            mealLog.getId(),
-                            mealLog.getType(),
-                            mealLog.getDate(),
-                            mealLog.getTime(),
-                            mealLog.getCaloriesGoal()
-                    ))
-                    .collect(Collectors.toList());
-        }
-
-        List<MealLog> mealLogsFromLastDay = mealLogRepository.findAllMealLogsFromLastDay(userId);
-
-        return mealLogsFromLastDay
+        return mealLogs
                 .stream()
-                .map(mealLog -> {
-                    MealLog newMealLog = new MealLog();
-                    newMealLog.setDate(date);
-                    newMealLog.setTime(mealLog.getTime());
-                    newMealLog.setCaloriesGoal(mealLog.getCaloriesGoal());
-                    newMealLog.setType(mealLog.getType());
-                    var user = new User();
-                    user.setId(userId);
-                    newMealLog.setUser(user);
-                    mealLogRepository.save(newMealLog);
-
-                    return new MealLogDTO(
-                            newMealLog.getId(),
-                            newMealLog.getType(),
-                            newMealLog.getDate(),
-                            newMealLog.getTime(),
-                            newMealLog.getCaloriesGoal()
-                    );
-                }).toList();
+                .map(mealLog -> new MealLogDTO(
+                        mealLog.getId(),
+                        mealLog.getType(),
+                        mealLog.getDate(),
+                        mealLog.getTime(),
+                        mealLog.getCaloriesGoal()
+                ))
+                .collect(Collectors.toList());
     }
 
     @Override
