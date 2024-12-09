@@ -58,6 +58,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(errorResponseDTO);
     }
 
+    // TODO: Improve error validation
     @Override
     protected ResponseEntity<Object> handleHandlerMethodValidationException(
             HandlerMethodValidationException ex,
@@ -86,6 +87,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(errorResponseDTO);
     }
 
+    // TODO: add error Log
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO<String>> handleGlobalException(
             Exception exception,

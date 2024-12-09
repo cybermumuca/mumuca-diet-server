@@ -51,4 +51,14 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "profile_id", referencedColumnName = "id", unique = true)
     private Profile profile;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<MealLog> mealLogs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<MealLogPreference> mealLogPreferences = new ArrayList<>();
+
+    public User(String id) {
+        this.id = id;
+    }
 }
