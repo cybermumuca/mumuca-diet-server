@@ -36,8 +36,9 @@ public class MealLogController {
                 .body(mealLogDTO);
     }
 
+
     @GetMapping(path = "/v1/meal-logs")
-    public ResponseEntity<List<MealLogDTO>> getMealLogsByDate(
+    public ResponseEntity<List<MealLogWithCaloriesConsumedDTO>> getMealLogsByDate(
             @RequestParam(
                     value = "date",
                     required = false,
@@ -46,10 +47,10 @@ public class MealLogController {
             LocalDate date,
             @AuthenticationPrincipal Jwt jwt
     ) {
-        List<MealLogDTO> mealLogDTOList = mealLogService
-                .findMealLogsByDate(date, jwt.getSubject());
+        List<MealLogWithCaloriesConsumedDTO> mealLogWithCaloriesConsumedDTOList =
+                mealLogService.findMealLogsByDate(date, jwt.getSubject());
 
-        if (mealLogDTOList.isEmpty()) {
+        if (mealLogWithCaloriesConsumedDTOList.isEmpty()) {
             return ResponseEntity
                     .noContent()
                     .build();
@@ -57,7 +58,7 @@ public class MealLogController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(mealLogDTOList);
+                .body(mealLogWithCaloriesConsumedDTOList);
     }
 
 

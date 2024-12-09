@@ -14,7 +14,7 @@ public interface MealLogService {
     MealLogDTO createMealLog(CreateMealLogDTO createMealLogDTO, String userId);
     void deleteMealLog(String mealLogId, String userId);
     MealLogDTO getMealLog(String mealLogId, String userId);
-    List<MealLogDTO> findMealLogsByDate(LocalDate date, String userId);
+    List<MealLogWithCaloriesConsumedDTO> findMealLogsByDate(LocalDate date, String userId);
     List<FoodDTO> getMealLogFoods(String mealLogId, String userId);
     List<MealWithFoodsDTO> getMealLogMeals(String mealLogId, String userId);
     MealNutritionalInformationDTO getMealLogNutritionalInformation(String mealLogId, String userId);

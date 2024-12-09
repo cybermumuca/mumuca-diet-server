@@ -46,8 +46,8 @@ public interface MealLogRepository extends JpaRepository<MealLog, String> {
             SUM(ni.vitaminC)
         )
         FROM MealLog ml
-        JOIN ml.foods mealLogFoods
-        JOIN mealLogFoods.nutritionalInformation ni
+        LEFT JOIN ml.foods mealLogFoods
+        LEFT JOIN mealLogFoods.nutritionalInformation ni
         WHERE ml.id = :mealLogId AND ml.user.id = :userId
     """)
     Optional<MealNutritionalInformationDTO> sumFoodsNutritionalInformationByMealLogIdAndUserId(
@@ -85,6 +85,19 @@ public interface MealLogRepository extends JpaRepository<MealLog, String> {
             @Param("mealLogId") String mealLogId,
             @Param("userId") String userId
     );
+
+    //TODO: Test this
+    @Query("""
+       SELECT SUM(COALESCE(ni.calories, 0)) + SUM(COALESCE(mfi.calories, 0))
+       FROM MealLog ml
+       LEFT JOIN ml.foods mealLogFoods
+       LEFT JOIN mealLogFoods.nutritionalInformation ni
+       LEFT JOIN ml.meals mealLogMeals
+       LEFT JOIN mealLogMeals.foods mealFoods
+       LEFT JOIN mealFoods.nutritionalInformation mfi
+       WHERE ml.id = :mealLogId AND ml.user.id = :userId
+    """)
+    Optional<Integer> sumFoodsAndMealsCaloriesByMealLogIdAndUserId(@Param("mealLogId") String mealLogId, @Param("userId") String userId);
 
     List<MealLog> findByDateAndUserId(LocalDate date, String userId);
 }

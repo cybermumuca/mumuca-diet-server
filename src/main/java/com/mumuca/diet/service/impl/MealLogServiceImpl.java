@@ -74,18 +74,25 @@ public class MealLogServiceImpl implements MealLogService {
 
     @Override
     @Transactional
-    public List<MealLogDTO> findMealLogsByDate(LocalDate date, String userId) {
+    public List<MealLogWithCaloriesConsumedDTO> findMealLogsByDate(LocalDate date, String userId) {
         List<MealLog> mealLogs = mealLogRepository.findByDateAndUserId(date, userId);
 
         return mealLogs
                 .stream()
-                .map(mealLog -> new MealLogDTO(
-                        mealLog.getId(),
-                        mealLog.getType(),
-                        mealLog.getDate(),
-                        mealLog.getTime(),
-                        mealLog.getCaloriesGoal()
-                ))
+                .map(mealLog -> {
+                    var caloriesConsumed = mealLogRepository
+                            .sumFoodsAndMealsCaloriesByMealLogIdAndUserId(mealLog.getId(), userId)
+                            .orElse(0);
+
+                    return new MealLogWithCaloriesConsumedDTO(
+                            mealLog.getId(),
+                            mealLog.getType(),
+                            mealLog.getDate(),
+                            mealLog.getTime(),
+                            mealLog.getCaloriesGoal(),
+                            caloriesConsumed
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
