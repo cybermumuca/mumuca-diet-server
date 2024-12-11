@@ -5,7 +5,9 @@ import com.mumuca.diet.exception.CredentialsMismatchException;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.exception.UserAlreadyExistsException;
 import com.mumuca.diet.exception.UserNotRegisteredYetException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSourceResolvable;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -19,12 +21,29 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    private <T> ResponseEntity<ErrorResponseDTO<T>> buildErrorResponse(
+            WebRequest request,
+            HttpStatus status,
+            String title,
+            T details
+    ) {
+        ErrorResponseDTO<T> errorResponse = new ErrorResponseDTO<>(
+                request.getDescription(false).replace("uri=", ""),
+                status.value(),
+                title,
+                details,
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(status).body(errorResponse);
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
@@ -33,15 +52,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatusCode status,
             WebRequest request
     ) {
-        Map<String, String> validationErrors = new HashMap<>();
-
-        ex.getBindingResult()
+        Map<String, String> validationErrors = ex.getBindingResult()
                 .getAllErrors()
-                .forEach((error) -> {
-                    String fieldName = ((FieldError) error).getField();
-                    String validationMsg = error.getDefaultMessage();
-                    validationErrors.put(fieldName, validationMsg);
-                });
+                .stream()
+                .collect(Collectors.toMap(
+                        error -> ((FieldError) error).getField(),
+                        DefaultMessageSourceResolvable::getDefaultMessage
+                ));
 
         var statusCode = HttpStatus.BAD_REQUEST;
 
@@ -87,27 +104,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(errorResponseDTO);
     }
 
-    // TODO: add error Log
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO<String>> handleGlobalException(
-            Exception exception,
+            Exception ex,
             WebRequest request
     ) {
-        exception.printStackTrace();
-
-        var statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-
-        ErrorResponseDTO<String> errorResponseDTO = new ErrorResponseDTO<>(
+        log.error(
+                "Unexpected internal error in path: {}",
                 request.getDescription(false).replace("uri=", ""),
-                statusCode.value(),
-                "Internal Server Error.",
-                "An unexpected error occurred.",
-                LocalDateTime.now()
+                ex
         );
 
-        return ResponseEntity
-                .status(statusCode)
-                .body(errorResponseDTO);
+        return buildErrorResponse(
+                request,
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal Server Error.",
+                "An unexpected error occurred."
+        );
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
@@ -115,19 +128,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             UserAlreadyExistsException ex,
             WebRequest request
     ) {
-        var statusCode = HttpStatus.CONFLICT;
-
-        ErrorResponseDTO<String> errorResponseDTO = new ErrorResponseDTO<String>(
-                request.getDescription(false).replace("uri=", ""),
-                statusCode.value(),
+        return buildErrorResponse(
+                request,
+                HttpStatus.CONFLICT,
                 "User Already Exists.",
-                ex.getMessage(),
-                LocalDateTime.now()
+                ex.getMessage()
         );
-
-        return ResponseEntity
-                .status(statusCode)
-                .body(errorResponseDTO);
     }
 
     @ExceptionHandler(CredentialsMismatchException.class)
@@ -135,19 +141,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             CredentialsMismatchException ex,
             WebRequest request
     ) {
-        var statusCode = HttpStatus.UNAUTHORIZED;
-
-        ErrorResponseDTO<String> errorResponseDTO = new ErrorResponseDTO<>(
-                request.getDescription(false).replace("uri=", ""),
-                statusCode.value(),
+        return buildErrorResponse(
+                request,
+                HttpStatus.UNAUTHORIZED,
                 "Credentials mismatch.",
-                ex.getMessage(),
-                LocalDateTime.now()
+                ex.getMessage()
         );
-
-        return ResponseEntity
-                .status(statusCode)
-                .body(errorResponseDTO);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -155,19 +154,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             ResourceNotFoundException ex,
             WebRequest request
     ) {
-        var statusCode = HttpStatus.NOT_FOUND;
-
-        var errorResponseDTO = new ErrorResponseDTO<String>(
-                request.getDescription(false).replace("uri=", ""),
-                statusCode.value(),
+        return buildErrorResponse(
+                request,
+                HttpStatus.NOT_FOUND,
                 "Resource not found.",
-                ex.getMessage(),
-                LocalDateTime.now()
+                ex.getMessage()
         );
-
-        return ResponseEntity
-                .status(statusCode)
-                .body(errorResponseDTO);
     }
 
     @ExceptionHandler(UserNotRegisteredYetException.class)
@@ -175,18 +167,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             UserNotRegisteredYetException ex,
             WebRequest request
     ) {
-        var statusCode = HttpStatus.UNPROCESSABLE_ENTITY;
-
-        var errorResponseDTO = new ErrorResponseDTO<>(
-                request.getDescription(false).replace("uri=", ""),
-                statusCode.value(),
-                ex.getMessage(),
-                "Complete the registration before performing this action.",
-                LocalDateTime.now()
+        return buildErrorResponse(
+                request,
+                HttpStatus.UNPROCESSABLE_ENTITY,
+                "User Not Registered Yet.",
+                "Complete the registration before performing this action."
         );
-
-        return ResponseEntity
-                .status(statusCode)
-                .body(errorResponseDTO);
     }
 }
