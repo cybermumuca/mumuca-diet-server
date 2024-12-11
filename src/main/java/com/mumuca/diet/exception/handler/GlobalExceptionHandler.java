@@ -1,10 +1,7 @@
 package com.mumuca.diet.exception.handler;
 
 import com.mumuca.diet.dto.ErrorResponseDTO;
-import com.mumuca.diet.exception.CredentialsMismatchException;
-import com.mumuca.diet.exception.ResourceNotFoundException;
-import com.mumuca.diet.exception.UserAlreadyExistsException;
-import com.mumuca.diet.exception.UserNotRegisteredYetException;
+import com.mumuca.diet.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -172,6 +169,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.UNPROCESSABLE_ENTITY,
                 "User Not Registered Yet.",
                 "Complete the registration before performing this action."
+        );
+    }
+
+    @ExceptionHandler(UniqueMealLogPreferenceException.class)
+    public ResponseEntity<ErrorResponseDTO<String>> handleUniqueMealLogPreferenceException(
+            UniqueMealLogPreferenceException ex,
+            WebRequest request
+    ) {
+        return buildErrorResponse(
+                request,
+                HttpStatus.EXPECTATION_FAILED,
+                ex.getMessage(),
+                "It is not possible to register a Meal of the same type."
         );
     }
 }

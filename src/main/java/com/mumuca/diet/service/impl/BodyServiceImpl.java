@@ -19,12 +19,10 @@ import static com.mumuca.diet.util.UpdateUtils.updateIfDifferent;
 public class BodyServiceImpl implements BodyService {
 
     private final BodyRepository bodyRepository;
-    private final UserRepository userRepository;
 
     @Override
     public BodyDTO registerBody(BodyRegistryDTO bodyRegistryDTO, String userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = new User(userId);
 
         Body body = new Body();
         body.setHeight(bodyRegistryDTO.height());

@@ -11,7 +11,6 @@ import com.mumuca.diet.model.User;
 import com.mumuca.diet.repository.FoodRepository;
 import com.mumuca.diet.repository.MealRepository;
 import com.mumuca.diet.repository.NutritionalInformationRepository;
-import com.mumuca.diet.repository.UserRepository;
 import com.mumuca.diet.service.MealService;
 import com.mumuca.diet.util.UpdateUtils;
 import lombok.AllArgsConstructor;
@@ -28,10 +27,10 @@ import java.util.Set;
 public class MealServiceImpl implements MealService {
 
     private final FoodRepository foodRepository;
-    private final UserRepository userRepository;
     private final MealRepository mealRepository;
     private final NutritionalInformationRepository nutritionalInformationRepository;
 
+    // TODO: refactor
     @Override
     @Transactional
     public MealDTO createMeal(CreateMealDTO createMealDTO, String userId) {
@@ -45,8 +44,7 @@ public class MealServiceImpl implements MealService {
 
         meal.setFoods(Set.copyOf(foods));
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = new User(userId);
 
         meal.setUser(user);
 

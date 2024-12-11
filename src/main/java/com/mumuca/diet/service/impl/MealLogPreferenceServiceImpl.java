@@ -4,6 +4,8 @@ import com.mumuca.diet.dto.meallogpreferences.CreateMealLogPreferenceDTO;
 import com.mumuca.diet.dto.meallogpreferences.MealLogPreferenceDTO;
 import com.mumuca.diet.dto.meallogpreferences.UpdateMealLogPreferenceDTO;
 import com.mumuca.diet.exception.ResourceNotFoundException;
+import com.mumuca.diet.exception.UniqueMealLogPreferenceException;
+import com.mumuca.diet.exception.UserNotRegisteredYetException;
 import com.mumuca.diet.model.MealLogPreference;
 import com.mumuca.diet.model.MealType;
 import com.mumuca.diet.model.User;
@@ -54,9 +56,8 @@ public class MealLogPreferenceServiceImpl implements MealLogPreferenceService {
 
         var user = new User(userId);
 
-        // TODO: throw UserNotRegisteredYet exception and catch it in GlobalExceptionHandler
         int userTargetCalories = goalRepository.findTargetCaloriesByUserId(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Goal not found for user " + userId));
+                .orElseThrow(() -> new UserNotRegisteredYetException("Goal not found."));
 
         return createMealLogPreferenceDTOList
                 .stream()
@@ -72,8 +73,7 @@ public class MealLogPreferenceServiceImpl implements MealLogPreferenceService {
                             .existsByTypeAndUserId(createMealLogPreferenceDTO.type(), userId);
 
                     if (mealLogPreferenceWithSameTypeExists) {
-                        // TODO: Throw a more specific exception
-                        throw new RuntimeException("There is already a preference with the same type");
+                        throw new UniqueMealLogPreferenceException("There is already a preference with the same type");
                     }
 
                     var mealLogPreferenceToSave = new MealLogPreference();

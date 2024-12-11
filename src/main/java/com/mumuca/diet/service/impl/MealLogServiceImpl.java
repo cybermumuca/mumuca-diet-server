@@ -29,12 +29,10 @@ public class MealLogServiceImpl implements MealLogService {
     private final MealLogRepository mealLogRepository;
     private final FoodRepository foodRepository;
     private final MealRepository mealRepository;
-    private final UserRepository userRepository;
 
     @Override
     public MealLogDTO createMealLog(CreateMealLogDTO createMealLogDTO, String userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not Found."));
+        User user = new User(userId);
 
         MealLog mealLog = new MealLog();
 

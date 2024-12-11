@@ -29,7 +29,7 @@ public class FoodServiceImpl implements FoodService {
     @Override
     @Transactional
     public FoodDTO createFood(CreateFoodDTO createFoodDTO, String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = new User(userId);
 
         Food food = new Food();
 
