@@ -16,6 +16,10 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+        session:
+          events:
+            log:
+              LOG_QUERIES_SLOWER_THAN_MS: 300
   sql:
     init:
       mode: always
