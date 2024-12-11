@@ -14,7 +14,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
@@ -243,49 +245,53 @@ public class MealLogServiceImpl implements MealLogService {
 
     @Override
     public void addFoodsToMealLog(String mealLogId, AddFoodsToMealLogDTO addFoodsToMealLogDTO, String userId) {
-        MealLog mealLog = mealLogRepository
+        MealLog mealLogToAddFoods = mealLogRepository
                 .findMealLogByIdAndUserIdWithFoods(mealLogId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Meal Log not found."));
 
         List<Food> foodsToAdd = foodRepository
                 .findAllByIdsAndUserId(addFoodsToMealLogDTO.foodIds(), userId);
 
-        if (foodsToAdd.isEmpty()) {
-            throw new ResourceNotFoundException("Foods not found.");
-        }
-
         if (foodsToAdd.size() != addFoodsToMealLogDTO.foodIds().size()) {
-            throw new ResourceNotFoundException("Some food were not found.");
+            throw new ResourceNotFoundException("Some foods were not found.");
         }
 
-        foodsToAdd.stream()
-                .filter(food -> !mealLog.getFoods().contains(food))
-                .forEach(food -> mealLog.getFoods().add(food));
+        Set<Food> existingFoods = new HashSet<>(mealLogToAddFoods.getFoods());
 
-        mealLogRepository.save(mealLog);
+        List<Food> uniqueFoodsToAdd = foodsToAdd.stream()
+                .filter(food -> !existingFoods.contains(food))
+                .toList();
+
+        if (!uniqueFoodsToAdd.isEmpty()) {
+            mealLogToAddFoods.getFoods().addAll(uniqueFoodsToAdd);
+            mealLogRepository.save(mealLogToAddFoods);
+        }
     }
 
     @Override
     public void addMealsToMealLog(String mealLogId, AddMealsToMealLogDTO addMealsToMealLogDTO, String userId) {
-        MealLog mealLog = mealLogRepository
+        MealLog mealLogToAddMeals = mealLogRepository
                 .findMealLogByIdAndUserIdWithMeals(mealLogId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Meal Log not found."));
 
         List<Meal> mealsToAdd = mealRepository.findAllByIdsAndUserId(addMealsToMealLogDTO.mealIds(), userId);
 
-        if (mealsToAdd.isEmpty()) {
-            throw new ResourceNotFoundException("Meals not found.");
-        }
-
         if (mealsToAdd.size() != addMealsToMealLogDTO.mealIds().size()) {
-            throw new ResourceNotFoundException("Some meal were not found.");
+            throw new ResourceNotFoundException("Some meals were not found.");
         }
 
-        mealsToAdd.stream()
-                .filter(meal -> !mealLog.getMeals().contains(meal))
-                .forEach(meal -> mealLog.getMeals().add(meal));
+        Set<Meal> existingMeals = new HashSet<>(mealLogToAddMeals.getMeals());
 
-        mealLogRepository.save(mealLog);
+        List<Meal> uniqueMealsToAdd = mealsToAdd.stream()
+                .filter(meal -> !existingMeals.contains(meal))
+                .toList();
+
+        if (!uniqueMealsToAdd.isEmpty()) {
+            mealLogToAddMeals
+                    .getMeals()
+                    .addAll(uniqueMealsToAdd);
+            mealLogRepository.save(mealLogToAddMeals);
+        }
     }
 
     @Override
@@ -327,7 +333,7 @@ public class MealLogServiceImpl implements MealLogService {
         long matchingFoodsCount = foodRepository.countByIdsAndUserId(deleteMealLogFoodsDTO.foodIds(), userId);
 
         if (matchingFoodsCount != deleteMealLogFoodsDTO.foodIds().size()) {
-            throw new ResourceNotFoundException("Some foods were not found or do not belong to the user.");
+            throw new ResourceNotFoundException("Some foods were not found.");
         }
 
         mealLog.getFoods()
@@ -345,7 +351,7 @@ public class MealLogServiceImpl implements MealLogService {
         long matchingMealsCount = mealRepository.countByIdsAndUserId(deleteMealLogMealsDTO.mealIds(), userId);
 
         if (matchingMealsCount != deleteMealLogMealsDTO.mealIds().size()) {
-            throw new ResourceNotFoundException("Some foods were not found or do not belong to the user.");
+            throw new ResourceNotFoundException("Some meals were not found.");
         }
 
         mealLog.getMeals()

@@ -14,10 +14,11 @@ import com.mumuca.diet.repository.NutritionalInformationRepository;
 import com.mumuca.diet.repository.UserRepository;
 import com.mumuca.diet.service.MealService;
 import com.mumuca.diet.util.UpdateUtils;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -154,41 +155,46 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    @Transactional
     public void removeFoodsFromMeal(String mealId, List<String> foodIds, String userId) {
-        Meal meal = mealRepository.findByIdAndUserId(mealId, userId)
+        Meal mealToRemoveFoods = mealRepository
+                .findByIdAndUserIdWithFoods(mealId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Meal not found."));
 
-        List<Food> foodsToRemove = foodRepository.findAllByIdsAndUserId(foodIds, userId);
+        long matchingFoodsCount = foodRepository.countByIdsAndUserId(foodIds, userId);
 
-        if (foodsToRemove.isEmpty()) {
-            throw new ResourceNotFoundException("Foods not found.");
+        if (matchingFoodsCount != foodIds.size()) {
+            throw new ResourceNotFoundException("Some foods were not found or do not belong to the user.");
         }
 
-        meal.getFoods().removeAll(foodsToRemove);
+        mealToRemoveFoods.getFoods()
+                .removeIf(food -> foodIds.contains(food.getId()));
 
-        mealRepository.save(meal);
+        mealRepository.save(mealToRemoveFoods);
     }
 
     @Override
+    @Transactional
     public void addFoodsToMeal(String mealId, List<String> foodIds, String userId) {
-        Meal meal = mealRepository.findByIdAndUserIdWithFoods(mealId, userId)
+        Meal mealToAddFoods = mealRepository.findByIdAndUserIdWithFoods(mealId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Meal not found."));
 
         List<Food> foodsToAdd = foodRepository.findAllByIdsAndUserId(foodIds, userId);
-
-        if (foodsToAdd.isEmpty()) {
-            throw new ResourceNotFoundException("Foods not found.");
-        }
 
         if (foodsToAdd.size() != foodIds.size()) {
             throw new ResourceNotFoundException("Some food were not found.");
         }
 
-        foodsToAdd.stream()
-                .filter(food -> !meal.getFoods().contains(food))
-                .forEach(food -> meal.getFoods().add(food));
+        Set<Food> existingFoods = new HashSet<>(mealToAddFoods.getFoods());
 
-        mealRepository.save(meal);
+        List<Food> uniqueFoodsToAdd = foodsToAdd.stream()
+                .filter(food -> !existingFoods.contains(food))
+                .toList();
+
+        if (!uniqueFoodsToAdd.isEmpty()) {
+            mealToAddFoods
+                    .getFoods()
+                    .addAll(uniqueFoodsToAdd);
+            mealRepository.save(mealToAddFoods);
+        }
     }
 }
