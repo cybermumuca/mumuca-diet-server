@@ -4,7 +4,6 @@ import com.mumuca.diet.dto.food.*;
 import com.mumuca.diet.dto.meal.MealDTO;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.model.Food;
-import com.mumuca.diet.model.Meal;
 import com.mumuca.diet.model.NutritionalInformation;
 import com.mumuca.diet.model.User;
 import com.mumuca.diet.repository.FoodRepository;
@@ -16,6 +15,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.mumuca.diet.util.UpdateUtils.updateIfDifferent;
 
 @Service
 @AllArgsConstructor
@@ -175,38 +176,52 @@ public class FoodServiceImpl implements FoodService {
     @Override
     @Transactional
     public FoodDTO updateFood(String foodId, UpdateFoodDTO updateFoodDTO, String userId) {
-        Food food = foodRepository.findByIdAndUserId(foodId, userId)
+        Food foodToUpdate = foodRepository.findByIdAndUserId(foodId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Food not found."));
 
-        if (updateFoodDTO.title() != null && !updateFoodDTO.title().isBlank()) {
-            food.setTitle(updateFoodDTO.title());
-        }
+        boolean updated = false;
 
-        if (updateFoodDTO.description() != null) {
-            food.setDescription(updateFoodDTO.description());
-        }
+        updateIfDifferent(
+                foodToUpdate::getTitle,
+                foodToUpdate::setTitle,
+                updateFoodDTO.title()
+        );
 
-        if (updateFoodDTO.brand() != null) {
-            food.setBrand(updateFoodDTO.brand());
-        }
+        updateIfDifferent(
+                foodToUpdate::getDescription,
+                foodToUpdate::setDescription,
+                updateFoodDTO.description()
+        );
+
+        updateIfDifferent(
+                foodToUpdate::getBrand,
+                foodToUpdate::setBrand,
+                updateFoodDTO.brand()
+        );
 
         if (updateFoodDTO.nutritionalInformation() != null) {
-            if (food.getNutritionalInformation() == null) {
+            if (foodToUpdate.getNutritionalInformation() == null) {
                 NutritionalInformation nutritionalInformation = new NutritionalInformation();
-                updateNutritionalInformationFields(nutritionalInformation, updateFoodDTO.nutritionalInformation());
-                nutritionalInformation.setFood(food);
-                food.setNutritionalInformation(nutritionalInformation);
+                updated |= updateNutritionalInformationFields(nutritionalInformation, updateFoodDTO.nutritionalInformation(), updated);
+                nutritionalInformation.setFood(foodToUpdate);
+                foodToUpdate.setNutritionalInformation(nutritionalInformation);
             } else {
-                updateNutritionalInformationFields(food.getNutritionalInformation(), updateFoodDTO.nutritionalInformation());
+                updated |= updateNutritionalInformationFields(
+                        foodToUpdate.getNutritionalInformation(),
+                        updateFoodDTO.nutritionalInformation(),
+                        updated
+                );
             }
         }
 
-        foodRepository.save(food);
+        if (updated) {
+            foodRepository.save(foodToUpdate);
+        }
 
         NutritionalInformationDTO nutritionalInformationDTO = null;
 
-        if (food.getNutritionalInformation() != null) {
-            NutritionalInformation ni = food.getNutritionalInformation();
+        if (foodToUpdate.getNutritionalInformation() != null) {
+            NutritionalInformation ni = foodToUpdate.getNutritionalInformation();
             nutritionalInformationDTO = new NutritionalInformationDTO(
                     ni.getId(),
                     ni.getCalories(),
@@ -230,66 +245,118 @@ public class FoodServiceImpl implements FoodService {
         }
 
         return new FoodDTO(
-                food.getId(),
-                food.getTitle(),
-                food.getBrand(),
-                food.getDescription(),
+                foodToUpdate.getId(),
+                foodToUpdate.getTitle(),
+                foodToUpdate.getBrand(),
+                foodToUpdate.getDescription(),
                 nutritionalInformationDTO
         );
     }
 
-    private void updateNutritionalInformationFields(NutritionalInformation nutritionalInformation, UpdateNutritionalInformationDTO updateNutritionalInfoDTO) {
-        if (updateNutritionalInfoDTO.calories() != null) {
-            nutritionalInformation.setCalories(updateNutritionalInfoDTO.calories());
-        }
-        if (updateNutritionalInfoDTO.carbohydrates() != null) {
-            nutritionalInformation.setCarbohydrates(updateNutritionalInfoDTO.carbohydrates());
-        }
-        if (updateNutritionalInfoDTO.protein() != null) {
-            nutritionalInformation.setProtein(updateNutritionalInfoDTO.protein());
-        }
-        if (updateNutritionalInfoDTO.fat() != null) {
-            nutritionalInformation.setFat(updateNutritionalInfoDTO.fat());
-        }
-        if (updateNutritionalInfoDTO.monounsaturatedFat() != null) {
-            nutritionalInformation.setMonounsaturatedFat(updateNutritionalInfoDTO.monounsaturatedFat());
-        }
-        if (updateNutritionalInfoDTO.saturatedFat() != null) {
-            nutritionalInformation.setSaturatedFat(updateNutritionalInfoDTO.saturatedFat());
-        }
-        if (updateNutritionalInfoDTO.polyunsaturatedFat() != null) {
-            nutritionalInformation.setPolyunsaturatedFat(updateNutritionalInfoDTO.polyunsaturatedFat());
-        }
-        if (updateNutritionalInfoDTO.transFat() != null) {
-            nutritionalInformation.setTransFat(updateNutritionalInfoDTO.transFat());
-        }
-        if (updateNutritionalInfoDTO.cholesterol() != null) {
-            nutritionalInformation.setCholesterol(updateNutritionalInfoDTO.cholesterol());
-        }
-        if (updateNutritionalInfoDTO.sodium() != null) {
-            nutritionalInformation.setSodium(updateNutritionalInfoDTO.sodium());
-        }
-        if (updateNutritionalInfoDTO.potassium() != null) {
-            nutritionalInformation.setPotassium(updateNutritionalInfoDTO.potassium());
-        }
-        if (updateNutritionalInfoDTO.fiber() != null) {
-            nutritionalInformation.setFiber(updateNutritionalInfoDTO.fiber());
-        }
-        if (updateNutritionalInfoDTO.sugar() != null) {
-            nutritionalInformation.setSugar(updateNutritionalInfoDTO.sugar());
-        }
-        if (updateNutritionalInfoDTO.calcium() != null) {
-            nutritionalInformation.setCalcium(updateNutritionalInfoDTO.calcium());
-        }
-        if (updateNutritionalInfoDTO.iron() != null) {
-            nutritionalInformation.setIron(updateNutritionalInfoDTO.iron());
-        }
-        if (updateNutritionalInfoDTO.vitaminA() != null) {
-            nutritionalInformation.setVitaminA(updateNutritionalInfoDTO.vitaminA());
-        }
-        if (updateNutritionalInfoDTO.vitaminC() != null) {
-            nutritionalInformation.setVitaminC(updateNutritionalInfoDTO.vitaminC());
-        }
+    private boolean updateNutritionalInformationFields(NutritionalInformation nutritionalInformation, UpdateNutritionalInformationDTO updateNutritionalInfoDTO, boolean updated) {
+        updated |= updateIfDifferent(
+                nutritionalInformation::getCalories,
+                nutritionalInformation::setCalories,
+                updateNutritionalInfoDTO.calories()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getCarbohydrates,
+                nutritionalInformation::setCarbohydrates,
+                updateNutritionalInfoDTO.carbohydrates()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getProtein,
+                nutritionalInformation::setProtein,
+                updateNutritionalInfoDTO.protein()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getFat,
+                nutritionalInformation::setFat,
+                updateNutritionalInfoDTO.fat()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getMonounsaturatedFat,
+                nutritionalInformation::setMonounsaturatedFat,
+                updateNutritionalInfoDTO.monounsaturatedFat()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getSaturatedFat,
+                nutritionalInformation::setSaturatedFat,
+                updateNutritionalInfoDTO.saturatedFat()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getPolyunsaturatedFat,
+                nutritionalInformation::setPolyunsaturatedFat,
+                updateNutritionalInfoDTO.polyunsaturatedFat()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getTransFat,
+                nutritionalInformation::setTransFat,
+                updateNutritionalInfoDTO.transFat()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getCholesterol,
+                nutritionalInformation::setCholesterol,
+                updateNutritionalInfoDTO.cholesterol()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getSodium,
+                nutritionalInformation::setSodium,
+                updateNutritionalInfoDTO.sodium()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getPotassium,
+                nutritionalInformation::setPotassium,
+                updateNutritionalInfoDTO.potassium()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getFiber,
+                nutritionalInformation::setFiber,
+                updateNutritionalInfoDTO.fiber()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getSugar,
+                nutritionalInformation::setSugar,
+                updateNutritionalInfoDTO.sugar()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getCalcium,
+                nutritionalInformation::setCalcium,
+                updateNutritionalInfoDTO.calcium()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getIron,
+                nutritionalInformation::setIron,
+                updateNutritionalInfoDTO.iron()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getVitaminA,
+                nutritionalInformation::setVitaminA,
+                updateNutritionalInfoDTO.vitaminA()
+        );
+
+        updated |= updateIfDifferent(
+                nutritionalInformation::getVitaminC,
+                nutritionalInformation::setVitaminC,
+                updateNutritionalInfoDTO.vitaminC()
+        );
+
+        return updated;
     }
 
     @Override

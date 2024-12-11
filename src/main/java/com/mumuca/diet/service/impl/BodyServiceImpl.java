@@ -12,6 +12,8 @@ import com.mumuca.diet.service.BodyService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.mumuca.diet.util.UpdateUtils.updateIfDifferent;
+
 @Service
 @AllArgsConstructor
 public class BodyServiceImpl implements BodyService {
@@ -44,22 +46,32 @@ public class BodyServiceImpl implements BodyService {
 
     @Override
     public void updateBodyRegistry(String bodyId, BodyRegistryUpdateDTO bodyRegistryUpdateDTO, String userId) {
-        Body bodyRegistry = bodyRepository.findByIdAndUserId(bodyId, userId)
+        Body bodyRegistryToUpdate = bodyRepository.findByIdAndUserId(bodyId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Body registry not found."));
 
-        if (bodyRegistryUpdateDTO.weight() != null) {
-            bodyRegistry.setWeight(bodyRegistryUpdateDTO.weight());
-        }
+        boolean updated = false;
 
-        if (bodyRegistryUpdateDTO.height() != null) {
-            bodyRegistry.setHeight(bodyRegistryUpdateDTO.height());
-        }
+        updated |= updateIfDifferent(
+                bodyRegistryToUpdate::getWeight,
+                bodyRegistryToUpdate::setWeight,
+                bodyRegistryUpdateDTO.weight()
+        );
 
-        if (bodyRegistryUpdateDTO.date() != null) {
-            bodyRegistry.setDate(bodyRegistryUpdateDTO.date());
-        }
+        updated |= updateIfDifferent(
+              bodyRegistryToUpdate::getHeight,
+              bodyRegistryToUpdate::setHeight,
+              bodyRegistryUpdateDTO.height()
+        );
 
-        bodyRepository.save(bodyRegistry);
+        updated |= updateIfDifferent(
+                bodyRegistryToUpdate::getDate,
+                bodyRegistryToUpdate::setDate,
+                bodyRegistryUpdateDTO.date()
+        );
+
+        if (updated) {
+            bodyRepository.save(bodyRegistryToUpdate);
+        }
     }
 
     @Override

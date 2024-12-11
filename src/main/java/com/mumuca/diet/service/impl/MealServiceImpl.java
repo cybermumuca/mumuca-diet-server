@@ -13,6 +13,7 @@ import com.mumuca.diet.repository.MealRepository;
 import com.mumuca.diet.repository.NutritionalInformationRepository;
 import com.mumuca.diet.repository.UserRepository;
 import com.mumuca.diet.service.MealService;
+import com.mumuca.diet.util.UpdateUtils;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -108,24 +109,40 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public MealDTO updateMeal(String mealId, UpdateMealDTO updateMealDTO, String userId) {
-        Meal meal = mealRepository.findByIdAndUserId(mealId, userId)
+        Meal mealToUpdate = mealRepository.findByIdAndUserId(mealId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Meal not found."));
 
-        if (updateMealDTO.title() != null && !updateMealDTO.title().isBlank()) {
-            meal.setTitle(updateMealDTO.title());
+        boolean updated = false;
+
+        updated |= UpdateUtils.updateIfDifferent(
+                mealToUpdate::getTitle,
+                mealToUpdate::setTitle,
+                updateMealDTO.title()
+        );
+
+        updated |= UpdateUtils.updateIfDifferent(
+                mealToUpdate::getDescription,
+                mealToUpdate::setTitle,
+                updateMealDTO.description()
+        );
+
+        updated |= UpdateUtils.updateIfDifferent(
+                mealToUpdate::getTitle,
+                mealToUpdate::setTitle,
+                updateMealDTO.title()
+        );
+
+        if (updated) {
+            mealRepository.save(mealToUpdate);
         }
 
-        if (updateMealDTO.description() != null) {
-            meal.setDescription(updateMealDTO.description());
-        }
 
-        if (updateMealDTO.type() != null) {
-            meal.setType(updateMealDTO.type());
-        }
-
-        mealRepository.save(meal);
-
-        return new MealDTO(meal.getId(), meal.getTitle(), meal.getDescription(), meal.getType());
+        return new MealDTO(
+                mealToUpdate.getId(),
+                mealToUpdate.getTitle(),
+                mealToUpdate.getDescription(),
+                mealToUpdate.getType()
+        );
     }
 
     @Override

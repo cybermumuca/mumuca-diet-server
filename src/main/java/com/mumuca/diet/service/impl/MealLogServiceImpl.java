@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
+import static com.mumuca.diet.util.UpdateUtils.updateIfDifferent;
+
 @Service
 @AllArgsConstructor
 public class MealLogServiceImpl implements MealLogService {
@@ -288,28 +290,31 @@ public class MealLogServiceImpl implements MealLogService {
 
     @Override
     public void updateMealLog(String mealLogId, UpdateMealLogDTO updateMealLogDTO, String userId) {
-        MealLog mealLog =  mealLogRepository.findMealLogByIdAndUserId(mealLogId, userId)
+        MealLog mealLogToUpdate = mealLogRepository.findMealLogByIdAndUserId(mealLogId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Meal Log not found."));
 
         boolean updated = false;
 
-        if (updateMealLogDTO.time() != null) {
-            mealLog.setTime(updateMealLogDTO.time());
-            updated = true;
-        }
+        updated |= updateIfDifferent(
+                mealLogToUpdate::getTime,
+                mealLogToUpdate::setTime,
+                updateMealLogDTO.time()
+        );
 
-        if (updateMealLogDTO.type() != null) {
-            mealLog.setType(updateMealLogDTO.type());
-            updated = true;
-        }
+        updated |= updateIfDifferent(
+                mealLogToUpdate::getType,
+                mealLogToUpdate::setType,
+                updateMealLogDTO.type()
+        );
 
-        if (updateMealLogDTO.caloriesGoal() != null) {
-            mealLog.setCaloriesGoal(updateMealLogDTO.caloriesGoal());
-            updated = true;
-        }
+        updated |= updateIfDifferent(
+                mealLogToUpdate::getCaloriesGoal,
+                mealLogToUpdate::setCaloriesGoal,
+                updateMealLogDTO.caloriesGoal()
+        );
 
         if (updated) {
-            mealLogRepository.save(mealLog);
+            mealLogRepository.save(mealLogToUpdate);
         }
     }
 
