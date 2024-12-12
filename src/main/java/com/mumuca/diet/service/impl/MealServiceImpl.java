@@ -14,6 +14,8 @@ import com.mumuca.diet.repository.NutritionalInformationRepository;
 import com.mumuca.diet.service.MealService;
 import com.mumuca.diet.util.UpdateUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -194,5 +196,11 @@ public class MealServiceImpl implements MealService {
                     .addAll(uniqueFoodsToAdd);
             mealRepository.save(mealToAddFoods);
         }
+    }
+
+    @Override
+    public Page<MealDTO> getMeals(Pageable pageable, String userId) {
+        return mealRepository.findByUserId(pageable, userId)
+                .map((meal -> new MealDTO(meal.getId(), meal.getTitle(), meal.getDescription(), meal.getType())));
     }
 }

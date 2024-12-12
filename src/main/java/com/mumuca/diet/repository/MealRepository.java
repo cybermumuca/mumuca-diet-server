@@ -1,6 +1,8 @@
 package com.mumuca.diet.repository;
 
 import com.mumuca.diet.model.Meal;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +15,8 @@ import java.util.Optional;
 @Repository
 public interface MealRepository extends JpaRepository<Meal, String> {
     Optional<Meal> findByIdAndUserId(String id, String userId);
+
+    Page<Meal> findByUserId(Pageable pageable, String userId);
 
     @EntityGraph(attributePaths = {"foods"})
     @Query("SELECT m FROM Meal m WHERE m.id = :mealId AND m.user.id = :userId")
