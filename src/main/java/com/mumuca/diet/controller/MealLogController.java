@@ -8,6 +8,7 @@ import com.mumuca.diet.service.MealLogService;
 import com.mumuca.diet.validator.ValidUUID;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/api")
 @AllArgsConstructor
+@Slf4j
 public class MealLogController {
 
     private final MealLogService mealLogService;
@@ -29,7 +31,11 @@ public class MealLogController {
             @PathVariable("id") @Valid @ValidUUID String mealLogId,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is requesting meal log [{}]", jwt.getSubject(), mealLogId);
+
         MealLogDTO mealLogDTO = mealLogService.getMealLog(mealLogId, jwt.getSubject());
+
+        log.info("Meal log returned for user [{}]. Meal log id: [{}]", jwt.getSubject(), mealLogId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -47,27 +53,43 @@ public class MealLogController {
             LocalDate date,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is requesting meal logs on date [{}]", jwt.getSubject(), date);
+
         List<MealLogWithCaloriesConsumedDTO> mealLogWithCaloriesConsumedDTOList =
                 mealLogService.findMealLogsByDate(date, jwt.getSubject());
 
         if (mealLogWithCaloriesConsumedDTOList.isEmpty()) {
+            log.info("No meal logs found for user [{}] on date [{}]", jwt.getSubject(), date);
             return ResponseEntity
                     .noContent()
                     .build();
         }
+
+        log.info("Meal logs found for user [{}] on date [{}]", jwt.getSubject(), date);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(mealLogWithCaloriesConsumedDTOList);
     }
 
-
     @GetMapping(path = "/v1/meal-logs/{id}/foods")
     public ResponseEntity<List<FoodDTO>> getMealLogFoods(
             @PathVariable("id") @Valid @ValidUUID String mealLogId,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is requesting foods from meal log [{}]", jwt.getSubject(), mealLogId);
+
         List<FoodDTO> foodDTOList = mealLogService.getMealLogFoods(mealLogId, jwt.getSubject());
+
+        if (foodDTOList.isEmpty()) {
+            log.info("No foods found for meal log [{}] for user [{}]", mealLogId, jwt.getSubject());
+
+            return ResponseEntity
+                    .noContent()
+                    .build();
+        }
+
+        log.info("Meal log foods returned for user [{}]. Meal log id: [{}]", jwt.getSubject(), mealLogId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -79,7 +101,19 @@ public class MealLogController {
             @PathVariable("id") @Valid @ValidUUID String mealLogId,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is requesting meals from meal log [{}]", jwt.getSubject(), mealLogId);
+
         List<MealWithFoodsDTO> mealWithFoodsDTOList = mealLogService.getMealLogMeals(mealLogId, jwt.getSubject());
+
+        if (mealWithFoodsDTOList.isEmpty()) {
+            log.info("No meals found for meal log [{}] for user [{}]", mealLogId, jwt.getSubject());
+
+            return ResponseEntity
+                    .noContent()
+                    .build();
+        }
+
+        log.info("Meal log meals returned for user [{}]. Meal log id: [{}]", jwt.getSubject(), mealLogId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -91,7 +125,12 @@ public class MealLogController {
             @PathVariable("id") @Valid @ValidUUID String mealLogId,
             @AuthenticationPrincipal Jwt jwt
     ) {
-        MealNutritionalInformationDTO mealNutritionalInformationDTO = mealLogService.getMealLogNutritionalInformation(mealLogId, jwt.getSubject());
+        log.info("User [{}] is requesting nutritional information of meal log [{}]", jwt.getSubject(), mealLogId);
+
+        MealNutritionalInformationDTO mealNutritionalInformationDTO = mealLogService
+                .getMealLogNutritionalInformation(mealLogId, jwt.getSubject());
+
+        log.info("Meal log nutritional information returned for user [{}]. Meal Log id: [{}]", jwt.getSubject(), mealLogId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -104,7 +143,11 @@ public class MealLogController {
             @Valid @RequestBody CreateMealLogDTO createMealLogDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is creating a meal log with payload [{}]", jwt.getSubject(), createMealLogDTO);
+
         MealLogDTO mealLogDTO = mealLogService.createMealLog(createMealLogDTO, jwt.getSubject());
+
+        log.info("Meal log created successfully. Meal Log Id: [{}], User: [{}]", mealLogDTO.id(), jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -117,7 +160,16 @@ public class MealLogController {
             @Valid @RequestBody AddFoodsToMealLogDTO addFoodsToMealLogDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info(
+                "User [{}] is adding foods with payload [{}] to meal log [{}]",
+                jwt.getSubject(),
+                addFoodsToMealLogDTO,
+                mealLogId
+        );
+
         mealLogService.addFoodsToMealLog(mealLogId, addFoodsToMealLogDTO, jwt.getSubject());
+
+        log.info("Foods added to meal log successfully. Meal log id: [{}], User: [{}]", mealLogId, jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -130,7 +182,16 @@ public class MealLogController {
             @Valid @RequestBody AddMealsToMealLogDTO addMealsToMealLogDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info(
+                "User [{}] is adding meals with payload [{}] to meal log [{}]",
+                jwt.getSubject(),
+                addMealsToMealLogDTO,
+                mealLogId
+        );
+
         mealLogService.addMealsToMealLog(mealLogId, addMealsToMealLogDTO, jwt.getSubject());
+
+        log.info("Meals added to meal log successfully. Meal log id: [{}], User: [{}]", mealLogId, jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -144,7 +205,11 @@ public class MealLogController {
             @Valid @RequestBody UpdateMealLogDTO updateMealLogDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is updating meal log [{}] with payload [{}]", jwt.getSubject(), mealLogId, updateMealLogDTO);
+
         mealLogService.updateMealLog(mealLogId, updateMealLogDTO, jwt.getSubject());
+
+        log.info("Meal log updated successfully. Meal log id: [{}], User: [{}]", mealLogId, jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -156,7 +221,11 @@ public class MealLogController {
             @PathVariable("id") @Valid @ValidUUID String mealLogId,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is deleting meal log [{}]", jwt.getSubject(), mealLogId);
+
         mealLogService.deleteMealLog(mealLogId, jwt.getSubject());
+
+        log.info("Meal log deleted successfully. Meal log id: [{}], User: [{}]", mealLogId, jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -169,7 +238,11 @@ public class MealLogController {
             @Valid @RequestBody DeleteMealLogFoodsDTO deleteMealLogFoodsDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is removing foods with payload [{}] from meal log [{}]", jwt.getSubject(), deleteMealLogFoodsDTO, mealLogId);
+
         mealLogService.removeMealLogFoods(mealLogId, deleteMealLogFoodsDTO, jwt.getSubject());
+
+        log.info("Foods removed from Meal log successfully. Meal log id: [{}], User: [{}]", mealLogId, jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -182,7 +255,11 @@ public class MealLogController {
             @Valid @RequestBody DeleteMealLogMealsDTO deleteMealLogMealsDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is removing meals with payload [{}] from meal log [{}]", jwt.getSubject(), deleteMealLogMealsDTO, mealLogId);
+
         mealLogService.removeMealLogMeals(mealLogId, deleteMealLogMealsDTO, jwt.getSubject());
+
+        log.info("Meals removed from Meal log successfully. Meal log id: [{}], User: [{}]", mealLogId, jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.OK)

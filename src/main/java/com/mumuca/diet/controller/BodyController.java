@@ -7,16 +7,17 @@ import com.mumuca.diet.service.BodyService;
 import com.mumuca.diet.validator.ValidUUID;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/api")
 @AllArgsConstructor
+@Slf4j
 public class BodyController {
 
     private final BodyService bodyService;
@@ -26,7 +27,11 @@ public class BodyController {
             @Valid @RequestBody BodyRegistryDTO bodyRegistryDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is registering a body with payload [{}]", jwt.getSubject(), bodyRegistryDTO);
+
         BodyDTO bodyDTO = bodyService.registerBody(bodyRegistryDTO, jwt.getSubject());
+
+        log.info("Body register created successfully. Body id: [{}], User: [{}]", bodyDTO.id(), jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -38,7 +43,11 @@ public class BodyController {
             @PathVariable("id") @Valid @ValidUUID String bodyId,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is requesting a body registry with id [{}]", jwt.getSubject(), bodyId);
+
         BodyDTO bodyDTO = bodyService.getBodyRegistry(bodyId, jwt.getSubject());
+
+        log.info("Body registry returned for user [{}]. Body registry id: [{}]", jwt.getSubject(), bodyId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -51,7 +60,11 @@ public class BodyController {
             @Valid @RequestBody BodyRegistryUpdateDTO bodyRegistryUpdateDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is updating a body registry [{}] with payload [{}]", jwt.getSubject(), bodyId, bodyRegistryUpdateDTO);
+
         bodyService.updateBodyRegistry(bodyId, bodyRegistryUpdateDTO, jwt.getSubject());
+
+        log.info("Body registry updated successfully. Body registry id: [{}], User: [{}]", bodyId,  jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -63,7 +76,11 @@ public class BodyController {
             @PathVariable("id") @Valid @ValidUUID String bodyId,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is deleting Body Registry [{}]", jwt.getSubject(), bodyId);
+
         bodyService.deleteBodyRegistry(bodyId, jwt.getSubject());
+
+        log.info("Body registry deleted successfully. Body registry id: [{}], User: [{}]", bodyId, jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.OK)

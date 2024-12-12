@@ -6,6 +6,7 @@ import com.mumuca.diet.dto.auth.SignUpDTO;
 import com.mumuca.diet.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/api")
 @AllArgsConstructor
+@Slf4j
 public class AuthController {
 
     private final AuthService authService;
@@ -23,6 +25,8 @@ public class AuthController {
     @PostMapping(path = "/v1/auth/sign-up")
     public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpDTO signUpDTO) {
         authService.signUp(signUpDTO);
+
+        log.info("[{}] signed up", signUpDTO.email());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -32,6 +36,9 @@ public class AuthController {
     @PostMapping(path = "/v1/auth/sign-in")
     public ResponseEntity<SignInResponseDTO> signIn(@RequestBody SignInDTO signInDTO) {
         var signInResponse = authService.signIn(signInDTO);
+
+        log.info("User with email [{}] signed in", signInDTO.email());
+
         return ResponseEntity.ok(signInResponse);
     }
 }

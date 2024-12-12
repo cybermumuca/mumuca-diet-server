@@ -3,6 +3,7 @@ package com.mumuca.diet.controller;
 import com.mumuca.diet.dto.progress.DailyProgressDTO;
 import com.mumuca.diet.service.ProgressService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 @RestController
 @RequestMapping(path = "/api")
 @AllArgsConstructor
+@Slf4j
 public class ProgressController {
 
     private final ProgressService progressService;
@@ -31,7 +33,11 @@ public class ProgressController {
             LocalDate date,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is getting daily progress", jwt.getSubject());
+
         DailyProgressDTO dailyProgressDTO = progressService.getDailyProgress(date, jwt.getSubject());
+
+        log.info("Daily progress fetched successfully to user [{}]", jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.OK)

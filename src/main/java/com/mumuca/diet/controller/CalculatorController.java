@@ -6,10 +6,9 @@ import com.mumuca.diet.model.ActivityLevel;
 import com.mumuca.diet.model.Gender;
 import com.mumuca.diet.model.GoalType;
 import com.mumuca.diet.util.NutritionalCalculator;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +21,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api")
+@Slf4j
 public class CalculatorController {
 
     @GetMapping(path = "/v1/calculator/bmi")
@@ -36,8 +36,12 @@ public class CalculatorController {
             @Positive(message = "The height must be a positive value.")
             BigDecimal height
     ) {
+        log.info("Calculating BMI value and classification for height [{}] and weight [{}]", height, weight);
+
         var bmiValue = NutritionalCalculator.calculateBMI(weight, height);
         var bmiClassification = NutritionalCalculator.classifyBMI(bmiValue);
+
+        log.info("BMI value and classification calculated successfully for height [{}] and weight [{}]", height, weight);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -56,7 +60,11 @@ public class CalculatorController {
             @Positive(message = "The height must be a positive value.")
             BigDecimal height
     ) {
+        log.info("Calculating BMI value for height [{}] and weight [{}]", height, weight);
+
         var bmiValue = NutritionalCalculator.calculateBMI(weight, height);
+
+        log.info("BMI value calculated successfully for height [{}] and weight [{}]", height, weight);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -67,7 +75,11 @@ public class CalculatorController {
     public ResponseEntity<Map<String, String>> calculateBMIClassification(
             @RequestParam("bmi") BigDecimal bmi
     ) {
+        log.info("Classifying BMI value for bmi [{}]", bmi);
+
         String classification = NutritionalCalculator.classifyBMI(bmi);
+
+        log.info("BMI classification calculated successfully for bmi [{}]", bmi);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -83,7 +95,11 @@ public class CalculatorController {
             @Positive(message = "The height must be a positive value.")
             BigDecimal height
     ) {
+        log.info("Calculating ideal weight for height [{}]", height);
+
         var idealWeight = NutritionalCalculator.calculateIdealWeight(height);
+
+        log.info("Ideal weight calculated successfully for height [{}]", height);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -119,12 +135,29 @@ public class CalculatorController {
             @NotNull(message = "The activity level cannot be null.")
             ActivityLevel activity
     ) {
+        log.info(
+                "Calculating BMR for height [{}], weight [{}], age [{}], gender [{}] and activity level [{}]",
+                height,
+                weight,
+                age,
+                gender,
+                activity
+        );
+
         BigDecimal bmr = NutritionalCalculator.calculateBMR(weight, height, age, gender);
         BigDecimal bmrWithActivity = NutritionalCalculator.adjustCaloriesForActivity(bmr, activity);
         BigDecimal caloriesToLoseWeight = NutritionalCalculator.adjustCaloriesForGoal(bmrWithActivity, GoalType.LOSE_WEIGHT);
         BigDecimal caloriesToGainWeight = NutritionalCalculator.adjustCaloriesForGoal(bmrWithActivity, GoalType.GAIN_WEIGHT);
-        BigDecimal caloriesToMantainWeight = NutritionalCalculator.adjustCaloriesForGoal(bmrWithActivity, GoalType.MAINTAIN_WEIGHT);
+        BigDecimal caloriesToMaintainWeight = NutritionalCalculator.adjustCaloriesForGoal(bmrWithActivity, GoalType.MAINTAIN_WEIGHT);
 
+        log.info(
+                "BMR calculated successfully for input: height [{}], weight [{}], age [{}], gender [{}] and activity level [{}]",
+                height,
+                weight,
+                age,
+                gender,
+                activity
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -134,7 +167,7 @@ public class CalculatorController {
                                 "bmrWithActivity", bmrWithActivity.intValue(),
                                 "caloriesToLoseWeight", caloriesToLoseWeight.intValue(),
                                 "caloriesToGainWeight", caloriesToGainWeight.intValue(),
-                                "caloriesToMantainWeight", caloriesToMantainWeight.intValue()
+                                "caloriesToMaintainWeight", caloriesToMaintainWeight.intValue()
                         )
                 );
     }
@@ -159,7 +192,24 @@ public class CalculatorController {
             @NotNull(message = "The gender cannot be null.")
             Gender gender
     ) {
+        log.info(
+                "Calculating body fat for height [{}], weight [{}], age [{}] and gender [{}]",
+                height,
+                weight,
+                age,
+                gender
+        );
+
         BigDecimal bodyFat = NutritionalCalculator.calculateBodyFat(weight, height, age, gender);
+
+        log.info(
+                "Body fat calculated successfully for input: height [{}], weight [{}], age [{}] and gender [{}]",
+                height,
+                weight,
+                age,
+                gender
+        );
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(Map.of("bodyFat", bodyFat.floatValue()));
@@ -187,12 +237,23 @@ public class CalculatorController {
             @Positive(message = "The fat percentage must be a positive value.")
             BigDecimal fatPercentage
     ) {
+        log.info(
+                "Calculating the macronutrient breakdown for the amount of calories [{}], " +
+                        "with percentage of protein [{}], carbohydrate [{}] and fat [{}]",
+                targetCalories,
+                proteinPercentage,
+                carbsPercentage,
+                fatPercentage
+        );
+
         var macronutrientDTO = NutritionalCalculator.calculateMacronutrients(
                 targetCalories,
                 proteinPercentage,
                 carbsPercentage,
                 fatPercentage
         );
+
+        log.info("Macronutrient breakdown calculated successfully for calories [{}]", targetCalories);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -206,7 +267,11 @@ public class CalculatorController {
             @Positive(message = "The weight must be a positive value.")
             BigDecimal weight
     ) {
+        log.info("Calculating water intake for weight [{}]", weight);
+
         var waterIntake = NutritionalCalculator.calculateWaterIntake(weight);
+
+        log.info("Water intake calculated successfully for input: weight [{}]", weight);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
