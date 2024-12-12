@@ -3,7 +3,7 @@
 Essa Lista contem os itens que falta para esse app estar viável para ir para produção
 
 - [ ] Endpoints de Paginação
-- [ ] Logging
+- [x] Logging
 - [ ] Queries mais especificas
 - [ ] Resolver os problemas do ```// TODO```
 - [ ] Perfil de environment com o Postgres

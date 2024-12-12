@@ -13,6 +13,8 @@ import com.mumuca.diet.service.FoodService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -378,5 +380,45 @@ public class FoodServiceImpl implements FoodService {
                         meal.getDescription(),
                         meal.getType()
                 )).toList();
+    }
+
+    @Override
+    public Page<FoodDTO> getFoods(Pageable pageable, String userId) {
+        return foodRepository.findByUserId(pageable, userId)
+                .map(food -> {
+                    NutritionalInformationDTO nutritionalInformationDTO = null;
+
+                    if (food.getNutritionalInformation() != null) {
+                        NutritionalInformation ni = food.getNutritionalInformation();
+                        nutritionalInformationDTO = new NutritionalInformationDTO(
+                                ni.getId(),
+                                ni.getCalories(),
+                                ni.getCarbohydrates(),
+                                ni.getProtein(),
+                                ni.getFat(),
+                                ni.getMonounsaturatedFat(),
+                                ni.getSaturatedFat(),
+                                ni.getPolyunsaturatedFat(),
+                                ni.getTransFat(),
+                                ni.getCholesterol(),
+                                ni.getSodium(),
+                                ni.getPotassium(),
+                                ni.getFiber(),
+                                ni.getSugar(),
+                                ni.getCalcium(),
+                                ni.getIron(),
+                                ni.getVitaminA(),
+                                ni.getVitaminC()
+                        );
+                    }
+
+                    return new FoodDTO(
+                            food.getId(),
+                            food.getTitle(),
+                            food.getBrand(),
+                            food.getDescription(),
+                            nutritionalInformationDTO
+                    );
+                });
     }
 }

@@ -1,6 +1,8 @@
 package com.mumuca.diet.repository;
 
 import com.mumuca.diet.model.Food;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,4 +22,6 @@ public interface FoodRepository extends JpaRepository<Food, String> {
 
     @Query("SELECT COUNT(f) FROM Food f WHERE f.id IN :ids AND f.user.id = :userId")
     long countByIdsAndUserId(@Param("ids") Iterable<String> ids, @Param("userId") String userId);
+
+    Page<Food> findByUserId(Pageable pageable, String userId);
 }

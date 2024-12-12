@@ -11,6 +11,10 @@ import com.mumuca.diet.validator.ValidUUID;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,6 +45,34 @@ public class FoodController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(foodDTO);
+    }
+
+    @GetMapping(path = "/v1/foods")
+    public ResponseEntity<Page<FoodDTO>> getFoods(
+            @PageableDefault(sort = "title", size = 20) Pageable pageable,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        log.info("User [{}] is requesting a paginated list of foods. Pageable: [{}]", jwt.getSubject(), pageable);
+
+        int maxPageSize = 100;
+
+        if (pageable.getPageSize() > maxPageSize) {
+            pageable = PageRequest.of(pageable.getPageNumber(), maxPageSize, pageable.getSort());
+            log.warn("Page size too large. Limiting to [{}] items per page.", maxPageSize);
+        }
+
+        Page<FoodDTO> foodPage = foodService.getFoods(pageable, jwt.getSubject());
+
+        log.info(
+                "Paginated list of foods returned for user [{}]. Total elements: [{}], Total pages: [{}]",
+                jwt.getSubject(),
+                foodPage.getTotalElements(),
+                foodPage.getTotalPages()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(foodPage);
     }
 
     @GetMapping(path = "/v1/foods/{id}")
