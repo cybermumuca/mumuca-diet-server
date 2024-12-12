@@ -7,9 +7,10 @@ import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.model.Body;
 import com.mumuca.diet.model.User;
 import com.mumuca.diet.repository.BodyRepository;
-import com.mumuca.diet.repository.UserRepository;
 import com.mumuca.diet.service.BodyService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import static com.mumuca.diet.util.UpdateUtils.updateIfDifferent;
@@ -78,5 +79,16 @@ public class BodyServiceImpl implements BodyService {
                 .orElseThrow(() -> new ResourceNotFoundException("Body registry not found."));
 
         bodyRepository.deleteById(bodyRegistryToDelete.getId());
+    }
+
+    @Override
+    public Page<BodyDTO> getBodiesRegistry(Pageable pageable, String userId) {
+        return bodyRepository.findByUserId(pageable, userId)
+                .map(body -> new BodyDTO(
+                        body.getId(),
+                        body.getWeight(),
+                        body.getHeight(),
+                        body.getDate()
+                ));
     }
 }
