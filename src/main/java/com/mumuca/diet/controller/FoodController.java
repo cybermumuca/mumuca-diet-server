@@ -10,6 +10,7 @@ import com.mumuca.diet.service.FoodService;
 import com.mumuca.diet.validator.ValidUUID;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/api")
 @AllArgsConstructor
+@Slf4j
 public class FoodController {
 
     private final FoodService foodService;
@@ -30,7 +32,11 @@ public class FoodController {
             @Valid @RequestBody CreateFoodDTO createFoodDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is creating a food with payload [{}]", jwt.getSubject(), createFoodDTO);
+
         FoodDTO foodDTO = foodService.createFood(createFoodDTO, jwt.getSubject());
+
+        log.info("Food created successfully. Food Id: [{}], User: [{}]", foodDTO.id(), jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -42,7 +48,11 @@ public class FoodController {
             @PathVariable("id") @Valid @ValidUUID String foodId,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is requesting details of food with id [{}]", jwt.getSubject(), foodId);
+
         FoodDTO foodDTO = foodService.getFood(foodId, jwt.getSubject());
+
+        log.info("Food details returned for user [{}]. Food id: [{}]", jwt.getSubject(), foodId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -54,7 +64,11 @@ public class FoodController {
             @PathVariable("id") @Valid @ValidUUID String foodId,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is requesting nutritional information of food with ID [{}]", jwt.getSubject(), foodId);
+
         NutritionalInformationDTO nutritionalInformationDTO = foodService.getFoodNutritionalInformation(foodId, jwt.getSubject());
+
+        log.info("Food nutritional information returned for user [{}]. Food ID: [{}]", jwt.getSubject(), foodId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -66,7 +80,11 @@ public class FoodController {
             @PathVariable("id") @Valid @ValidUUID String foodId,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is requesting meals that contain the food with id [{}]", jwt.getSubject(), foodId);
+
         List<MealDTO> mealDTOList = foodService.getFoodMeals(foodId, jwt.getSubject());
+
+        log.info("Meals containing the food [{}] returned to the user [{}]", foodId, jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -79,7 +97,11 @@ public class FoodController {
             @Valid @RequestBody UpdateFoodDTO updateFoodDTO,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is updating food [{}] with payload [{}]", jwt.getSubject(), foodId, updateFoodDTO);
+
         FoodDTO foodDTO = foodService.updateFood(foodId, updateFoodDTO, jwt.getSubject());
+
+        log.info("Food updated sucessfully. Food id: [{}], User: [{}]", foodId, jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -91,7 +113,11 @@ public class FoodController {
             @PathVariable("id") @Valid @ValidUUID String foodId,
             @AuthenticationPrincipal Jwt jwt
     ) {
+        log.info("User [{}] is deleting food [{}]", jwt.getSubject(), foodId);
+
         foodService.deleteFood(foodId, jwt.getSubject());
+
+        log.info("Food deleted sucessfully. Food id: [{}], User: [{}]", foodId, jwt.getSubject());
 
         return ResponseEntity
                 .status(HttpStatus.OK)

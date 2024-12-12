@@ -12,6 +12,7 @@ import com.mumuca.diet.repository.UserRepository;
 import com.mumuca.diet.service.FoodService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +21,10 @@ import static com.mumuca.diet.util.UpdateUtils.updateIfDifferent;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class FoodServiceImpl implements FoodService {
 
     private final FoodRepository foodRepository;
-    private final UserRepository userRepository;
     private final MealRepository mealRepository;
 
     @Override
