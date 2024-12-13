@@ -5,7 +5,7 @@ Tudo que essa API precisa para estar pronta para produção
 ## **1. Configurações para Produção**
 
 ### **1.1. Perfil de Produção**
-- [ ] Configurar um perfil específico para produção no arquivo `application-prod.yml.
+- [x] Configurar um perfil específico para produção no arquivo `application-prod.yml`.
 
 ### **1.2. Configurações de Banco de Dados**
 - [ ] Utilizar o PostgreSQL.
