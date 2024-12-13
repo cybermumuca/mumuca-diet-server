@@ -48,9 +48,13 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Body> bodyHistory = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", referencedColumnName = "id", unique = true)
     private Profile profile;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "goal_id", referencedColumnName = "id", unique = true)
+    private Goal goal;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<MealLog> mealLogs = new ArrayList<>();

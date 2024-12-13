@@ -45,7 +45,6 @@ public class Goal {
     @Column
     private LocalDate deadline;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @OneToOne(mappedBy = "goal", cascade = CascadeType.ALL)
     private User user;
 }

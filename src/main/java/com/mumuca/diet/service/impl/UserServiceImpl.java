@@ -68,6 +68,7 @@ public class UserServiceImpl implements UserService {
 
         Goal goal = new Goal();
 
+        user.setGoal(goal);
         goal.setUser(user);
         goal.setGoalType(completeRegistrationDTO.goal());
         goal.setTargetWeight(completeRegistrationDTO.targetWeight());
