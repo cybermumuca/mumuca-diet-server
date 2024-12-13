@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: mumuca-diet
+  datasource:
+    url: jdbc:postgresql://localhost:5432/devdb
+    driver-class-name: org.postgresql.Driver
+    username: devuser
+    password: devpassword
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        session:
+          events:
+            log:
+              LOG_QUERIES_SLOWER_THAN_MS: 30
+    generate-ddl: true
+
+  h2:
+    console:
+      enabled: false
+  sql:
+    init:
+      mode: always
+
+jwt:
+  public:
+    key: classpath:app.pub
+  private:
+    key: classpath:app.key
+
+bcrypt:
+  salt: 13
