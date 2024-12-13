@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -127,14 +128,20 @@ public class MealLogController {
     ) {
         log.info("User [{}] is requesting nutritional information of meal log [{}]", jwt.getSubject(), mealLogId);
 
-        MealNutritionalInformationDTO mealNutritionalInformationDTO = mealLogService
+        Optional<MealNutritionalInformationDTO> mealNutritionalInformationDTO = mealLogService
                 .getMealLogNutritionalInformation(mealLogId, jwt.getSubject());
+
+        if (mealNutritionalInformationDTO.isEmpty()) {
+           log.info("There is no nutritional information available for meal log [{}]. User: [{}]", mealLogId, jwt.getSubject());
+
+           return ResponseEntity.noContent().build();
+        }
 
         log.info("Meal log nutritional information returned for user [{}]. Meal Log id: [{}]", jwt.getSubject(), mealLogId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(mealNutritionalInformationDTO);
+                .body(mealNutritionalInformationDTO.get());
     }
 
 

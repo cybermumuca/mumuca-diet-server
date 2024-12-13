@@ -2,7 +2,6 @@ package com.mumuca.diet.repository;
 
 import com.mumuca.diet.dto.meal.MealNutritionalInformationDTO;
 import com.mumuca.diet.model.MealLog;
-import com.mumuca.diet.model.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,6 +24,7 @@ public interface MealLogRepository extends JpaRepository<MealLog, String> {
     @Query("SELECT ml from MealLog ml WHERE ml.id = :mealId AND ml.user.id = :userId")
     Optional<MealLog> findMealLogByIdAndUserIdWithMeals(String mealId, String userId);
 
+    // TODO: Remove the Optional, because this method always returns the DTO
     @Query("""
         SELECT new com.mumuca.diet.dto.meal.MealNutritionalInformationDTO(
             SUM(ni.calories),
@@ -55,6 +55,7 @@ public interface MealLogRepository extends JpaRepository<MealLog, String> {
             @Param("userId") String userId
     );
 
+    // TODO: Remove the Optional, because this method always returns the DTO
     @Query("""
         SELECT new com.mumuca.diet.dto.meal.MealNutritionalInformationDTO(
             SUM(mfi.calories),
@@ -100,4 +101,12 @@ public interface MealLogRepository extends JpaRepository<MealLog, String> {
     Optional<Integer> sumFoodsAndMealsCaloriesByMealLogIdAndUserId(@Param("mealLogId") String mealLogId, @Param("userId") String userId);
 
     List<MealLog> findByDateAndUserId(LocalDate date, String userId);
+
+    boolean existsByIdAndUserId(String mealLogId, String userId);
+
+    @Query("SELECT COUNT(f.id) > 0 FROM MealLog ml JOIN ml.foods f WHERE ml.id = :mealLogId AND ml.user.id = :userId")
+    boolean existsFoodsByIdAndUserId(@Param("mealLogId") String mealLogId, @Param("userId") String userId);
+
+    @Query("SELECT COUNT(m.id) > 0 FROM MealLog ml JOIN ml.meals m WHERE ml.id = :mealLogId AND ml.user.id = :userId")
+    boolean existsMealsByIdAndUserId(@Param("mealLogId") String mealLogId, @Param("userId") String userId);
 }

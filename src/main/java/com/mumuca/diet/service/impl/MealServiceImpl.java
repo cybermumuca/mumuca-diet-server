@@ -19,10 +19,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -32,7 +32,6 @@ public class MealServiceImpl implements MealService {
     private final MealRepository mealRepository;
     private final NutritionalInformationRepository nutritionalInformationRepository;
 
-    // TODO: refactor
     @Override
     @Transactional
     public MealDTO createMeal(CreateMealDTO createMealDTO, String userId) {
@@ -41,14 +40,13 @@ public class MealServiceImpl implements MealService {
         meal.setTitle(createMealDTO.title());
         meal.setDescription(createMealDTO.description());
         meal.setType(createMealDTO.type());
+        meal.setUser(new User(userId));
 
-        List<Food> foods = foodRepository.findAllByIdsAndUserId(createMealDTO.foodIds(), userId);
-
-        meal.setFoods(Set.copyOf(foods));
-
-        User user = new User(userId);
-
-        meal.setUser(user);
+        foodRepository
+                .findAllIdsByIdsAndUserId(createMealDTO.foodIds(), userId)
+                .stream()
+                .map(Food::new)
+                .forEach(meal.getFoods()::add);
 
         mealRepository.save(meal);
 
@@ -104,8 +102,20 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public Optional<MealNutritionalInformationDTO> getMealNutritionalInformation(String mealId, String userId) {
-        return nutritionalInformationRepository
-                .sumNutritionalInformationByMealIdAndUserId(mealId, userId);
+        boolean mealExists = mealRepository.existsByIdAndUserId(mealId, userId);
+
+        if (!mealExists) {
+            throw new ResourceNotFoundException("Meal not found.");
+        }
+
+        boolean mealHasFood = mealRepository.existsFoodsByMealIdAndUserId(mealId, userId);
+
+        if (!mealHasFood) {
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(mealRepository
+                .sumNutritionalInformationByMealIdAndUserId(mealId, userId));
     }
 
     @Override
@@ -178,22 +188,24 @@ public class MealServiceImpl implements MealService {
         Meal mealToAddFoods = mealRepository.findByIdAndUserIdWithFoods(mealId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Meal not found."));
 
-        List<Food> foodsToAdd = foodRepository.findAllByIdsAndUserId(foodIds, userId);
+        List<String> foodIdsToAdd = foodRepository
+                .findAllIdsByIdsAndUserId(foodIds, userId);
 
-        if (foodsToAdd.size() != foodIds.size()) {
+        if (foodIdsToAdd.size() != foodIds.size()) {
             throw new ResourceNotFoundException("Some food were not found.");
         }
 
-        Set<Food> existingFoods = new HashSet<>(mealToAddFoods.getFoods());
+        Set<String> existingFoodIds = mealToAddFoods.getFoods().stream()
+                .map(Food::getId)
+                .collect(Collectors.toSet());
 
-        List<Food> uniqueFoodsToAdd = foodsToAdd.stream()
-                .filter(food -> !existingFoods.contains(food))
+        List<String> uniqueFoodIdsToAdd = foodIdsToAdd.stream()
+                .filter(foodId -> !existingFoodIds.contains(foodId))
                 .toList();
 
-        if (!uniqueFoodsToAdd.isEmpty()) {
-            mealToAddFoods
-                    .getFoods()
-                    .addAll(uniqueFoodsToAdd);
+        if (!uniqueFoodIdsToAdd.isEmpty()) {
+            uniqueFoodIdsToAdd
+                    .forEach(foodId -> mealToAddFoods.getFoods().add(new Food(foodId)));
             mealRepository.save(mealToAddFoods);
         }
     }

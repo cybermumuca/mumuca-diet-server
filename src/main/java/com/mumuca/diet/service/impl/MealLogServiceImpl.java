@@ -13,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
@@ -29,6 +31,41 @@ public class MealLogServiceImpl implements MealLogService {
     private final MealLogRepository mealLogRepository;
     private final FoodRepository foodRepository;
     private final MealRepository mealRepository;
+
+    private MealNutritionalInformationDTO getDefaultNutritionalInformation() {
+        return new MealNutritionalInformationDTO(
+                BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
+                BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
+                BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
+                BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
+                BigDecimal.ZERO
+        );
+    }
+
+    private BigDecimal safeAdd(BigDecimal value1, BigDecimal value2) {
+        return (value1 == null ? BigDecimal.ZERO : value1)
+                .add(value2 == null ? BigDecimal.ZERO : value2);
+    }
+
+    private boolean isDefaultNutritionalInformation(MealNutritionalInformationDTO info) {
+        return info.calories().equals(BigDecimal.ZERO)
+                && info.carbohydrates().equals(BigDecimal.ZERO)
+                && info.protein().equals(BigDecimal.ZERO)
+                && info.fat().equals(BigDecimal.ZERO)
+                && info.monounsaturatedFat().equals(BigDecimal.ZERO)
+                && info.saturatedFat().equals(BigDecimal.ZERO)
+                && info.polyunsaturatedFat().equals(BigDecimal.ZERO)
+                && info.transFat().equals(BigDecimal.ZERO)
+                && info.cholesterol().equals(BigDecimal.ZERO)
+                && info.sodium().equals(BigDecimal.ZERO)
+                && info.potassium().equals(BigDecimal.ZERO)
+                && info.fiber().equals(BigDecimal.ZERO)
+                && info.sugar().equals(BigDecimal.ZERO)
+                && info.calcium().equals(BigDecimal.ZERO)
+                && info.iron().equals(BigDecimal.ZERO)
+                && info.vitaminA().equals(BigDecimal.ZERO)
+                && info.vitaminC().equals(BigDecimal.ZERO);
+    }
 
     @Override
     public MealLogDTO createMealLog(CreateMealLogDTO createMealLogDTO, String userId) {
@@ -192,44 +229,82 @@ public class MealLogServiceImpl implements MealLogService {
                 .toList();
     }
 
-    // TODO: Fix NullPointerException exception when any query field is null
+    // TODO: TEST THIS
     @Override
-    public MealNutritionalInformationDTO getMealLogNutritionalInformation(String mealLogId, String userId) {
+    public Optional<MealNutritionalInformationDTO> getMealLogNutritionalInformation(String mealLogId, String userId) {
+        boolean mealLogExists = mealLogRepository.existsByIdAndUserId(mealLogId, userId);
+
+        if (!mealLogExists) {
+            throw new ResourceNotFoundException("Meal Log not found.");
+        }
+
         try (var virtualThreadExecutor = Executors.newVirtualThreadPerTaskExecutor()) {
-            var foodsFuture = CompletableFuture.supplyAsync(() ->
-                            mealLogRepository.sumFoodsNutritionalInformationByMealLogIdAndUserId(mealLogId, userId)
-                                    .orElseThrow(() -> new ResourceNotFoundException("Meal Log not found.")),
+            var mealLogHasFoodsFuture = CompletableFuture.supplyAsync(
+                    () -> mealLogRepository.existsFoodsByIdAndUserId(mealLogId, userId),
                     virtualThreadExecutor
             );
 
-            var mealsFuture = CompletableFuture.supplyAsync(() ->
-                            mealLogRepository.sumMealsNutritionalInformationByMealLogIdAndUserId(mealLogId, userId)
-                                    .orElseThrow(() -> new ResourceNotFoundException("Meal Log not found.")),
+            var mealLogHasMealsFuture = CompletableFuture.supplyAsync(
+                    () -> mealLogRepository.existsMealsByIdAndUserId(mealLogId, userId),
                     virtualThreadExecutor
             );
 
-            var foodsNutritionalInformation = foodsFuture.join();
-            var mealsNutritionalInformation = mealsFuture.join();
+            CompletableFuture<MealNutritionalInformationDTO> foodsFuture = mealLogHasFoodsFuture
+                    .thenCompose(hasFoods -> {
+                        if (!hasFoods) {
+                            return CompletableFuture.completedFuture(getDefaultNutritionalInformation());
+                        }
 
-            return new MealNutritionalInformationDTO(
-                    foodsNutritionalInformation.calories().add(mealsNutritionalInformation.calories()),
-                    foodsNutritionalInformation.carbohydrates().add(mealsNutritionalInformation.carbohydrates()),
-                    foodsNutritionalInformation.protein().add(mealsNutritionalInformation.protein()),
-                    foodsNutritionalInformation.fat().add(mealsNutritionalInformation.fat()),
-                    foodsNutritionalInformation.monounsaturatedFat().add(mealsNutritionalInformation.monounsaturatedFat()),
-                    foodsNutritionalInformation.saturatedFat().add(mealsNutritionalInformation.saturatedFat()),
-                    foodsNutritionalInformation.polyunsaturatedFat().add(mealsNutritionalInformation.polyunsaturatedFat()),
-                    foodsNutritionalInformation.transFat().add(mealsNutritionalInformation.transFat()),
-                    foodsNutritionalInformation.cholesterol().add(mealsNutritionalInformation.cholesterol()),
-                    foodsNutritionalInformation.sodium().add(mealsNutritionalInformation.sodium()),
-                    foodsNutritionalInformation.potassium().add(mealsNutritionalInformation.potassium()),
-                    foodsNutritionalInformation.fiber().add(mealsNutritionalInformation.fiber()),
-                    foodsNutritionalInformation.sugar().add(mealsNutritionalInformation.sugar()),
-                    foodsNutritionalInformation.calcium().add(mealsNutritionalInformation.calcium()),
-                    foodsNutritionalInformation.iron().add(mealsNutritionalInformation.iron()),
-                    foodsNutritionalInformation.vitaminA().add(mealsNutritionalInformation.vitaminA()),
-                    foodsNutritionalInformation.vitaminC().add(mealsNutritionalInformation.vitaminC())
+                        return CompletableFuture.supplyAsync(() -> {
+                            return mealLogRepository
+                                    .sumFoodsNutritionalInformationByMealLogIdAndUserId(mealLogId, userId)
+                                    .orElseGet(this::getDefaultNutritionalInformation);
+                        }, virtualThreadExecutor);
+                    }
             );
+
+            CompletableFuture<MealNutritionalInformationDTO> mealsFuture = mealLogHasMealsFuture
+                    .thenCompose(hasMeals -> {
+                        if (!hasMeals) {
+                            return CompletableFuture.completedFuture(getDefaultNutritionalInformation());
+                        }
+
+                        return CompletableFuture.supplyAsync(() -> {
+                            return mealLogRepository
+                                    .sumMealsNutritionalInformationByMealLogIdAndUserId(mealLogId, userId)
+                                    .orElseGet(this::getDefaultNutritionalInformation);
+                        }, virtualThreadExecutor);
+            });
+
+            var nutritionalInformationFuture = foodsFuture
+                    .thenCombine(mealsFuture, (foodsNI, mealsNI) -> new MealNutritionalInformationDTO(
+                            safeAdd(foodsNI.calories(), mealsNI.calories()),
+                            safeAdd(foodsNI.carbohydrates(), mealsNI.carbohydrates()),
+                            safeAdd(foodsNI.protein(), mealsNI.protein()),
+                            safeAdd(foodsNI.fat(), mealsNI.fat()),
+                            safeAdd(foodsNI.monounsaturatedFat(), mealsNI.monounsaturatedFat()),
+                            safeAdd(foodsNI.saturatedFat(), mealsNI.saturatedFat()),
+                            safeAdd(foodsNI.polyunsaturatedFat(), mealsNI.polyunsaturatedFat()),
+                            safeAdd(foodsNI.transFat(), mealsNI.transFat()),
+                            safeAdd(foodsNI.cholesterol(), mealsNI.cholesterol()),
+                            safeAdd(foodsNI.sodium(), mealsNI.sodium()),
+                            safeAdd(foodsNI.potassium(), mealsNI.potassium()),
+                            safeAdd(foodsNI.fiber(), mealsNI.fiber()),
+                            safeAdd(foodsNI.sugar(), mealsNI.sugar()),
+                            safeAdd(foodsNI.calcium(), mealsNI.calcium()),
+                            safeAdd(foodsNI.iron(), mealsNI.iron()),
+                            safeAdd(foodsNI.vitaminA(), mealsNI.vitaminA()),
+                            safeAdd(foodsNI.vitaminC(), mealsNI.vitaminC())
+                    )
+            );
+
+            var nutritionalInformation = nutritionalInformationFuture.join();
+
+            if (isDefaultNutritionalInformation(nutritionalInformation)) {
+                return Optional.empty();
+            }
+
+            return Optional.of(nutritionalInformation);
         } catch (CompletionException e) {
             Throwable cause = e.getCause();
 
@@ -237,7 +312,7 @@ public class MealLogServiceImpl implements MealLogService {
                 throw (ResourceNotFoundException) cause;
             }
 
-            throw new RuntimeException("Unexpected error occurred while fetching meal data.", e);
+            throw new RuntimeException("Failed to calculate nutritional information for Meal Log with ID: " + mealLogId, e);
         }
     }
 
@@ -247,21 +322,23 @@ public class MealLogServiceImpl implements MealLogService {
                 .findMealLogByIdAndUserIdWithFoods(mealLogId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Meal Log not found."));
 
-        List<Food> foodsToAdd = foodRepository
-                .findAllByIdsAndUserId(addFoodsToMealLogDTO.foodIds(), userId);
+        List<String> foodIdsToAdd = foodRepository
+                .findAllIdsByIdsAndUserId(addFoodsToMealLogDTO.foodIds(), userId);
 
-        if (foodsToAdd.size() != addFoodsToMealLogDTO.foodIds().size()) {
+        if (foodIdsToAdd.size() != addFoodsToMealLogDTO.foodIds().size()) {
             throw new ResourceNotFoundException("Some foods were not found.");
         }
 
-        Set<Food> existingFoods = new HashSet<>(mealLogToAddFoods.getFoods());
+        Set<String> existingFoodIds = mealLogToAddFoods.getFoods().stream()
+                .map(Food::getId)
+                .collect(Collectors.toSet());
 
-        List<Food> uniqueFoodsToAdd = foodsToAdd.stream()
-                .filter(food -> !existingFoods.contains(food))
+        List<String> uniqueFoodIdsToAdd = foodIdsToAdd.stream()
+                .filter(foodId -> !existingFoodIds.contains(foodId))
                 .toList();
 
-        if (!uniqueFoodsToAdd.isEmpty()) {
-            mealLogToAddFoods.getFoods().addAll(uniqueFoodsToAdd);
+        if (!uniqueFoodIdsToAdd.isEmpty()) {
+            uniqueFoodIdsToAdd.forEach(foodId -> mealLogToAddFoods.getFoods().add(new Food(foodId)));
             mealLogRepository.save(mealLogToAddFoods);
         }
     }

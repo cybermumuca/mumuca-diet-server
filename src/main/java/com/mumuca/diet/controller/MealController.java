@@ -93,7 +93,7 @@ public class MealController {
     ) {
         log.info("User [{}] is requesting nutritional information of meal [{}]", jwt.getSubject(), mealId);
 
-        Optional<MealNutritionalInformationDTO> nutritionalInformationDTO =  mealService.getMealNutritionalInformation(mealId, jwt.getSubject());
+        Optional<MealNutritionalInformationDTO> nutritionalInformationDTO = mealService.getMealNutritionalInformation(mealId, jwt.getSubject());
 
         if (nutritionalInformationDTO.isEmpty()) {
             log.info(

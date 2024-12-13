@@ -41,4 +41,8 @@ public class Food {
 
     @ManyToMany(mappedBy = "foods")
     private Set<MealLog> mealLogs = new LinkedHashSet<>();
+
+    public Food(String id) {
+        this.id = id;
+    }
 }

@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface MealLogService {
     MealLogDTO createMealLog(CreateMealLogDTO createMealLogDTO, String userId);
@@ -17,7 +18,7 @@ public interface MealLogService {
     List<MealLogWithCaloriesConsumedDTO> findMealLogsByDate(LocalDate date, String userId);
     List<FoodDTO> getMealLogFoods(String mealLogId, String userId);
     List<MealWithFoodsDTO> getMealLogMeals(String mealLogId, String userId);
-    MealNutritionalInformationDTO getMealLogNutritionalInformation(String mealLogId, String userId);
+    Optional<MealNutritionalInformationDTO> getMealLogNutritionalInformation(String mealLogId, String userId);
     void addFoodsToMealLog(String mealLogId, AddFoodsToMealLogDTO addFoodsToMealLogDTO, String userId);
     void addMealsToMealLog(String mealLogId, AddMealsToMealLogDTO addMealsToMealLogDTO, String userId);
     void updateMealLog(String mealLogId, UpdateMealLogDTO updateMealLogDTO, String userId);

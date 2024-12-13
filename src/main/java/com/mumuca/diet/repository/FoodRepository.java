@@ -15,8 +15,8 @@ import java.util.Optional;
 public interface FoodRepository extends JpaRepository<Food, String> {
     Optional<Food> findByIdAndUserId(String id, String userId);
 
-    @Query("SELECT f FROM Food f WHERE f.id IN :ids AND f.user.id = :userId")
-    List<Food> findAllByIdsAndUserId(Iterable<String> ids, String userId);
+    @Query("SELECT f.id FROM Food f WHERE f.id IN :ids AND f.user.id = :userId")
+    List<String> findAllIdsByIdsAndUserId(Iterable<String> ids, String userId);
 
     List<Food> findAllByMealLogsIdAndUserId(String mealLogId, String userId);
 
