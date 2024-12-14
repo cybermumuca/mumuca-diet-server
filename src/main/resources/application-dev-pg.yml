@@ -33,3 +33,7 @@ jwt:
 
 bcrypt:
   salt: 13
+
+log:
+  level: info
+  path: logs

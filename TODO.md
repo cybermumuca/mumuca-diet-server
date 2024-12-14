@@ -14,7 +14,7 @@ Tudo que essa API precisa para estar pronta para produção
 
 ### **1.3. Logs**
 - [x] Fazer logging
-- [ ] Usar Logs estruturados em JSON.
+- [x] Usar Logs estruturados em JSON.
 
 ### **1.4. Migrações**
 - [x] Gerar Migrations
