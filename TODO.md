@@ -10,7 +10,7 @@ Tudo que essa API precisa para estar pronta para produção
 ### **1.2. Configurações de Banco de Dados**
 - [x] Utilizar o PostgreSQL.
 - [x] Configurar o Pool de conexões do **Hikari** para o PostgreSQL.
-- [ ] Configurar o Redis.
+- [x] Configurar o Redis.
 
 ### **1.3. Logs**
 - [x] Fazer logging
@@ -51,10 +51,10 @@ Tudo que essa API precisa para estar pronta para produção
 - [ ] Usar Redis para cachear dados na API.
 
 ### **3.3. Queries SQL**
-- [ ] Fazer queries mais especificas na API.
+- [x] Fazer queries mais especificas na API.
 
 ### **3.4. Virtual Threads**
-- [ ] Habilitar Threads virtuais no Gateway e na API.
+- [x] Habilitar Threads virtuais no Gateway e na API.
 
 ## **4. Deploy**
 

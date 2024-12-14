@@ -10,12 +10,12 @@ spring:
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
     hikari:
-      maximum-pool-size: ${DATABASE_MAX_POOL_SIZE:20}    # Número máximo de conexões no pool
-      minimum-idle: ${DATABASE_MIN_POOL_SIZE:5}          # Número mínimo de conexões ociosas no pool
-      idle-timeout: ${DATABASE_IDLE_TIMEOUT:30000}       # Tempo máximo de inatividade de uma conexão ociosa (em milissegundos)
-      max-lifetime: ${DB_MAX_LIFETIME:1800000}           # Tempo máximo de vida de uma conexão no pool (em milissegundos)
-      connection-timeout: ${DB_CONNECTION_TIMEOUT:20000} # Tempo máximo para aguardar uma conexão do pool (em milissegundos)
-      pool-name: ${DB_POOL_NAME:HikariPool-Mumuca}       # Nome do pool (opcional)
+      maximum-pool-size: ${DATABASE_MAX_POOL_SIZE:20}          # Número máximo de conexões no pool
+      minimum-idle: ${DATABASE_MIN_POOL_SIZE:5}                # Número mínimo de conexões ociosas no pool
+      idle-timeout: ${DATABASE_IDLE_TIMEOUT:30000}             # Tempo máximo de inatividade de uma conexão ociosa (em milissegundos)
+      max-lifetime: ${DATABASE_MAX_LIFETIME:1800000}           # Tempo máximo de vida de uma conexão no pool (em milissegundos)
+      connection-timeout: ${DATABASE_CONNECTION_TIMEOUT:20000} # Tempo máximo para aguardar uma conexão do pool (em milissegundos)
+      pool-name: ${DATABASE_POOL_NAME:HikariPool-Mumuca}       # Nome do pool (opcional)
   flyway:
     enabled: true
     locations: classpath:db/migration
@@ -31,6 +31,17 @@ spring:
           events:
             log:
               LOG_QUERIES_SLOWER_THAN_MS: ${LOG_QUERIES_SLOWER_THAN_MS:300}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      lettuce:
+        pool:
+          max-active: ${REDIS_POOL_MAX_ACTIVE:50}   # Máximo de conexões ativas
+          max-idle: ${REDIS_POOL_MAX_IDLE:20}       # Máximo de conexões ociosas no pool
+          min-idle: ${REDIS_POOL_MIN_IDLE:5}        # Mínimo de conexões ociosas no pool
+          max-wait: ${REDIS_POOL_MAX_WAIT:10s}      # Tempo máximo de espera por uma conexão
+          enabled: true
 
 jwt:
   public:
