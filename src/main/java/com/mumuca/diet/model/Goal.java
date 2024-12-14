@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,6 +25,7 @@ public class Goal {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "goal_type")
+    @JdbcType(value = PostgreSQLEnumJdbcType.class)
     private GoalType goalType;
 
     @Column(name = "target_calories")

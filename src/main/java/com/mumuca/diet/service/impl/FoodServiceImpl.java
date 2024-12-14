@@ -8,6 +8,7 @@ import com.mumuca.diet.model.NutritionalInformation;
 import com.mumuca.diet.model.User;
 import com.mumuca.diet.repository.FoodRepository;
 import com.mumuca.diet.repository.MealRepository;
+import com.mumuca.diet.repository.NutritionalInformationRepository;
 import com.mumuca.diet.repository.UserRepository;
 import com.mumuca.diet.service.FoodService;
 import jakarta.transaction.Transactional;
@@ -27,6 +28,7 @@ import static com.mumuca.diet.util.UpdateUtils.updateIfDifferent;
 public class FoodServiceImpl implements FoodService {
 
     private final FoodRepository foodRepository;
+    private final NutritionalInformationRepository nutritionalInformationRepository;
     private final MealRepository mealRepository;
 
     @Override
@@ -41,32 +43,34 @@ public class FoodServiceImpl implements FoodService {
         food.setBrand(createFoodDTO.brand());
         food.setUser(user);
 
-        if (createFoodDTO.nutritionalInformation() != null) {
-            CreateNutritionalInformationDTO nutritionalInfoDTO = createFoodDTO.nutritionalInformation();
-
-            NutritionalInformation nutritionalInformation = new NutritionalInformation();
-            nutritionalInformation.setCalories(nutritionalInfoDTO.calories());
-            nutritionalInformation.setCarbohydrates(nutritionalInfoDTO.carbohydrates());
-            nutritionalInformation.setProtein(nutritionalInfoDTO.protein());
-            nutritionalInformation.setFat(nutritionalInfoDTO.fat());
-            nutritionalInformation.setMonounsaturatedFat(nutritionalInfoDTO.monounsaturatedFat());
-            nutritionalInformation.setSaturatedFat(nutritionalInfoDTO.saturatedFat());
-            nutritionalInformation.setPolyunsaturatedFat(nutritionalInfoDTO.polyunsaturatedFat());
-            nutritionalInformation.setTransFat(nutritionalInfoDTO.transFat());
-            nutritionalInformation.setCholesterol(nutritionalInfoDTO.cholesterol());
-            nutritionalInformation.setSodium(nutritionalInfoDTO.sodium());
-            nutritionalInformation.setPotassium(nutritionalInfoDTO.potassium());
-            nutritionalInformation.setFiber(nutritionalInfoDTO.fiber());
-            nutritionalInformation.setSugar(nutritionalInfoDTO.sugar());
-            nutritionalInformation.setCalcium(nutritionalInfoDTO.calcium());
-            nutritionalInformation.setIron(nutritionalInfoDTO.iron());
-            nutritionalInformation.setVitaminA(nutritionalInfoDTO.vitaminA());
-            nutritionalInformation.setVitaminC(nutritionalInfoDTO.vitaminC());
-
-            food.setNutritionalInformation(nutritionalInformation);
-        }
-
         foodRepository.save(food);
+
+        CreateNutritionalInformationDTO nutritionalInfoDTO = createFoodDTO.nutritionalInformation();
+
+        NutritionalInformation nutritionalInformation = new NutritionalInformation();
+
+        nutritionalInformation.setCalories(nutritionalInfoDTO.calories());
+        nutritionalInformation.setCarbohydrates(nutritionalInfoDTO.carbohydrates());
+        nutritionalInformation.setProtein(nutritionalInfoDTO.protein());
+        nutritionalInformation.setFat(nutritionalInfoDTO.fat());
+        nutritionalInformation.setMonounsaturatedFat(nutritionalInfoDTO.monounsaturatedFat());
+        nutritionalInformation.setSaturatedFat(nutritionalInfoDTO.saturatedFat());
+        nutritionalInformation.setPolyunsaturatedFat(nutritionalInfoDTO.polyunsaturatedFat());
+        nutritionalInformation.setTransFat(nutritionalInfoDTO.transFat());
+        nutritionalInformation.setCholesterol(nutritionalInfoDTO.cholesterol());
+        nutritionalInformation.setSodium(nutritionalInfoDTO.sodium());
+        nutritionalInformation.setPotassium(nutritionalInfoDTO.potassium());
+        nutritionalInformation.setFiber(nutritionalInfoDTO.fiber());
+        nutritionalInformation.setSugar(nutritionalInfoDTO.sugar());
+        nutritionalInformation.setCalcium(nutritionalInfoDTO.calcium());
+        nutritionalInformation.setIron(nutritionalInfoDTO.iron());
+        nutritionalInformation.setVitaminA(nutritionalInfoDTO.vitaminA());
+        nutritionalInformation.setVitaminC(nutritionalInfoDTO.vitaminC());
+
+        nutritionalInformation.setFood(food);
+        food.setNutritionalInformation(nutritionalInformation);
+
+        nutritionalInformationRepository.save(nutritionalInformation);
 
         NutritionalInformationDTO nutritionalInformationDTO = null;
 

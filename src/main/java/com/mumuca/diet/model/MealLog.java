@@ -2,6 +2,8 @@ package com.mumuca.diet.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -23,6 +25,7 @@ public class MealLog {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
+    @JdbcType(value = PostgreSQLEnumJdbcType.class)
     private MealType type;
 
     @Column(name = "date")

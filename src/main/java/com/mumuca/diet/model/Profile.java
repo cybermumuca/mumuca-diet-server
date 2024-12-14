@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -24,6 +26,7 @@ public class Profile {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
+    @JdbcType(value = PostgreSQLEnumJdbcType.class)
     private Gender gender;
 
     @Column(name = "birthDate")
@@ -34,6 +37,7 @@ public class Profile {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "activity_level")
+    @JdbcType(value = PostgreSQLEnumJdbcType.class)
     private ActivityLevel activityLevel;
 
     @OneToOne(fetch = FetchType.LAZY)

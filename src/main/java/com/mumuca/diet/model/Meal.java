@@ -2,6 +2,8 @@ package com.mumuca.diet.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -26,7 +28,8 @@ public class Meal {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "type")
+    @Column(name = "type", columnDefinition = "meal_type_enum")
+    @JdbcType(value = PostgreSQLEnumJdbcType.class)
     private MealType type;
 
     @ManyToMany(fetch = FetchType.LAZY)
