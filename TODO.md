@@ -30,7 +30,7 @@ Tudo que essa API precisa para estar pronta para produção
 - [ ] Configurar o Spring Security na API para adicionar cabeçalhos de segurança
 
 ### **2.3. Propriedades Sensíveis**
-- [ ] Usar variáveis de ambiente ou um cofre de segredos.
+- [x] Usar variáveis de ambiente ou um cofre de segredos.
 
 ### **2.4. Controle de Taxa de Requisição**
 - [ ] Configurar um **Rate Limiter** no Spring Cloud Gateway com o Redis.
@@ -82,11 +82,6 @@ Tudo que essa API precisa para estar pronta para produção
 
 ### **6.2. Testes em Produção**
 - [] Fazer um ambiente de Staging.
-
-
-
-
-
 
 ## **7. CI/CD**
 

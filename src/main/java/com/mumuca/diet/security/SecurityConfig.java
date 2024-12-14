@@ -53,15 +53,14 @@ public class SecurityConfig {
                         request
                                 .requestMatchers(
                                         "/api/v1/auth/**",
-                                        "/api/v1/calculator/**",
-                                        "/h2-console/**"
+                                        "/api/v1/calculator/**"
                                 ).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
+        http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
         return http.build();
     }

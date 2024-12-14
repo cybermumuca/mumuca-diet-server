@@ -16,12 +16,15 @@ spring:
       max-lifetime: ${DB_MAX_LIFETIME:1800000}           # Tempo máximo de vida de uma conexão no pool (em milissegundos)
       connection-timeout: ${DB_CONNECTION_TIMEOUT:20000} # Tempo máximo para aguardar uma conexão do pool (em milissegundos)
       pool-name: ${DB_POOL_NAME:HikariPool-Mumuca}       # Nome do pool (opcional)
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     defer-datasource-initialization: false
+    open-in-view: true # Desativar depois
     properties:
       hibernate:
-        ddl-auto: update
         show_sql: false
         format_sql: false
         session:
