@@ -16,6 +16,10 @@ Tudo que essa API precisa para estar pronta para produção
 - [x] Fazer logging
 - [ ] Usar Logs estruturados em JSON.
 
+### **1.4. Migrações**
+- [x] Gerar Migrations
+- [ ] Ajustes finos na definição dos campos das migrations
+
 ## **2. Segurança**
 
 ### **2.1. HTTPS**
