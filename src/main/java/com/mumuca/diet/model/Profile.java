@@ -19,23 +19,25 @@ public class Profile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")
     private String id;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "gender")
     private Gender gender;
 
-    @Column(nullable = false)
+    @Column(name = "birthDate")
     private LocalDate birthDate;
 
-    @Column
+    @Column(name = "photoUrl")
     private String photoUrl;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "activity_level")
     private ActivityLevel activityLevel;
 
-    @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     public int getAge() {

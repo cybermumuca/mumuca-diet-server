@@ -18,7 +18,7 @@ Tudo que essa API precisa para estar pronta para produção
 
 ### **1.4. Migrações**
 - [x] Gerar Migrations
-- [ ] Ajustes finos na definição dos campos das migrations
+- [x] Ajustes finos na definição dos campos das migrations
 
 ## **2. Segurança**
 

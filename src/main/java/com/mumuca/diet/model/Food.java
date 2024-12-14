@@ -17,29 +17,29 @@ public class Food {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")
     private String id;
 
-    @Column(nullable = false)
+    @Column(name = "title")
     private String title;
 
-    @Column
+    @Column(name = "brand")
     private String brand;
 
-    @Column
+    @Column(name = "description")
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "nutritional_information_id", referencedColumnName = "id", unique = true)
+    @OneToOne(mappedBy = "food", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private NutritionalInformation nutritionalInformation;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(mappedBy = "foods")
+    @ManyToMany(mappedBy = "foods", fetch = FetchType.LAZY)
     private Set<Meal> meals = new LinkedHashSet<>();
 
-    @ManyToMany(mappedBy = "foods")
+    @ManyToMany(mappedBy = "foods", fetch = FetchType.LAZY)
     private Set<MealLog> mealLogs = new LinkedHashSet<>();
 
     public Food(String id) {

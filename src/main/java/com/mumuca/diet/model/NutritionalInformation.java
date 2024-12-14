@@ -6,7 +6,7 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "nutritional_informations")
+@Table(name = "nutritional_information")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,60 +16,62 @@ public class NutritionalInformation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")
     private String id;
 
-    @Column(name = "calories", nullable = false)
+    @Column(name = "calories")
     private BigDecimal calories = BigDecimal.ZERO;
 
-    @Column(name = "carbohydrates", nullable = false)
+    @Column(name = "carbohydrates")
     private BigDecimal carbohydrates = BigDecimal.ZERO;
 
-    @Column(name = "protein", nullable = false)
+    @Column(name = "protein")
     private BigDecimal protein = BigDecimal.ZERO;
 
-    @Column(name = "fat", nullable = false)
+    @Column(name = "fat")
     private BigDecimal fat = BigDecimal.ZERO;
 
-    @Column(name = "monounsaturated_fat", nullable = false)
+    @Column(name = "monounsaturated_fat")
     private BigDecimal monounsaturatedFat = BigDecimal.ZERO;
 
-    @Column(name = "saturated_fat", nullable = false)
+    @Column(name = "saturated_fat")
     private BigDecimal saturatedFat = BigDecimal.ZERO;
 
-    @Column(name = "polyunsaturated_fat", nullable = false)
+    @Column(name = "polyunsaturated_fat")
     private BigDecimal polyunsaturatedFat = BigDecimal.ZERO;
 
-    @Column(name = "trans_fat", nullable = false)
+    @Column(name = "trans_fat")
     private BigDecimal transFat = BigDecimal.ZERO;
 
-    @Column(name = "cholesterol", nullable = false)
+    @Column(name = "cholesterol")
     private BigDecimal cholesterol = BigDecimal.ZERO;
 
-    @Column(name = "sodium", nullable = false)
+    @Column(name = "sodium")
     private BigDecimal sodium = BigDecimal.ZERO;
 
-    @Column(name = "potassium", nullable = false)
+    @Column(name = "potassium")
     private BigDecimal potassium = BigDecimal.ZERO;
 
-    @Column(name = "fiber", nullable = false)
+    @Column(name = "fiber")
     private BigDecimal fiber = BigDecimal.ZERO;
 
-    @Column(name = "sugar", nullable = false)
+    @Column(name = "sugar")
     private BigDecimal sugar = BigDecimal.ZERO;
 
-    @Column(name = "calcium", nullable = false)
+    @Column(name = "calcium")
     private BigDecimal calcium = BigDecimal.ZERO;
 
-    @Column(name = "iron", nullable = false)
+    @Column(name = "iron")
     private BigDecimal iron = BigDecimal.ZERO;
 
-    @Column(name = "vitamin_a", nullable = false)
+    @Column(name = "vitamin_a")
     private BigDecimal vitaminA = BigDecimal.ZERO;
 
-    @Column(name = "vitamin_c", nullable = false)
+    @Column(name = "vitamin_c")
     private BigDecimal vitaminC = BigDecimal.ZERO;
 
-    @OneToOne(mappedBy = "nutritionalInformation", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "food_id")
     private Food food;
 
     @PrePersist

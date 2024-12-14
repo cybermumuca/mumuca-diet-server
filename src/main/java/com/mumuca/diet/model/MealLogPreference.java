@@ -20,19 +20,20 @@ import java.time.LocalTime;
 public class MealLogPreference {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")
     private String id;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(name = "type")
     private MealType type;
 
-    @Column(nullable = false)
+    @Column(name = "time")
     private LocalTime time;
 
-    @Column(nullable = false)
+    @Column(name = "calories_goal")
     private Integer caloriesGoal;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 }

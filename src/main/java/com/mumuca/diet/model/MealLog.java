@@ -18,38 +18,39 @@ import java.util.Set;
 public class MealLog {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")
     private String id;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(name = "type")
     private MealType type;
 
-    @Column(nullable = false)
+    @Column(name = "date")
     private LocalDate date;
 
-    @Column(nullable = false)
+    @Column(name = "time")
     private LocalTime time;
 
-    @Column(nullable = false)
+    @Column(name = "calories_goal")
     private Integer caloriesGoal;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "meal_log_meals",
+            name = "meal_logs_meals",
             joinColumns = @JoinColumn(name = "meal_log_id"),
             inverseJoinColumns = @JoinColumn(name = "meal_id")
     )
     private Set<Meal> meals = new LinkedHashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "meal_log_foods",
+            name = "meal_logs_foods",
             joinColumns = @JoinColumn(name = "meal_log_id"),
             inverseJoinColumns = @JoinColumn(name = "food_id")
     )
     private Set<Food> foods = new LinkedHashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 }
