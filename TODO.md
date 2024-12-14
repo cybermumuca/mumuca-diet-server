@@ -9,7 +9,7 @@ Tudo que essa API precisa para estar pronta para produção
 
 ### **1.2. Configurações de Banco de Dados**
 - [x] Utilizar o PostgreSQL.
-- [ ] Configurar o Pool de conexões do **Hikari** para o PostgreSQL.
+- [x] Configurar o Pool de conexões do **Hikari** para o PostgreSQL.
 - [ ] Configurar o Redis.
 
 ### **1.3. Logs**
@@ -36,8 +36,8 @@ Tudo que essa API precisa para estar pronta para produção
 - [ ] Configurar um **Rate Limiter** no Spring Cloud Gateway com o Redis.
 
 ### **2.5. Logout**
-- [ ] Adicionar endpoint para logout.
-- [ ] Fazer uma lista negra para os JWTs revogados.
+- [x] Adicionar endpoint para logout.
+- [x] Fazer uma lista negra para os JWTs revogados.
 
 ### **2.6. Segredos JWT**
 - [ ] Configurar o RSA do JWT para produção.

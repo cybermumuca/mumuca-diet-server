@@ -9,6 +9,7 @@ import com.mumuca.diet.model.Role;
 import com.mumuca.diet.model.User;
 import com.mumuca.diet.repository.RoleRepository;
 import com.mumuca.diet.repository.UserRepository;
+import com.mumuca.diet.security.JwtBlacklist;
 import com.mumuca.diet.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtEncoder jwtEncoder;
+    private final JwtBlacklist jwtBlacklist;
 
     @Override
     public void signUp(SignUpDTO signUpDTO) {
@@ -80,5 +82,10 @@ public class AuthServiceImpl implements AuthService {
         var jwt = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
         return new SignInResponseDTO(jwt, expiresIn);
+    }
+
+    @Override
+    public void signOut(String tokenValue, Instant expiresIn) {
+        jwtBlacklist.addToBlacklist(tokenValue, expiresIn);
     }
 }

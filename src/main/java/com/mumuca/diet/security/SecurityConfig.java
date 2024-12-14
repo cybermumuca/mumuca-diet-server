@@ -1,5 +1,6 @@
 package com.mumuca.diet.security;
 
+import com.mumuca.diet.security.filter.JwtValidationFilter;
 import com.mumuca.diet.security.filter.UserValidationFilter;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -42,11 +43,13 @@ public class SecurityConfig {
     private int bcryptSalt;
 
     private final UserValidationFilter userValidationFilter;
+    private final JwtValidationFilter jwtValidationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .addFilterAfter(userValidationFilter, BearerTokenAuthenticationFilter.class)
+                .addFilterAfter(jwtValidationFilter, BearerTokenAuthenticationFilter.class)
+                .addFilterAfter(userValidationFilter, JwtValidationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request ->

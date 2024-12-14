@@ -36,6 +36,4 @@ public class LoggingInterceptor implements HandlerInterceptor {
                 duration
         );
     }
-
-
 }

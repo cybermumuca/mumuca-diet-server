@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,5 +42,18 @@ public class AuthController {
         log.info("User with email [{}] signed in", signInDTO.email());
 
         return ResponseEntity.ok(signInResponse);
+    }
+
+    @PostMapping(path = "/v1/auth/sign-out")
+    public ResponseEntity<Void> signOut(@AuthenticationPrincipal Jwt jwt) {
+        log.info("User [{}] is logging out", jwt.getSubject());
+
+        authService.signOut(jwt.getTokenValue(), jwt.getExpiresAt());
+
+        log.info("User [{}] logged out successfully", jwt.getSubject());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 }
