@@ -16,7 +16,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("Incoming Request: {} {}", request.getMethod(), request.getRequestURI());
+        log.info("Incoming Request: {} {} from {}", request.getMethod(), request.getRequestURI(), request.getHeader("X-Client-IP"));
 
         request.setAttribute(START_TIME_ATTRIBUTE, System.currentTimeMillis());
 

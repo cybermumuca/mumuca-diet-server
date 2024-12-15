@@ -27,13 +27,13 @@ Tudo que essa API precisa para estar pronta para produção
 - [ ] Habilitar HTTPS no Spring Cloud Gateway
 
 ### **2.2. Cabeçalhos de Segurança**
-- [ ] Configurar o Spring Security na API para adicionar cabeçalhos de segurança
+- [x] Configurar o Spring Security na API para adicionar cabeçalhos de segurança
 
 ### **2.3. Propriedades Sensíveis**
 - [x] Usar variáveis de ambiente ou um cofre de segredos.
 
 ### **2.4. Controle de Taxa de Requisição**
-- [ ] Configurar um **Rate Limiter** no Spring Cloud Gateway com o Redis.
+- [x] Configurar um **Rate Limiter** no Spring Cloud Gateway com o Redis.
 
 ### **2.5. Logout**
 - [x] Adicionar endpoint para logout.
@@ -45,7 +45,7 @@ Tudo que essa API precisa para estar pronta para produção
 ## **3. Desempenho**
 
 ### **3.1. Compressão**
-- [ ] Ativar a compressão HTTP no Spring Cloud Gateway.
+- [x] Ativar a compressão HTTP no Spring Cloud Gateway.
 
 ### **3.2. Cache**
 - [ ] Usar Redis para cachear dados na API.

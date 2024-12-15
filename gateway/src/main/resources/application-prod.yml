@@ -1,0 +1,58 @@
+server:
+  port: ${APP_PORT}
+  compression:
+    enabled: true
+    mime-types: application/json
+
+spring:
+  application:
+    name: gateway
+  threads:
+    virtual:
+      enabled: true
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origin-patterns:
+              - ${DOMAIN_URL}
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+            allowedHeaders:
+              - '*'
+            allowCredentials: true
+            maxAge: 3600
+      httpclient:
+        connect-timeout: 5000
+        response-timeout: 5s
+        pool:
+          max-connections: 100
+          max-idle-time: 30s
+      default-filters:
+        - PreserveHostHeader
+        - AddRequestHeader=X-Forwarded-By, Spring-Cloud-Gateway
+        - AddRequestHeader=X-Request-Received-At, ${time.now}
+        - AddRequestHeader=X-Trace-Id, ${random.uuid}
+        - AddRequestHeader=X-Client-IP, ${remoteAddress}
+        - AddRequestHeader=X-Gateway-Version, 1.0.0
+        - AddRequestHeader=X-Gateway-Redirect, true
+        - AddRequestHeader=X-Max-Processing-Time, 5000ms
+
+apiUrl: ${API_URL}
+
+rate-limiter:
+  public-route:
+    replenish-rate: 1
+    burst-capacity: ${PUBLIC_RATE_LIMIT}
+  private-route:
+    replenish-rate: 1
+    burst-capacity: ${PRIVATE_RATE_LIMIT}

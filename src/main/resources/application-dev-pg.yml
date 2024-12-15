@@ -50,3 +50,6 @@ bcrypt:
 log:
   level: info
   path: logs
+
+server:
+  port: 8081
