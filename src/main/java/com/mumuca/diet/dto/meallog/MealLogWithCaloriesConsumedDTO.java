@@ -1,5 +1,6 @@
 package com.mumuca.diet.dto.meallog;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mumuca.diet.model.MealType;
 
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ public record MealLogWithCaloriesConsumedDTO(
         String id,
         MealType type,
         LocalDate date,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm")
         LocalTime time,
         Integer caloriesGoal,
         Integer caloriesConsumed
