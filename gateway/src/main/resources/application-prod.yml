@@ -36,23 +36,16 @@ spring:
         response-timeout: 5s
         pool:
           max-connections: 100
-          max-idle-time: 30s
-      default-filters:
-        - PreserveHostHeader
-        - AddRequestHeader=X-Forwarded-By, Spring-Cloud-Gateway
-        - AddRequestHeader=X-Request-Received-At, ${time.now}
-        - AddRequestHeader=X-Trace-Id, ${random.uuid}
-        - AddRequestHeader=X-Client-IP, ${remoteAddress}
-        - AddRequestHeader=X-Gateway-Version, 1.0.0
-        - AddRequestHeader=X-Gateway-Redirect, true
-        - AddRequestHeader=X-Max-Processing-Time, 5000ms
+          max-idle-time: 10s
 
 apiUrl: ${API_URL}
 
 rate-limiter:
   public-route:
-    replenish-rate: 1
-    burst-capacity: ${PUBLIC_RATE_LIMIT}
+    replenish-rate: 20
+    burst-capacity: ${PUBLIC_RATE_LIMIT:5000}
+    requested-token: 100
   private-route:
-    replenish-rate: 1
-    burst-capacity: ${PRIVATE_RATE_LIMIT}
+    replenish-rate: 20
+    burst-capacity: ${PRIVATE_RATE_LIMIT:20000}
+    requested-token: 100

@@ -51,3 +51,13 @@ jwt:
 
 bcrypt:
   salt: ${BCRYPT_SALT:13}
+
+log:
+  level: info
+  path: logs
+
+server:
+  port: ${APP_PORT:8081}
+  error:
+    whitelabel:
+      enabled: false

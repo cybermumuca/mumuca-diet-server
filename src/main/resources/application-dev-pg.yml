@@ -53,3 +53,6 @@ log:
 
 server:
   port: 8081
+  error:
+    whitelabel:
+      enabled: false
