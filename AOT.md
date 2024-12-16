@@ -15,4 +15,5 @@ java -agentlib:native-image-agent=config-output-dir=src/main/resources/META-INF/
 mvn -Pnative native:compile -Dspring.profiles.active=dev-pg -DskipTests
 ```
 
-5. RESOLVER O PROBLEMA DOS REPOSITORIOS JPA NÃO INSTANCIAREM
+5. RESOLVER O PROBLEMA DOS REPOSITORIOS JPA NÃO INSTANCIAREM  
+Problema no [Github](https://github.com/spring-projects/spring-boot/releases/tag/v3.2.3)
