@@ -2,6 +2,7 @@ package com.mumuca.diet.security;
 
 import com.mumuca.diet.security.filter.JwtValidationFilter;
 import com.mumuca.diet.security.filter.UserValidationFilter;
+import com.mumuca.diet.util.KeyUtils;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,19 +30,25 @@ import org.springframework.security.web.SecurityFilterChain;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Value("${jwt.public.key}")
-    private RSAPublicKey publicKey;
-
-    @Value("${jwt.private.key}")
-    private RSAPrivateKey privateKey;
-
     @Value("${bcrypt.salt}")
     private int bcryptSalt;
+
+    @Bean
+    public RSAPublicKey publicKey(Environment env) {
+        String publicKeyStr = env.getProperty("jwt.public.key");
+        return KeyUtils.parsePublicKey(publicKeyStr);
+    }
+
+    @Bean
+    public RSAPrivateKey privateKey(Environment env) {
+        String privateKeyStr = env.getProperty("jwt.private.key");
+        return KeyUtils.parsePrivateKey(privateKeyStr);
+    }
 
     private final UserValidationFilter userValidationFilter;
     private final JwtValidationFilter jwtValidationFilter;
@@ -75,12 +83,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtDecoder jwtDecoder() {
+    public JwtDecoder jwtDecoder(RSAPublicKey publicKey) {
         return NimbusJwtDecoder.withPublicKey(publicKey).build();
     }
 
     @Bean
-    public JwtEncoder jwtEncoder() {
+    public JwtEncoder jwtEncoder(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
         JWK jwk = new RSAKey.Builder(publicKey).privateKey(privateKey).build();
         var jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
