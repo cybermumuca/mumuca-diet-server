@@ -20,13 +20,20 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
             "/v1/auth/sign-in",
             "/v1/auth/sign-up"
     );
+    private static final String COOKIE_NAME = "jwt";
 
     private boolean isPublicPath(String path) {
         return PUBLIC_PATHS.stream().anyMatch(path::startsWith);
     }
 
-    private boolean isJwtPresent(String token) {
-        return token.startsWith("Bearer ");
+    private boolean isJwtValid(String token) {
+        return token != null && token.startsWith("Bearer ");
+    }
+
+    private String getJwtFromCookie(ServerWebExchange exchange) {
+        return exchange.getRequest().getCookies().getFirst(COOKIE_NAME) != null
+                ? "Bearer " + exchange.getRequest().getCookies().getFirst(COOKIE_NAME).getValue()
+                : null;
     }
 
     @Override
@@ -39,7 +46,11 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
 
         String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
 
-        if (authHeader == null || !isJwtPresent(authHeader)) {
+        if (!isJwtValid(authHeader)) {
+            authHeader = getJwtFromCookie(exchange);
+        }
+
+        if (!isJwtValid(authHeader)) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
