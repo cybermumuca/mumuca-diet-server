@@ -115,8 +115,6 @@ public class UserServiceImpl implements UserService {
     public ProfileDTO getUserProfile(
             String userId
     ) {
-        System.out.println("userId: " + userId);
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found."));
 
