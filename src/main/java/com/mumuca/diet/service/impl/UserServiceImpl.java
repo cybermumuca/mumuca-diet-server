@@ -1,9 +1,7 @@
 package com.mumuca.diet.service.impl;
 
-import com.mumuca.diet.dto.BmiDTO;
-import com.mumuca.diet.dto.CompleteRegistrationDTO;
-import com.mumuca.diet.dto.DiagnosisDTO;
-import com.mumuca.diet.dto.RegistrationCompletedDTO;
+import com.mumuca.diet.dto.*;
+import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.exception.UserAlreadyRegisteredException;
 import com.mumuca.diet.exception.UserNotRegisteredYetException;
 import com.mumuca.diet.model.*;
@@ -110,6 +108,30 @@ public class UserServiceImpl implements UserService {
                 goal.getFatTarget().floatValue(),
                 goal.getWaterIntakeTarget().floatValue(),
                 goal.getDeadline()
+        );
+    }
+
+    @Override
+    public ProfileDTO getUserProfile(
+            String userId
+    ) {
+        System.out.println("userId: " + userId);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found."));
+
+        if(user.getProfile() == null) {
+            throw new UserNotRegisteredYetException("User not registered yet.");
+        }
+
+        return new ProfileDTO(
+                user.getProfile().getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getProfile().getGender(),
+                user.getProfile().getPhotoUrl(),
+                user.getProfile().getActivityLevel(),
+                user.getProfile().getAge()
         );
     }
 

@@ -2,6 +2,7 @@ package com.mumuca.diet.controller;
 
 import com.mumuca.diet.dto.CompleteRegistrationDTO;
 import com.mumuca.diet.dto.DiagnosisDTO;
+import com.mumuca.diet.dto.ProfileDTO;
 import com.mumuca.diet.dto.RegistrationCompletedDTO;
 import com.mumuca.diet.service.UserService;
 import jakarta.validation.Valid;
@@ -50,5 +51,18 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(diagnosisDTO);
+    }
+
+    @GetMapping(path = "/v1/me/profile")
+    public ResponseEntity<ProfileDTO> getProfile(@AuthenticationPrincipal Jwt jwt) {
+        log.info("User [{}] is getting profile", jwt.getSubject());
+
+        ProfileDTO profileDTO = userService.getUserProfile(jwt.getSubject());
+
+        log.info("profile successfully obtained for user [{}]", jwt.getSubject());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(profileDTO);
     }
 }
