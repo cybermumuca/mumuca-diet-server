@@ -56,7 +56,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .addFilterAfter(jwtValidationFilter, BearerTokenAuthenticationFilter.class)
+                .addFilterBefore(jwtValidationFilter, BearerTokenAuthenticationFilter.class)
+                // TODO: there are only non-existent user issues in development, remove this later
                 .addFilterAfter(userValidationFilter, JwtValidationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())

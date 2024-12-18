@@ -4,6 +4,8 @@ import com.mumuca.diet.dto.auth.SignInDTO;
 import com.mumuca.diet.dto.auth.SignInResponseDTO;
 import com.mumuca.diet.dto.auth.SignUpDTO;
 import com.mumuca.diet.service.AuthService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +38,18 @@ public class AuthController {
     }
 
     @PostMapping(path = "/v1/auth/sign-in")
-    public ResponseEntity<SignInResponseDTO> signIn(@RequestBody SignInDTO signInDTO) {
+    public ResponseEntity<SignInResponseDTO> signIn(@RequestBody SignInDTO signInDTO, HttpServletResponse response) {
         var signInResponse = authService.signIn(signInDTO);
 
         log.info("User with email [{}] signed in", signInDTO.email());
+
+        Cookie jwtCookie = new Cookie("jwt", signInResponse.accessToken());
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setSecure(true);
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(Math.toIntExact(signInResponse.expiresIn()));
+
+        response.addCookie(jwtCookie);
 
         return ResponseEntity.ok(signInResponse);
     }
