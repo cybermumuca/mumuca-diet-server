@@ -57,7 +57,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .addFilterBefore(jwtValidationFilter, BearerTokenAuthenticationFilter.class)
-                .addFilterAfter(userValidationFilter, JwtValidationFilter.class) // TODO: there are only non-existent user issues in development, remove this later
+                .addFilterBefore(userValidationFilter, BearerTokenAuthenticationFilter.class) // TODO: there are only non-existent user issues in development, remove this later
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request ->

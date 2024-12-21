@@ -17,6 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Component
 @AllArgsConstructor
@@ -24,6 +25,15 @@ public class UserValidationFilter extends OncePerRequestFilter {
 
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
+    private static final Set<String> PUBLIC_PATHS = Set.of(
+            "/api/v1/calculator",
+            "/api/v1/auth/sign-in",
+            "/api/v1/auth/sign-up"
+    );
+
+    private boolean isPublicPath(String path) {
+        return PUBLIC_PATHS.stream().anyMatch(path::startsWith);
+    }
 
     @Override
     protected void doFilterInternal(
@@ -33,9 +43,12 @@ public class UserValidationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        if (isPublicPath(request.getRequestURI())) {
+            filterChain.doFilter(request, response);
+        }
+
         if (authentication != null && authentication.getPrincipal() instanceof Jwt jwt) {
             String userId = jwt.getSubject();
-
 
             if (!userRepository.existsUserById((userId))) {
                 ErrorResponseDTO<Void> errorResponse = new ErrorResponseDTO<>(
