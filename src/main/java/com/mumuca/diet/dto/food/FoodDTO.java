@@ -5,5 +5,6 @@ public record FoodDTO(
         String title,
         String brand,
         String description,
+        PortionDTO portion,
         NutritionalInformationDTO nutritionalInformation
 ) {}

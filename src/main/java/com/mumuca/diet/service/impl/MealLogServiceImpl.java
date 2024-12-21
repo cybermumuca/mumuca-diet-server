@@ -2,6 +2,7 @@ package com.mumuca.diet.service.impl;
 
 import com.mumuca.diet.dto.food.FoodDTO;
 import com.mumuca.diet.dto.food.NutritionalInformationDTO;
+import com.mumuca.diet.dto.food.PortionDTO;
 import com.mumuca.diet.dto.meal.MealNutritionalInformationDTO;
 import com.mumuca.diet.dto.meal.MealWithFoodsDTO;
 import com.mumuca.diet.dto.meallog.*;
@@ -166,12 +167,19 @@ public class MealLogServiceImpl implements MealLogService {
                                 ni.getVitaminC()
                         );
                     }
+                    var portionDTO = new PortionDTO(
+                            food.getPortion().getId(),
+                            food.getPortion().getAmount(),
+                            food.getPortion().getUnit(),
+                            food.getPortion().getDescription()
+                    );
 
                     return new FoodDTO(
                             food.getId(),
                             food.getTitle(),
                             food.getBrand(),
                             food.getDescription(),
+                            portionDTO,
                             nutritionalInformationDTO
                     );
                 })
@@ -217,11 +225,19 @@ public class MealLogServiceImpl implements MealLogService {
                                         );
                                     }
 
+                                    var portionDTO = new PortionDTO(
+                                            food.getPortion().getId(),
+                                            food.getPortion().getAmount(),
+                                            food.getPortion().getUnit(),
+                                            food.getPortion().getDescription()
+                                    );
+
                                     return new FoodDTO(
                                             food.getId(),
                                             food.getTitle(),
                                             food.getBrand(),
                                             food.getDescription(),
+                                            portionDTO,
                                             nutritionalInformationDTO
                                     );
                         }).toList()

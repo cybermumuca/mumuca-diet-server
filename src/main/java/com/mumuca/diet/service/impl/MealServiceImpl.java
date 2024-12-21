@@ -2,6 +2,7 @@ package com.mumuca.diet.service.impl;
 
 import com.mumuca.diet.dto.food.FoodDTO;
 import com.mumuca.diet.dto.food.NutritionalInformationDTO;
+import com.mumuca.diet.dto.food.PortionDTO;
 import com.mumuca.diet.dto.meal.*;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.model.Food;
@@ -30,7 +31,6 @@ public class MealServiceImpl implements MealService {
 
     private final FoodRepository foodRepository;
     private final MealRepository mealRepository;
-    private final NutritionalInformationRepository nutritionalInformationRepository;
 
     @Override
     @Transactional
@@ -88,11 +88,19 @@ public class MealServiceImpl implements MealService {
                                 );
                             }
 
+                            var portionDTO = new PortionDTO(
+                                    food.getPortion().getId(),
+                                    food.getPortion().getAmount(),
+                                    food.getPortion().getUnit(),
+                                    food.getPortion().getDescription()
+                            );
+
                             return new FoodDTO(
                                     food.getId(),
                                     food.getTitle(),
                                     food.getBrand(),
                                     food.getDescription(),
+                                    portionDTO,
                                     nutritionalInformationDTO
                             );
                         }).toList()

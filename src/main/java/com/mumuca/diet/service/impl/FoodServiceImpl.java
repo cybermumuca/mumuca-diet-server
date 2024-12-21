@@ -5,11 +5,9 @@ import com.mumuca.diet.dto.meal.MealDTO;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.model.Food;
 import com.mumuca.diet.model.NutritionalInformation;
+import com.mumuca.diet.model.Portion;
 import com.mumuca.diet.model.User;
-import com.mumuca.diet.repository.FoodRepository;
-import com.mumuca.diet.repository.MealRepository;
-import com.mumuca.diet.repository.NutritionalInformationRepository;
-import com.mumuca.diet.repository.UserRepository;
+import com.mumuca.diet.repository.*;
 import com.mumuca.diet.service.FoodService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -29,6 +27,7 @@ public class FoodServiceImpl implements FoodService {
 
     private final FoodRepository foodRepository;
     private final NutritionalInformationRepository nutritionalInformationRepository;
+    private final PortionRepository portionRepository;
     private final MealRepository mealRepository;
 
     @Override
@@ -98,11 +97,24 @@ public class FoodServiceImpl implements FoodService {
             );
         }
 
+        Portion portion = new Portion();
+        portion.setAmount(createFoodDTO.portion().amount());
+        portion.setUnit(createFoodDTO.portion().unit());
+        portion.setDescription(createFoodDTO.portion().description());
+
+        portion.setFood(food);
+        food.setPortion(portion);
+
+        portionRepository.save(portion);
+
+        PortionDTO portionDTO = new PortionDTO(portion.getId(), portion.getAmount(), portion.getUnit(), portion.getDescription());
+
         return new FoodDTO(
                 food.getId(),
                 food.getTitle(),
                 food.getBrand(),
                 food.getDescription(),
+                portionDTO,
                 nutritionalInformationDTO
         );
     }
@@ -138,11 +150,19 @@ public class FoodServiceImpl implements FoodService {
             );
         }
 
+        PortionDTO portionDTO = new PortionDTO(
+                food.getPortion().getId(),
+                food.getPortion().getAmount(),
+                food.getPortion().getUnit(),
+                food.getPortion().getDescription()
+        );
+
         return new FoodDTO(
                 food.getId(),
                 food.getTitle(),
                 food.getBrand(),
                 food.getDescription(),
+                portionDTO,
                 nutritionalInformationDTO
         );
     }
@@ -180,6 +200,7 @@ public class FoodServiceImpl implements FoodService {
         );
     }
 
+    // TODO: test this
     @Override
     @Transactional
     public FoodDTO updateFood(String foodId, UpdateFoodDTO updateFoodDTO, String userId) {
@@ -188,19 +209,19 @@ public class FoodServiceImpl implements FoodService {
 
         boolean updated = false;
 
-        updateIfDifferent(
+        updated |= updateIfDifferent(
                 foodToUpdate::getTitle,
                 foodToUpdate::setTitle,
                 updateFoodDTO.title()
         );
 
-        updateIfDifferent(
+        updated |= updateIfDifferent(
                 foodToUpdate::getDescription,
                 foodToUpdate::setDescription,
                 updateFoodDTO.description()
         );
 
-        updateIfDifferent(
+        updated |= updateIfDifferent(
                 foodToUpdate::getBrand,
                 foodToUpdate::setBrand,
                 updateFoodDTO.brand()
@@ -209,7 +230,13 @@ public class FoodServiceImpl implements FoodService {
         if (updateFoodDTO.nutritionalInformation() != null) {
             if (foodToUpdate.getNutritionalInformation() == null) {
                 NutritionalInformation nutritionalInformation = new NutritionalInformation();
-                updated |= updateNutritionalInformationFields(nutritionalInformation, updateFoodDTO.nutritionalInformation(), updated);
+
+                updated |= updateNutritionalInformationFields(
+                        nutritionalInformation,
+                        updateFoodDTO.nutritionalInformation(),
+                        updated
+                );
+
                 nutritionalInformation.setFood(foodToUpdate);
                 foodToUpdate.setNutritionalInformation(nutritionalInformation);
             } else {
@@ -219,6 +246,26 @@ public class FoodServiceImpl implements FoodService {
                         updated
                 );
             }
+        }
+
+        if (updateFoodDTO.portion() != null) {
+            updated |= updateIfDifferent(
+                    foodToUpdate.getPortion()::getDescription,
+                    foodToUpdate.getPortion()::setDescription,
+                    updateFoodDTO.portion().description()
+            );
+
+            updated |= updateIfDifferent(
+                    foodToUpdate.getPortion()::getAmount,
+                    foodToUpdate.getPortion()::setAmount,
+                    updateFoodDTO.portion().amount()
+            );
+
+            updated |= updateIfDifferent(
+                    foodToUpdate.getPortion()::getUnit,
+                    foodToUpdate.getPortion()::setUnit,
+                    updateFoodDTO.portion().unit()
+            );
         }
 
         if (updated) {
@@ -251,11 +298,19 @@ public class FoodServiceImpl implements FoodService {
             );
         }
 
+        var portionDTO = new PortionDTO(
+                foodToUpdate.getPortion().getId(),
+                foodToUpdate.getPortion().getAmount(),
+                foodToUpdate.getPortion().getUnit(),
+                foodToUpdate.getPortion().getDescription()
+        );
+
         return new FoodDTO(
                 foodToUpdate.getId(),
                 foodToUpdate.getTitle(),
                 foodToUpdate.getBrand(),
                 foodToUpdate.getDescription(),
+                portionDTO,
                 nutritionalInformationDTO
         );
     }
@@ -416,11 +471,19 @@ public class FoodServiceImpl implements FoodService {
                         );
                     }
 
+                    var portionDTO = new PortionDTO(
+                            food.getPortion().getId(),
+                            food.getPortion().getAmount(),
+                            food.getPortion().getUnit(),
+                            food.getPortion().getDescription()
+                    );
+
                     return new FoodDTO(
                             food.getId(),
                             food.getTitle(),
                             food.getBrand(),
                             food.getDescription(),
+                            portionDTO,
                             nutritionalInformationDTO
                     );
                 });

@@ -8,6 +8,7 @@ public record CreateFoodDTO(
         String title,
         String brand,
         String description,
+        CreatePortionDTO portion,
         @NotNull(message = "nutritionalInformation cannot be null")
         CreateNutritionalInformationDTO nutritionalInformation
 ) {}

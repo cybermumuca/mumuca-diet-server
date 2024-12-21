@@ -30,6 +30,9 @@ public class Food {
     private String description;
 
     @OneToOne(mappedBy = "food", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private Portion portion;
+
+    @OneToOne(mappedBy = "food", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private NutritionalInformation nutritionalInformation;
 
     @ManyToOne(fetch = FetchType.LAZY)
