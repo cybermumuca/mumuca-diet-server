@@ -156,6 +156,19 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @Override
+    @Transactional
+    public void resetRegister(String userId) {
+        Profile profileToDelete = profileRepository.findByUserId(userId)
+                .orElseThrow(() -> new UserNotRegisteredYetException("Profile not found."));
+
+        profileRepository.deleteById(profileToDelete.getId());
+
+        goalRepository.deleteByUserId(userId);
+
+        bodyRepository.deleteAllByUserId(userId);
+    }
+
     private int calculateTargetCalories(
             BigDecimal weight,
             BigDecimal height,

@@ -9,4 +9,6 @@ public interface UserService {
     RegistrationCompletedDTO completeRegistration(CompleteRegistrationDTO completeRegistrationDTO, String userId);
     ProfileDTO getUserProfile(String userId);
     DiagnosisDTO generateDiagnosis(String userId);
+
+    void resetRegister(String userId);
 }

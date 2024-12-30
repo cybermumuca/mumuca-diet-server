@@ -13,4 +13,5 @@ public interface BodyRepository extends JpaRepository<Body, String> {
     Optional<Body> findByIdAndUserId(String id, String userId);
     Optional<Body> findFirstByUserIdOrderByDateDesc(String userId);
     Page<Body> findByUserId(Pageable pageable, String userId);
+    void deleteAllByUserId(String userId);
 }

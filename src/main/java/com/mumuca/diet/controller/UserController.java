@@ -65,4 +65,17 @@ public class UserController {
                 .status(HttpStatus.OK)
                 .body(profileDTO);
     }
+
+    @DeleteMapping(path = "/v1/me/register")
+    public ResponseEntity<Void> resetRegister(@AuthenticationPrincipal Jwt jwt) {
+        log.info("User [{}] is resetting profile", jwt.getSubject());
+
+        userService.resetRegister(jwt.getSubject());
+
+        log.info("User [{}] successfully reset the profile", jwt.getSubject());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
 }

@@ -14,4 +14,5 @@ public interface GoalRepository extends JpaRepository<Goal, String> {
     Optional<Goal> findByUserId(@Param("userId") String userId);
     @Query("SELECT g.targetCalories FROM Goal g WHERE g.user.id = :userId")
     Optional<Integer> findTargetCaloriesByUserId(@Param("userId") String userId);
+    void deleteByUserId(@Param("userId") String userId);
 }
