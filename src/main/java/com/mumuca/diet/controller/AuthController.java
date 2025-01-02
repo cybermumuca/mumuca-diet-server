@@ -55,10 +55,20 @@ public class AuthController {
     }
 
     @PostMapping(path = "/v1/auth/sign-out")
-    public ResponseEntity<Void> signOut(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<Void> signOut(
+            @AuthenticationPrincipal Jwt jwt,
+            HttpServletResponse response
+    ) {
         log.info("User [{}] is logging out", jwt.getSubject());
 
         authService.signOut(jwt.getTokenValue(), jwt.getExpiresAt());
+
+        Cookie jwtCookie = new Cookie("jwt", null);
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(0);
+
+        response.addCookie(jwtCookie);
 
         log.info("User [{}] logged out successfully", jwt.getSubject());
 
