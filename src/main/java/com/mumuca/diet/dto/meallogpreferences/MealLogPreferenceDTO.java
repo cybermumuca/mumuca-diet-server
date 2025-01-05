@@ -8,7 +8,7 @@ import java.time.LocalTime;
 public record MealLogPreferenceDTO(
         String id,
         MealType type,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
         LocalTime time,
         Integer caloriesGoal
 ) {}
