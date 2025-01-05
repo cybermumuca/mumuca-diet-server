@@ -10,7 +10,7 @@ public record MealLogWithCaloriesConsumedDTO(
         String id,
         MealType type,
         LocalDate date,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
         LocalTime time,
         Integer caloriesGoal,
         Integer caloriesConsumed
