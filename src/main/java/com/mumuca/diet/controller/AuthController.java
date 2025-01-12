@@ -67,6 +67,7 @@ public class AuthController {
         jwtCookie.setHttpOnly(true);
         jwtCookie.setPath("/");
         jwtCookie.setMaxAge(0);
+        jwtCookie.setAttribute("SameSite", "None");
 
         response.addCookie(jwtCookie);
 
