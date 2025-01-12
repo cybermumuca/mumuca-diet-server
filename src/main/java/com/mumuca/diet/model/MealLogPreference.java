@@ -1,5 +1,6 @@
 package com.mumuca.diet.model;
 
+import com.mumuca.diet.audit.AbstractAuditEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcType;
@@ -19,7 +20,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MealLogPreference {
+public class MealLogPreference extends AbstractAuditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")

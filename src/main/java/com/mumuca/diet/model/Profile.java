@@ -1,5 +1,6 @@
 package com.mumuca.diet.model;
 
+import com.mumuca.diet.audit.AbstractAuditEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import java.time.Period;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Profile {
+public class Profile extends AbstractAuditEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

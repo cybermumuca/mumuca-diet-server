@@ -1,0 +1,41 @@
+ALTER TABLE profiles
+ADD COLUMN created_by VARCHAR(255),
+ADD COLUMN created_date TIMESTAMP DEFAULT NOW(),
+ADD COLUMN last_modified_by VARCHAR(255),
+ADD COLUMN last_modified_date TIMESTAMP DEFAULT NOW();
+
+ALTER TABLE goals
+ADD COLUMN created_by VARCHAR(255),
+ADD COLUMN created_date TIMESTAMP DEFAULT NOW(),
+ADD COLUMN last_modified_by VARCHAR(255),
+ADD COLUMN last_modified_date TIMESTAMP DEFAULT NOW();
+
+ALTER TABLE bodies
+ADD COLUMN created_by VARCHAR(255),
+ADD COLUMN created_date TIMESTAMP DEFAULT NOW(),
+ADD COLUMN last_modified_by VARCHAR(255),
+ADD COLUMN last_modified_date TIMESTAMP DEFAULT NOW();
+
+ALTER TABLE foods
+ADD COLUMN created_by VARCHAR(255),
+ADD COLUMN created_date TIMESTAMP DEFAULT NOW(),
+ADD COLUMN last_modified_by VARCHAR(255),
+ADD COLUMN last_modified_date TIMESTAMP DEFAULT NOW();
+
+ALTER TABLE meals
+ADD COLUMN created_by VARCHAR(255),
+ADD COLUMN created_date TIMESTAMP DEFAULT NOW(),
+ADD COLUMN last_modified_by VARCHAR(255),
+ADD COLUMN last_modified_date TIMESTAMP DEFAULT NOW();
+
+ALTER TABLE meal_logs
+ADD COLUMN created_by VARCHAR(255),
+ADD COLUMN created_date TIMESTAMP DEFAULT NOW(),
+ADD COLUMN last_modified_by VARCHAR(255),
+ADD COLUMN last_modified_date TIMESTAMP DEFAULT NOW();
+
+ALTER TABLE meal_log_preferences
+ADD COLUMN created_by VARCHAR(255),
+ADD COLUMN created_date TIMESTAMP DEFAULT NOW(),
+ADD COLUMN last_modified_by VARCHAR(255),
+ADD COLUMN last_modified_date TIMESTAMP DEFAULT NOW();

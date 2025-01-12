@@ -1,5 +1,6 @@
 package com.mumuca.diet.model;
 
+import com.mumuca.diet.audit.AbstractAuditEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Food {
+public class Food extends AbstractAuditEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
