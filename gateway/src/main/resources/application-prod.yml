@@ -32,11 +32,11 @@ spring:
             allowCredentials: true
             maxAge: 3600
       httpclient:
-        connect-timeout: 5000
-        response-timeout: 5s
+        connect-timeout: 20000
+        response-timeout: 20s
         pool:
           max-connections: 100
-          max-idle-time: 10s
+          max-idle-time: 15s
 
 apiUrl: ${API_URL}
 
