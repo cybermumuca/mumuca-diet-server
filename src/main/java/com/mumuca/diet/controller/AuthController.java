@@ -48,6 +48,7 @@ public class AuthController {
         jwtCookie.setSecure(true);
         jwtCookie.setPath("/");
         jwtCookie.setMaxAge(Math.toIntExact(signInResponse.expiresIn()));
+        jwtCookie.setAttribute("SameSite", "None");
 
         response.addCookie(jwtCookie);
 
