@@ -4,7 +4,8 @@ RUN microdnf install maven -y
 
 WORKDIR /app
 
-COPY . .
+COPY pom.xml .
+COPY src ./src
 
 RUN mvn clean compile spring-boot:process-aot package -DskipTests
 
