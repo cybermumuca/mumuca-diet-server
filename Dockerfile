@@ -17,5 +17,4 @@ COPY --from=builder /app/target/*.jar app.jar
 
 EXPOSE 8081
 
-ENTRYPOINT ["java", "-Dspring.aot.enabled=true", "-jar", "app.jar"]
-CMD ["-Dspring.profiles.active=prod"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-Dspring.aot.enabled=true", "-jar", "app.jar"]
