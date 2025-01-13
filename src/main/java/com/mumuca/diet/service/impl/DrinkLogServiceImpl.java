@@ -1,7 +1,9 @@
 package com.mumuca.diet.service.impl;
 
+import com.mumuca.diet.dto.drinklog.CreateDrinkLogDTO;
 import com.mumuca.diet.dto.drinklog.DrinkLogDTO;
 import com.mumuca.diet.model.DrinkLog;
+import com.mumuca.diet.model.User;
 import com.mumuca.diet.repository.DrinkLogRepository;
 import com.mumuca.diet.service.DrinkLogService;
 import jakarta.transaction.Transactional;
@@ -32,5 +34,27 @@ public class DrinkLogServiceImpl implements DrinkLogService {
                         drinkLog.getLiquidIntake()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public DrinkLogDTO createDrinkLog(CreateDrinkLogDTO createDrinkLogDTO, String userId) {
+        User user = new User(userId);
+
+        DrinkLog drinkLog = new DrinkLog();
+
+        drinkLog.setDate(createDrinkLogDTO.date());
+        drinkLog.setTime(createDrinkLogDTO.time());
+        drinkLog.setLiquidIntake(createDrinkLogDTO.liquidIntake());
+        drinkLog.setUser(user);
+
+        drinkLogRepository.save(drinkLog);
+
+        return new DrinkLogDTO(
+                drinkLog.getId(),
+                drinkLog.getDate(),
+                drinkLog.getTime(),
+                drinkLog.getLiquidIntake()
+        );
     }
 }

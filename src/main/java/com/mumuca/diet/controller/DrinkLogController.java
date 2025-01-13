@@ -1,17 +1,16 @@
 package com.mumuca.diet.controller;
 
+import com.mumuca.diet.dto.drinklog.CreateDrinkLogDTO;
 import com.mumuca.diet.dto.drinklog.DrinkLogDTO;
 import com.mumuca.diet.service.DrinkLogService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -44,5 +43,21 @@ public class DrinkLogController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(drinkLogDTOList);
+    }
+
+    @PostMapping(path = "/v1/meal-logs")
+    public ResponseEntity<DrinkLogDTO> createDrinkLog(
+            @Valid @RequestBody CreateDrinkLogDTO createDrinkLogDTO,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        log.info("User [{}] is creating a drink log with payload [{}]", jwt.getSubject(), createDrinkLogDTO);
+
+        DrinkLogDTO drinkLogDTO = drinkLogService.createDrinkLog(createDrinkLogDTO, jwt.getSubject());
+
+        log.info("Drink log created successfully. Drink Log Id: [{}], User: [{}]", drinkLogDTO.id(), jwt.getSubject());
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(drinkLogDTO);
     }
 }
