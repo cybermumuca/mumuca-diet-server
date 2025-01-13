@@ -62,8 +62,8 @@ Tudo que essa API precisa para estar pronta para produção
 - [ ] Utilizar GraalVM para gerar um binario nativo otimizado da aplicação.
 
 ### **4.2. Docker**
-- [ ] Containerizar o Spring Cloud Gateway.
-- [ ] Containerizar a API.
+- [x] Containerizar o Spring Cloud Gateway.
+- [x] Containerizar a API.
 
 ### **4.4. Balanceador de Carga**
 - [ ] Configurar um balanceador de carga.
