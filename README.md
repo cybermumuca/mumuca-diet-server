@@ -1,6 +1,6 @@
 # mumuca.diet Backend
 
-mumuca.diet Backend é uma aplicação desenvolvida em Java e Spring Boot para gerenciamento de refeições, registro de progresso corporal, acompanhamento de metas nutricionais e muito mais. Este projeto complementa o [frontend](https://github.com/cybermumuca/mumuca-diet) e proporciona uma estrutura segura e escalável para suportar as funcionalidades do webapp.
+mumuca.diet Backend é uma aplicação desenvolvida em Java e Spring Boot para gerenciamento de refeições, registro de progresso corporal, acompanhamento de metas nutricionais e muito mais. Este projeto complementa o [frontend](https://github.com/cybermumuca/mumuca-diet-webapp) e proporciona uma estrutura segura e escalável para suportar as funcionalidades do webapp.
 
 ## 💡 Principais Funcionalidades
 - Controle do consumo de micronutrientes, macronutrientes, água e calorias
