@@ -2,6 +2,7 @@ package com.mumuca.diet.service.impl;
 
 import com.mumuca.diet.dto.drinklog.CreateDrinkLogDTO;
 import com.mumuca.diet.dto.drinklog.DrinkLogDTO;
+import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.model.DrinkLog;
 import com.mumuca.diet.model.User;
 import com.mumuca.diet.repository.DrinkLogRepository;
@@ -56,5 +57,14 @@ public class DrinkLogServiceImpl implements DrinkLogService {
                 drinkLog.getTime(),
                 drinkLog.getLiquidIntake()
         );
+    }
+
+    @Override
+    @Transactional
+    public void deleteDrinkLog(String drinkLogId, String userId) {
+        DrinkLog drinkLog = drinkLogRepository.findDrinkLogByIdAndUserId(drinkLogId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Drink Log Not Found."));
+
+        drinkLogRepository.deleteById(drinkLog.getId());
     }
 }

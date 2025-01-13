@@ -3,6 +3,7 @@ package com.mumuca.diet.controller;
 import com.mumuca.diet.dto.drinklog.CreateDrinkLogDTO;
 import com.mumuca.diet.dto.drinklog.DrinkLogDTO;
 import com.mumuca.diet.service.DrinkLogService;
+import com.mumuca.diet.validator.ValidUUID;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +46,7 @@ public class DrinkLogController {
                 .body(drinkLogDTOList);
     }
 
-    @PostMapping(path = "/v1/meal-logs")
+    @PostMapping(path = "/v1/drink-logs")
     public ResponseEntity<DrinkLogDTO> createDrinkLog(
             @Valid @RequestBody CreateDrinkLogDTO createDrinkLogDTO,
             @AuthenticationPrincipal Jwt jwt
@@ -59,5 +60,21 @@ public class DrinkLogController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(drinkLogDTO);
+    }
+
+    @DeleteMapping(path = "/v1/drink-logs/{id}")
+    public ResponseEntity<Void> deleteDrinkLog(
+            @PathVariable("id") @Valid @ValidUUID String drinkLogId,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        log.info("User [{}] is deleting drink log [{}]", jwt.getSubject(), drinkLogId);
+
+        drinkLogService.deleteDrinkLog(drinkLogId, jwt.getSubject());
+
+        log.info("Drink log deleted successfully. Meal log id: [{}], User: [{}]", drinkLogId, jwt.getSubject());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 }

@@ -11,4 +11,6 @@ public interface DrinkLogService {
     List<DrinkLogDTO> findDrinkLogsByDate(LocalDate date, String userId);
 
     DrinkLogDTO createDrinkLog(CreateDrinkLogDTO createDrinkLogDTO, String userId);
+
+    void deleteDrinkLog(String drinkLogId, String userId);
 }
