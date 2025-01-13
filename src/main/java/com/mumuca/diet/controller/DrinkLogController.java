@@ -2,6 +2,7 @@ package com.mumuca.diet.controller;
 
 import com.mumuca.diet.dto.drinklog.CreateDrinkLogDTO;
 import com.mumuca.diet.dto.drinklog.DrinkLogDTO;
+import com.mumuca.diet.dto.drinklog.UpdateDrinkLogDTO;
 import com.mumuca.diet.service.DrinkLogService;
 import com.mumuca.diet.validator.ValidUUID;
 import jakarta.validation.Valid;
@@ -60,6 +61,23 @@ public class DrinkLogController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(drinkLogDTO);
+    }
+
+    @PutMapping(path = "/v1/meal-logs/{id}")
+    public ResponseEntity<Void> updateMealLog(
+            @PathVariable("id") @Valid @ValidUUID String drinkLogId,
+            @Valid @RequestBody UpdateDrinkLogDTO updateDrinkLogDTO,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        log.info("User [{}] is updating meal log [{}] with payload [{}]", jwt.getSubject(), drinkLogId, updateDrinkLogDTO);
+
+        drinkLogService.updateDrinkLog(drinkLogId, updateDrinkLogDTO, jwt.getSubject());
+
+        log.info("Drink log updated successfully. Drink log id: [{}], User: [{}]", drinkLogId, jwt.getSubject());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @DeleteMapping(path = "/v1/drink-logs/{id}")
