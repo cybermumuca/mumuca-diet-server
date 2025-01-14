@@ -63,7 +63,7 @@ public class DrinkLogController {
                 .body(drinkLogDTO);
     }
 
-    @PutMapping(path = "/v1/meal-logs/{id}")
+    @PutMapping(path = "/v1/drink-logs/{id}")
     public ResponseEntity<Void> updateMealLog(
             @PathVariable("id") @Valid @ValidUUID String drinkLogId,
             @Valid @RequestBody UpdateDrinkLogDTO updateDrinkLogDTO,
