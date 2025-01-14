@@ -1,6 +1,8 @@
 package com.mumuca.diet.testutil;
 
 import com.github.javafaker.Faker;
+import com.mumuca.diet.food.model.Food;
+import com.mumuca.diet.food.model.NutritionalInformation;
 import com.mumuca.diet.model.*;
 
 import java.math.BigDecimal;

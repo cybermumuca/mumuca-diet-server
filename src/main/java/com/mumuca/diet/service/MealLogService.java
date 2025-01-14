@@ -1,11 +1,9 @@
 package com.mumuca.diet.service;
 
-import com.mumuca.diet.dto.food.FoodDTO;
-import com.mumuca.diet.dto.meal.MealDTO;
+import com.mumuca.diet.food.dto.FoodDTO;
 import com.mumuca.diet.dto.meal.MealNutritionalInformationDTO;
 import com.mumuca.diet.dto.meal.MealWithFoodsDTO;
 import com.mumuca.diet.dto.meallog.*;
-import jakarta.validation.Valid;
 
 import java.time.LocalDate;
 import java.util.List;

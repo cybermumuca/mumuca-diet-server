@@ -1,6 +1,7 @@
 package com.mumuca.diet.model;
 
 import com.mumuca.diet.drink.model.DrinkLog;
+import com.mumuca.diet.food.model.Food;
 import jakarta.persistence.*;
 import lombok.*;
 

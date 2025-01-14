@@ -1,6 +1,6 @@
-package com.mumuca.diet.repository;
+package com.mumuca.diet.food.repository;
 
-import com.mumuca.diet.model.Food;
+import com.mumuca.diet.food.model.Food;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

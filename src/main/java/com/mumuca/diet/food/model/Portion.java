@@ -1,5 +1,6 @@
-package com.mumuca.diet.model;
+package com.mumuca.diet.food.model;
 
+import com.mumuca.diet.model.Unit;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcType;

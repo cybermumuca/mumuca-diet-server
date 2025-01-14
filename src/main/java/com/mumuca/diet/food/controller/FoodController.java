@@ -1,12 +1,12 @@
-package com.mumuca.diet.controller;
+package com.mumuca.diet.food.controller;
 
 
-import com.mumuca.diet.dto.food.CreateFoodDTO;
-import com.mumuca.diet.dto.food.FoodDTO;
-import com.mumuca.diet.dto.food.NutritionalInformationDTO;
-import com.mumuca.diet.dto.food.UpdateFoodDTO;
+import com.mumuca.diet.food.dto.CreateFoodDTO;
+import com.mumuca.diet.food.dto.FoodDTO;
+import com.mumuca.diet.food.dto.NutritionalInformationDTO;
+import com.mumuca.diet.food.dto.UpdateFoodDTO;
 import com.mumuca.diet.dto.meal.MealDTO;
-import com.mumuca.diet.service.FoodService;
+import com.mumuca.diet.food.service.FoodService;
 import com.mumuca.diet.validator.ValidUUID;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

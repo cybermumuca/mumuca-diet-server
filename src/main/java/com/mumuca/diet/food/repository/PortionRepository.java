@@ -1,6 +1,6 @@
-package com.mumuca.diet.repository;
+package com.mumuca.diet.food.repository;
 
-import com.mumuca.diet.model.Portion;
+import com.mumuca.diet.food.model.Portion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

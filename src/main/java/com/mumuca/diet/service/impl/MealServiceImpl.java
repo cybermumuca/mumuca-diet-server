@@ -1,17 +1,16 @@
 package com.mumuca.diet.service.impl;
 
-import com.mumuca.diet.dto.food.FoodDTO;
-import com.mumuca.diet.dto.food.NutritionalInformationDTO;
-import com.mumuca.diet.dto.food.PortionDTO;
+import com.mumuca.diet.food.dto.FoodDTO;
+import com.mumuca.diet.food.dto.NutritionalInformationDTO;
+import com.mumuca.diet.food.dto.PortionDTO;
 import com.mumuca.diet.dto.meal.*;
 import com.mumuca.diet.exception.ResourceNotFoundException;
-import com.mumuca.diet.model.Food;
+import com.mumuca.diet.food.model.Food;
 import com.mumuca.diet.model.Meal;
-import com.mumuca.diet.model.NutritionalInformation;
+import com.mumuca.diet.food.model.NutritionalInformation;
 import com.mumuca.diet.model.User;
-import com.mumuca.diet.repository.FoodRepository;
+import com.mumuca.diet.food.repository.FoodRepository;
 import com.mumuca.diet.repository.MealRepository;
-import com.mumuca.diet.repository.NutritionalInformationRepository;
 import com.mumuca.diet.service.MealService;
 import com.mumuca.diet.util.UpdateUtils;
 import lombok.AllArgsConstructor;

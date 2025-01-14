@@ -1,12 +1,15 @@
 package com.mumuca.diet.service.impl;
 
-import com.mumuca.diet.dto.food.FoodDTO;
-import com.mumuca.diet.dto.food.NutritionalInformationDTO;
-import com.mumuca.diet.dto.food.PortionDTO;
+import com.mumuca.diet.food.dto.FoodDTO;
+import com.mumuca.diet.food.dto.NutritionalInformationDTO;
+import com.mumuca.diet.food.dto.PortionDTO;
 import com.mumuca.diet.dto.meal.MealNutritionalInformationDTO;
 import com.mumuca.diet.dto.meal.MealWithFoodsDTO;
 import com.mumuca.diet.dto.meallog.*;
 import com.mumuca.diet.exception.ResourceNotFoundException;
+import com.mumuca.diet.food.model.Food;
+import com.mumuca.diet.food.model.NutritionalInformation;
+import com.mumuca.diet.food.repository.FoodRepository;
 import com.mumuca.diet.model.*;
 import com.mumuca.diet.repository.*;
 import com.mumuca.diet.service.MealLogService;

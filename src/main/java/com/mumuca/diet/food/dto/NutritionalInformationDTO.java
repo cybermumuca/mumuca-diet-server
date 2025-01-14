@@ -1,4 +1,4 @@
-package com.mumuca.diet.dto.food;
+package com.mumuca.diet.food.dto;
 
 import java.math.BigDecimal;
 

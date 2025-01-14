@@ -1,6 +1,7 @@
 package com.mumuca.diet.model;
 
 import com.mumuca.diet.audit.AbstractAuditEntity;
+import com.mumuca.diet.food.model.Food;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcType;

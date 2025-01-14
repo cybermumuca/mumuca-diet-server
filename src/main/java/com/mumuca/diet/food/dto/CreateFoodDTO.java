@@ -1,4 +1,4 @@
-package com.mumuca.diet.dto.food;
+package com.mumuca.diet.food.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

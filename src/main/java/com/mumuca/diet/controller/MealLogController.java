@@ -1,6 +1,6 @@
 package com.mumuca.diet.controller;
 
-import com.mumuca.diet.dto.food.FoodDTO;
+import com.mumuca.diet.food.dto.FoodDTO;
 import com.mumuca.diet.dto.meal.MealNutritionalInformationDTO;
 import com.mumuca.diet.dto.meal.MealWithFoodsDTO;
 import com.mumuca.diet.dto.meallog.*;
