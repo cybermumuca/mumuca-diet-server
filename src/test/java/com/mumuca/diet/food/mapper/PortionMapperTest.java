@@ -4,7 +4,7 @@ import com.mumuca.diet.food.dto.CreatePortionDTO;
 import com.mumuca.diet.food.dto.PortionDTO;
 import com.mumuca.diet.food.dto.UpdatePortionDTO;
 import com.mumuca.diet.food.model.Portion;
-import com.mumuca.diet.model.Unit;
+import com.mumuca.diet.food.model.Unit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

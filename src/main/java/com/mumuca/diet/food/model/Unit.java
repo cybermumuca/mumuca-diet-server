@@ -1,4 +1,4 @@
-package com.mumuca.diet.model;
+package com.mumuca.diet.food.model;
 
 public enum Unit {
     GRAM("g"),

@@ -10,7 +10,7 @@ import com.mumuca.diet.food.repository.NutritionalInformationRepository;
 import com.mumuca.diet.food.repository.PortionRepository;
 import com.mumuca.diet.food.service.impl.FoodServiceImpl;
 import com.mumuca.diet.model.Meal;
-import com.mumuca.diet.model.Unit;
+import com.mumuca.diet.food.model.Unit;
 import com.mumuca.diet.model.User;
 import com.mumuca.diet.repository.MealRepository;
 import com.mumuca.diet.repository.UserRepository;

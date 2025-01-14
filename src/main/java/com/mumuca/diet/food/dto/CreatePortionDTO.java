@@ -1,6 +1,6 @@
 package com.mumuca.diet.food.dto;
 
-import com.mumuca.diet.model.Unit;
+import com.mumuca.diet.food.model.Unit;
 import jakarta.validation.constraints.NotNull;
 
 public record CreatePortionDTO(
