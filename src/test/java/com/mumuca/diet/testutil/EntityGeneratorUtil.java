@@ -3,6 +3,7 @@ package com.mumuca.diet.testutil;
 import com.github.javafaker.Faker;
 import com.mumuca.diet.food.model.Food;
 import com.mumuca.diet.food.model.NutritionalInformation;
+import com.mumuca.diet.food.model.Portion;
 import com.mumuca.diet.model.*;
 
 import java.math.BigDecimal;
@@ -46,6 +47,14 @@ public class EntityGeneratorUtil {
                 .iron(BigDecimal.valueOf(faker.number().numberBetween(0, 10)))  // Ferro entre 0mg e 10mg
                 .vitaminA(BigDecimal.valueOf(faker.number().numberBetween(0, 1000)))  // Vitamina A entre 0UI e 1000UI
                 .vitaminC(BigDecimal.valueOf(faker.number().numberBetween(0, 60)))  // Vitamina C entre 0mg e 60mg
+                .build();
+    }
+
+    public static Portion createPortion() {
+        return Portion.builder()
+                .amount(faker.number().numberBetween(0, 100))
+                .unit(Unit.GRAM)
+                .description(faker.lorem().characters(15))
                 .build();
     }
 
