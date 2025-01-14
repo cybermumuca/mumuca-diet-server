@@ -2,6 +2,8 @@ package com.mumuca.diet.drinklog.service;
 
 import com.mumuca.diet.dto.drinklog.CreateDrinkLogDTO;
 import com.mumuca.diet.dto.drinklog.DrinkLogDTO;
+import com.mumuca.diet.dto.drinklog.UpdateDrinkLogDTO;
+import com.mumuca.diet.model.DrinkLog;
 import com.mumuca.diet.model.User;
 import com.mumuca.diet.repository.DrinkLogRepository;
 import com.mumuca.diet.repository.UserRepository;
@@ -9,6 +11,7 @@ import com.mumuca.diet.service.impl.DrinkLogServiceImpl;
 import com.mumuca.diet.testutil.EntityGeneratorUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,23 +41,37 @@ class DrinkLogServiceImplIntegrationTest {
     @Autowired
     private UserRepository userRepository;
 
-
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
-    void findDrinkLogsByDate() {
+    @Transactional
+    @DisplayName("should find drink logs by date successfully")
+    void shouldFindDrinkLogsByDate() {
+        // Assert
+        User user = EntityGeneratorUtil.createUser();
+        userRepository.save(user);
 
+        DrinkLog drinkLog = new DrinkLog();
+        drinkLog.setDate(LocalDate.of(2025, 1, 1));
+        drinkLog.setTime(LocalTime.of(10, 0));
+        drinkLog.setLiquidIntake(new BigDecimal("500"));
+        drinkLog.setUser(user);
+
+        drinkLogRepository.save(drinkLog);
+
+        // Act
+        List<DrinkLogDTO> result = sut.findDrinkLogsByDate(LocalDate.of(2025, 1, 1), user.getId());
+
+        // Assert
+        assertThat(result).hasSize(1);
+        assertThat(result.getFirst().id()).isEqualTo(drinkLog.getId());
+        assertThat(result.getFirst().date()).isEqualTo(LocalDate.of(2025, 1, 1));
+        assertThat(result.getFirst().time()).isEqualTo(LocalTime.of(10, 0));
+        assertThat(result.getFirst().liquidIntake()).isEqualTo(new BigDecimal("500"));
     }
 
     @Test
     @Transactional
-    void createDrinkLog() {
+    @DisplayName("should create drink log successfully")
+    void shouldCreateDrinkLog() {
         // Arrange
         CreateDrinkLogDTO createDrinkLogDTO = new CreateDrinkLogDTO(
                 LocalDate.of(2025, 1, 2),
@@ -80,10 +98,57 @@ class DrinkLogServiceImplIntegrationTest {
     }
 
     @Test
-    void deleteDrinkLog() {
+    @Transactional
+    @DisplayName("should delete drink log successfully")
+    void shouldDeleteDrinkLog() {
+        // Arrange
+        User user = EntityGeneratorUtil.createUser();
+        userRepository.save(user);
+
+        DrinkLog drinkLog = new DrinkLog();
+        drinkLog.setDate(LocalDate.of(2025, 1, 1));
+        drinkLog.setTime(LocalTime.of(10, 0));
+        drinkLog.setLiquidIntake(new BigDecimal("500"));
+        drinkLog.setUser(user);
+
+        drinkLogRepository.save(drinkLog);
+
+        // Act
+        sut.deleteDrinkLog(drinkLog.getId(), user.getId());
+
+        // Assert
+        assertThat(drinkLogRepository.findById(drinkLog.getId())).isNotPresent();
     }
 
     @Test
-    void updateDrinkLog() {
+    @Transactional
+    @DisplayName("should update drink log successfully")
+    void shouldUpdateDrinkLog() {
+        // Arrange
+        User user = EntityGeneratorUtil.createUser();
+        userRepository.save(user);
+
+        DrinkLog drinkLog = new DrinkLog();
+        drinkLog.setDate(LocalDate.of(2025, 1, 1));
+        drinkLog.setTime(LocalTime.of(10, 0));
+        drinkLog.setLiquidIntake(new BigDecimal("500"));
+        drinkLog.setUser(user);
+
+        drinkLogRepository.save(drinkLog);
+
+        UpdateDrinkLogDTO updateDrinkLogDTO = new UpdateDrinkLogDTO(
+                LocalTime.of(15, 30),
+                LocalDate.of(2025, 1, 3),
+                new BigDecimal("1000")
+        );
+
+        // Act
+        sut.updateDrinkLog(drinkLog.getId(), updateDrinkLogDTO, user.getId());
+
+        // Assert
+        DrinkLog updatedDrinkLog = drinkLogRepository.findById(drinkLog.getId()).orElseThrow();
+        assertThat(updatedDrinkLog.getTime()).isEqualTo(LocalTime.of(15, 30));
+        assertThat(updatedDrinkLog.getDate()).isEqualTo(LocalDate.of(2025, 1, 3));
+        assertThat(updatedDrinkLog.getLiquidIntake()).isEqualTo(new BigDecimal("1000"));
     }
 }

@@ -23,7 +23,7 @@ import static com.mumuca.diet.util.UpdateUtils.updateIfDifferent;
 @AllArgsConstructor
 public class DrinkLogServiceImpl implements DrinkLogService {
 
-    private DrinkLogRepository drinkLogRepository;
+    private final DrinkLogRepository drinkLogRepository;
     private final DrinkLogMapper drinkLogMapper;
 
     @Override
@@ -33,12 +33,7 @@ public class DrinkLogServiceImpl implements DrinkLogService {
 
         return drinkLogs
                 .stream()
-                .map(drinkLog -> new DrinkLogDTO(
-                        drinkLog.getId(),
-                        drinkLog.getDate(),
-                        drinkLog.getTime(),
-                        drinkLog.getLiquidIntake()
-                ))
+                .map(drinkLogMapper::fromDrinkLogToDrinkLogDTO)
                 .collect(Collectors.toList());
     }
 
@@ -69,28 +64,8 @@ public class DrinkLogServiceImpl implements DrinkLogService {
         DrinkLog drinkLogToUpdate = drinkLogRepository.findDrinkLogByIdAndUserId(drinkLogId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Drink Log Not Found."));
 
-        boolean updated = false;
+        drinkLogMapper.updateDrinkLogFromDTO(updateDrinkLogDTO, drinkLogToUpdate);
 
-        updated |= updateIfDifferent(
-                drinkLogToUpdate::getTime,
-                drinkLogToUpdate::setTime,
-                updateDrinkLogDTO.time()
-        );
-
-        updated |= updateIfDifferent(
-                drinkLogToUpdate::getDate,
-                drinkLogToUpdate::setDate,
-                updateDrinkLogDTO.date()
-        );
-
-        updated |= updateIfDifferent(
-                drinkLogToUpdate::getLiquidIntake,
-                drinkLogToUpdate::setLiquidIntake,
-                updateDrinkLogDTO.liquidIntake()
-        );
-
-        if (updated) {
-            drinkLogRepository.save(drinkLogToUpdate);
-        }
+        drinkLogRepository.save(drinkLogToUpdate);
     }
 }
