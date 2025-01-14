@@ -120,70 +120,29 @@ public class FoodServiceImpl implements FoodService {
         Food foodToUpdate = foodRepository.findByIdAndUserId(foodId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Food not found."));
 
-        boolean updated = false;
-
-        updated |= updateIfDifferent(
+        updateIfDifferent(
                 foodToUpdate::getTitle,
                 foodToUpdate::setTitle,
                 updateFoodDTO.title()
         );
 
-        updated |= updateIfDifferent(
+        updateIfDifferent(
                 foodToUpdate::getDescription,
                 foodToUpdate::setDescription,
                 updateFoodDTO.description()
         );
 
-        updated |= updateIfDifferent(
+        updateIfDifferent(
                 foodToUpdate::getBrand,
                 foodToUpdate::setBrand,
                 updateFoodDTO.brand()
         );
 
-        if (updateFoodDTO.nutritionalInformation() != null) {
-            if (foodToUpdate.getNutritionalInformation() == null) {
-                NutritionalInformation nutritionalInformation = new NutritionalInformation();
+        nutritionalInformationMapper.updateNIFromUpdateNIDTO(updateFoodDTO.nutritionalInformation(), foodToUpdate.getNutritionalInformation());
 
-                updated |= updateNutritionalInformationFields(
-                        nutritionalInformation,
-                        updateFoodDTO.nutritionalInformation(),
-                        updated
-                );
+        portionMapper.updatePortionFromUpdatePortionDTO(updateFoodDTO.portion(), foodToUpdate.getPortion());
 
-                nutritionalInformation.setFood(foodToUpdate);
-                foodToUpdate.setNutritionalInformation(nutritionalInformation);
-            } else {
-                updated |= updateNutritionalInformationFields(
-                        foodToUpdate.getNutritionalInformation(),
-                        updateFoodDTO.nutritionalInformation(),
-                        updated
-                );
-            }
-        }
-
-        if (updateFoodDTO.portion() != null) {
-            updated |= updateIfDifferent(
-                    foodToUpdate.getPortion()::getDescription,
-                    foodToUpdate.getPortion()::setDescription,
-                    updateFoodDTO.portion().description()
-            );
-
-            updated |= updateIfDifferent(
-                    foodToUpdate.getPortion()::getAmount,
-                    foodToUpdate.getPortion()::setAmount,
-                    updateFoodDTO.portion().amount()
-            );
-
-            updated |= updateIfDifferent(
-                    foodToUpdate.getPortion()::getUnit,
-                    foodToUpdate.getPortion()::setUnit,
-                    updateFoodDTO.portion().unit()
-            );
-        }
-
-        if (updated) {
-            foodRepository.save(foodToUpdate);
-        }
+        foodRepository.save(foodToUpdate);
 
         NutritionalInformationDTO nutritionalInformationDTO = nutritionalInformationMapper.fromNIToNIDTO(foodToUpdate.getNutritionalInformation());
 
@@ -197,112 +156,6 @@ public class FoodServiceImpl implements FoodService {
                 portionDTO,
                 nutritionalInformationDTO
         );
-    }
-
-    private boolean updateNutritionalInformationFields(NutritionalInformation nutritionalInformation, UpdateNutritionalInformationDTO updateNutritionalInfoDTO, boolean updated) {
-        updated |= updateIfDifferent(
-                nutritionalInformation::getCalories,
-                nutritionalInformation::setCalories,
-                updateNutritionalInfoDTO.calories()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getCarbohydrates,
-                nutritionalInformation::setCarbohydrates,
-                updateNutritionalInfoDTO.carbohydrates()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getProtein,
-                nutritionalInformation::setProtein,
-                updateNutritionalInfoDTO.protein()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getFat,
-                nutritionalInformation::setFat,
-                updateNutritionalInfoDTO.fat()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getMonounsaturatedFat,
-                nutritionalInformation::setMonounsaturatedFat,
-                updateNutritionalInfoDTO.monounsaturatedFat()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getSaturatedFat,
-                nutritionalInformation::setSaturatedFat,
-                updateNutritionalInfoDTO.saturatedFat()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getPolyunsaturatedFat,
-                nutritionalInformation::setPolyunsaturatedFat,
-                updateNutritionalInfoDTO.polyunsaturatedFat()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getTransFat,
-                nutritionalInformation::setTransFat,
-                updateNutritionalInfoDTO.transFat()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getCholesterol,
-                nutritionalInformation::setCholesterol,
-                updateNutritionalInfoDTO.cholesterol()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getSodium,
-                nutritionalInformation::setSodium,
-                updateNutritionalInfoDTO.sodium()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getPotassium,
-                nutritionalInformation::setPotassium,
-                updateNutritionalInfoDTO.potassium()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getFiber,
-                nutritionalInformation::setFiber,
-                updateNutritionalInfoDTO.fiber()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getSugar,
-                nutritionalInformation::setSugar,
-                updateNutritionalInfoDTO.sugar()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getCalcium,
-                nutritionalInformation::setCalcium,
-                updateNutritionalInfoDTO.calcium()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getIron,
-                nutritionalInformation::setIron,
-                updateNutritionalInfoDTO.iron()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getVitaminA,
-                nutritionalInformation::setVitaminA,
-                updateNutritionalInfoDTO.vitaminA()
-        );
-
-        updated |= updateIfDifferent(
-                nutritionalInformation::getVitaminC,
-                nutritionalInformation::setVitaminC,
-                updateNutritionalInfoDTO.vitaminC()
-        );
-
-        return updated;
     }
 
     @Override
