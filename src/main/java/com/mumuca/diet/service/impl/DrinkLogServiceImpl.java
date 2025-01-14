@@ -1,5 +1,6 @@
 package com.mumuca.diet.service.impl;
 
+import com.mumuca.diet.drinklog.mapper.DrinkLogMapper;
 import com.mumuca.diet.dto.drinklog.CreateDrinkLogDTO;
 import com.mumuca.diet.dto.drinklog.DrinkLogDTO;
 import com.mumuca.diet.dto.drinklog.UpdateDrinkLogDTO;
@@ -23,6 +24,7 @@ import static com.mumuca.diet.util.UpdateUtils.updateIfDifferent;
 public class DrinkLogServiceImpl implements DrinkLogService {
 
     private DrinkLogRepository drinkLogRepository;
+    private final DrinkLogMapper drinkLogMapper;
 
     @Override
     @Transactional
@@ -45,21 +47,11 @@ public class DrinkLogServiceImpl implements DrinkLogService {
     public DrinkLogDTO createDrinkLog(CreateDrinkLogDTO createDrinkLogDTO, String userId) {
         User user = new User(userId);
 
-        DrinkLog drinkLog = new DrinkLog();
-
-        drinkLog.setDate(createDrinkLogDTO.date());
-        drinkLog.setTime(createDrinkLogDTO.time());
-        drinkLog.setLiquidIntake(createDrinkLogDTO.liquidIntake());
-        drinkLog.setUser(user);
+        DrinkLog drinkLog = drinkLogMapper.fromCreateDrinkLogDTOToDrinkLog(createDrinkLogDTO, user);
 
         drinkLogRepository.save(drinkLog);
 
-        return new DrinkLogDTO(
-                drinkLog.getId(),
-                drinkLog.getDate(),
-                drinkLog.getTime(),
-                drinkLog.getLiquidIntake()
-        );
+        return drinkLogMapper.fromDrinkLogToDrinkLogDTO(drinkLog);
     }
 
     @Override
