@@ -323,7 +323,7 @@
   "name":"com.fasterxml.jackson.core.ObjectCodec",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "methods":[{"name":"getJsonFactory","parameterTypes":[] }, {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.core.type.ResolvedType"] }, {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.core.type.TypeReference"] }, {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","java.lang.Class"] }]
+  "methods":[{"name":"getJsonFactory","parameterTypes":[] }, {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.core.type.ResolvedType"] }, {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","java.lang.Class"] }]
 },
 {
   "name":"com.fasterxml.jackson.core.TreeCodec",
@@ -421,7 +421,21 @@
   "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"CGLIB$SET_STATIC_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }, {"name":"CGLIB$SET_THREAD_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }]
 },
 {
-  "name":"com.mumuca.diet.config.AppHints"
+  "name":"com.mumuca.diet.audit.AbstractAuditEntity",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"setCreatedBy","parameterTypes":["java.lang.String"] }, {"name":"setCreatedDate","parameterTypes":["java.time.Instant"] }, {"name":"setLastModifiedBy","parameterTypes":["java.lang.String"] }, {"name":"setLastModifiedDate","parameterTypes":["java.time.Instant"] }]
+},
+{
+  "name":"com.mumuca.diet.audit.AbstractAuditEntity_"
+},
+{
+  "name":"com.mumuca.diet.audit.AuditService",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getCurrentAuditor","parameterTypes":[] }, {"name":"toAuditorAware","parameterTypes":[] }]
 },
 {
   "name":"com.mumuca.diet.config.CacheConfig",
@@ -533,7 +547,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"calculateBMI","parameterTypes":["java.math.BigDecimal","java.math.BigDecimal"] }]
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.mumuca.diet.controller.FoodController",
@@ -585,13 +599,6 @@
   "methods":[{"name":"<init>","parameterTypes":["com.mumuca.diet.service.UserService"] }]
 },
 {
-  "name":"com.mumuca.diet.dto.BmiDTO",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"classification","parameterTypes":[] }, {"name":"value","parameterTypes":[] }]
-},
-{
   "name":"com.mumuca.diet.dto.meal.MealNutritionalInformationDTO",
   "queryAllDeclaredConstructors":true
 },
@@ -608,6 +615,36 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.mumuca.diet.hint.AppHintsRegistrar",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"registerHints","parameterTypes":["org.springframework.aot.hint.RuntimeHints","java.lang.ClassLoader"] }, {"name":"setBeanFactory","parameterTypes":["org.springframework.beans.factory.BeanFactory"] }]
+},
+{
+  "name":"com.mumuca.diet.hint.AppHintsRegistrar$$SpringCGLIB$$0",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "fields":[{"name":"CGLIB$FACTORY_DATA"}],
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"CGLIB$SET_STATIC_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }, {"name":"CGLIB$SET_THREAD_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }]
+},
+{
+  "name":"com.mumuca.diet.hint.SecurityHintsRegistrar",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"registerHints","parameterTypes":["org.springframework.aot.hint.RuntimeHints","java.lang.ClassLoader"] }, {"name":"setBeanFactory","parameterTypes":["org.springframework.beans.factory.BeanFactory"] }]
+},
+{
+  "name":"com.mumuca.diet.hint.SecurityHintsRegistrar$$SpringCGLIB$$0",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "fields":[{"name":"CGLIB$FACTORY_DATA"}],
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"CGLIB$SET_STATIC_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }, {"name":"CGLIB$SET_THREAD_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }]
 },
 {
   "name":"com.mumuca.diet.interceptor.LoggingInterceptor",
@@ -636,7 +673,7 @@
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getId","parameterTypes":[] }, {"name":"setBrand","parameterTypes":["java.lang.String"] }, {"name":"setDescription","parameterTypes":["java.lang.String"] }, {"name":"setId","parameterTypes":["java.lang.String"] }, {"name":"setMealLogs","parameterTypes":["java.util.Set"] }, {"name":"setMeals","parameterTypes":["java.util.Set"] }, {"name":"setNutritionalInformation","parameterTypes":["com.mumuca.diet.model.NutritionalInformation"] }, {"name":"setTitle","parameterTypes":["java.lang.String"] }, {"name":"setUser","parameterTypes":["com.mumuca.diet.model.User"] }]
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getId","parameterTypes":[] }, {"name":"setBrand","parameterTypes":["java.lang.String"] }, {"name":"setDescription","parameterTypes":["java.lang.String"] }, {"name":"setId","parameterTypes":["java.lang.String"] }, {"name":"setMealLogs","parameterTypes":["java.util.Set"] }, {"name":"setMeals","parameterTypes":["java.util.Set"] }, {"name":"setNutritionalInformation","parameterTypes":["com.mumuca.diet.model.NutritionalInformation"] }, {"name":"setPortion","parameterTypes":["com.mumuca.diet.model.Portion"] }, {"name":"setTitle","parameterTypes":["java.lang.String"] }, {"name":"setUser","parameterTypes":["com.mumuca.diet.model.User"] }]
 },
 {
   "name":"com.mumuca.diet.model.Food_"
@@ -706,6 +743,17 @@
   "name":"com.mumuca.diet.model.NutritionalInformation_"
 },
 {
+  "name":"com.mumuca.diet.model.Portion",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getId","parameterTypes":[] }, {"name":"setAmount","parameterTypes":["java.lang.Integer"] }, {"name":"setDescription","parameterTypes":["java.lang.String"] }, {"name":"setFood","parameterTypes":["com.mumuca.diet.model.Food"] }, {"name":"setId","parameterTypes":["java.lang.String"] }, {"name":"setUnit","parameterTypes":["com.mumuca.diet.model.Unit"] }]
+},
+{
+  "name":"com.mumuca.diet.model.Portion_"
+},
+{
   "name":"com.mumuca.diet.model.Profile",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -726,6 +774,9 @@
 },
 {
   "name":"com.mumuca.diet.model.Role_"
+},
+{
+  "name":"com.mumuca.diet.model.Unit"
 },
 {
   "name":"com.mumuca.diet.model.User",
@@ -777,6 +828,11 @@
   "queryAllPublicMethods":true
 },
 {
+  "name":"com.mumuca.diet.repository.PortionRepository",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
   "name":"com.mumuca.diet.repository.ProfileRepository",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true
@@ -803,30 +859,14 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["com.mumuca.diet.security.filter.UserValidationFilter","com.mumuca.diet.security.filter.JwtValidationFilter"] }, {"name":"jwtDecoder","parameterTypes":[] }, {"name":"jwtEncoder","parameterTypes":[] }, {"name":"passwordEncoder","parameterTypes":[] }, {"name":"securityFilterChain","parameterTypes":["org.springframework.security.config.annotation.web.builders.HttpSecurity"] }, {"name":"setBeanFactory","parameterTypes":["org.springframework.beans.factory.BeanFactory"] }]
-},
-{
-  "name":"com.mumuca.diet.security.SecurityConfig$$SpringCGLIB$$0",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "fields":[{"name":"CGLIB$FACTORY_DATA"}],
-  "methods":[{"name":"<init>","parameterTypes":["com.mumuca.diet.security.filter.UserValidationFilter","com.mumuca.diet.security.filter.JwtValidationFilter"] }, {"name":"CGLIB$SET_STATIC_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }, {"name":"CGLIB$SET_THREAD_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }]
-},
-{
-  "name":"com.mumuca.diet.security.SecurityConfig$$SpringCGLIB$$FastClass$$0",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.Class"] }]
-},
-{
-  "name":"com.mumuca.diet.security.SecurityConfig$$SpringCGLIB$$FastClass$$1",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.Class"] }]
+  "methods":[{"name":"<init>","parameterTypes":["com.mumuca.diet.security.filter.UserValidationFilter","com.mumuca.diet.security.filter.JwtValidationFilter"] }, {"name":"jwtDecoder","parameterTypes":["java.security.interfaces.RSAPublicKey"] }, {"name":"jwtEncoder","parameterTypes":["java.security.interfaces.RSAPublicKey","java.security.interfaces.RSAPrivateKey"] }, {"name":"passwordEncoder","parameterTypes":[] }, {"name":"privateKey","parameterTypes":["org.springframework.core.env.Environment"] }, {"name":"publicKey","parameterTypes":["org.springframework.core.env.Environment"] }, {"name":"securityFilterChain","parameterTypes":["org.springframework.security.config.annotation.web.builders.HttpSecurity"] }]
 },
 {
   "name":"com.mumuca.diet.security.filter.JwtValidationFilter",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["com.mumuca.diet.security.JwtBlacklist","com.fasterxml.jackson.databind.ObjectMapper"] }]
+  "methods":[{"name":"<init>","parameterTypes":["com.mumuca.diet.service.JwtService","com.mumuca.diet.security.JwtBlacklist","com.fasterxml.jackson.databind.ObjectMapper"] }]
 },
 {
   "name":"com.mumuca.diet.security.filter.UserValidationFilter",
@@ -852,6 +892,11 @@
 },
 {
   "name":"com.mumuca.diet.service.GoalService",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"com.mumuca.diet.service.JwtService",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true
 },
@@ -899,7 +944,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["com.mumuca.diet.repository.FoodRepository","com.mumuca.diet.repository.NutritionalInformationRepository","com.mumuca.diet.repository.MealRepository"] }, {"name":"createFood","parameterTypes":["com.mumuca.diet.dto.food.CreateFoodDTO","java.lang.String"] }, {"name":"deleteFood","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"getFood","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"getFoodMeals","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"getFoodNutritionalInformation","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"getFoods","parameterTypes":["org.springframework.data.domain.Pageable","java.lang.String"] }, {"name":"updateFood","parameterTypes":["java.lang.String","com.mumuca.diet.dto.food.UpdateFoodDTO","java.lang.String"] }]
+  "methods":[{"name":"<init>","parameterTypes":["com.mumuca.diet.repository.FoodRepository","com.mumuca.diet.repository.NutritionalInformationRepository","com.mumuca.diet.repository.PortionRepository","com.mumuca.diet.repository.MealRepository"] }, {"name":"createFood","parameterTypes":["com.mumuca.diet.dto.food.CreateFoodDTO","java.lang.String"] }, {"name":"deleteFood","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"getFood","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"getFoodMeals","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"getFoodNutritionalInformation","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"getFoods","parameterTypes":["org.springframework.data.domain.Pageable","java.lang.String"] }, {"name":"updateFood","parameterTypes":["java.lang.String","com.mumuca.diet.dto.food.UpdateFoodDTO","java.lang.String"] }]
 },
 {
   "name":"com.mumuca.diet.service.impl.FoodServiceImpl$$SpringCGLIB$$0",
@@ -912,6 +957,13 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":["com.mumuca.diet.repository.GoalRepository"] }, {"name":"getUserGoal","parameterTypes":["java.lang.String"] }, {"name":"updateUserMacronutrientGoal","parameterTypes":["com.mumuca.diet.dto.goal.UpdateMacronutrientGoalDTO","java.lang.String"] }, {"name":"updateUserWaterIntakeGoal","parameterTypes":["com.mumuca.diet.dto.goal.UpdateWaterIntakeGoalDTO","java.lang.String"] }]
+},
+{
+  "name":"com.mumuca.diet.service.impl.JwtServiceImpl",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.springframework.core.env.Environment"] }, {"name":"decode","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"com.mumuca.diet.service.impl.MealLogPreferenceServiceImpl",
@@ -942,7 +994,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["com.mumuca.diet.repository.FoodRepository","com.mumuca.diet.repository.MealRepository","com.mumuca.diet.repository.NutritionalInformationRepository"] }, {"name":"addFoodsToMeal","parameterTypes":["java.lang.String","java.util.List","java.lang.String"] }, {"name":"createMeal","parameterTypes":["com.mumuca.diet.dto.meal.CreateMealDTO","java.lang.String"] }, {"name":"deleteMeal","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"getMeal","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"getMealNutritionalInformation","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"getMeals","parameterTypes":["org.springframework.data.domain.Pageable","java.lang.String"] }, {"name":"removeFoodsFromMeal","parameterTypes":["java.lang.String","java.util.List","java.lang.String"] }, {"name":"updateMeal","parameterTypes":["java.lang.String","com.mumuca.diet.dto.meal.UpdateMealDTO","java.lang.String"] }]
+  "methods":[{"name":"<init>","parameterTypes":["com.mumuca.diet.repository.FoodRepository","com.mumuca.diet.repository.MealRepository"] }, {"name":"addFoodsToMeal","parameterTypes":["java.lang.String","java.util.List","java.lang.String"] }, {"name":"createMeal","parameterTypes":["com.mumuca.diet.dto.meal.CreateMealDTO","java.lang.String"] }, {"name":"deleteMeal","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"getMeal","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"getMealNutritionalInformation","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"getMeals","parameterTypes":["org.springframework.data.domain.Pageable","java.lang.String"] }, {"name":"removeFoodsFromMeal","parameterTypes":["java.lang.String","java.util.List","java.lang.String"] }, {"name":"updateMeal","parameterTypes":["java.lang.String","com.mumuca.diet.dto.meal.UpdateMealDTO","java.lang.String"] }]
 },
 {
   "name":"com.mumuca.diet.service.impl.MealServiceImpl$$SpringCGLIB$$0",
@@ -961,7 +1013,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["com.mumuca.diet.repository.UserRepository","com.mumuca.diet.repository.BodyRepository","com.mumuca.diet.repository.ProfileRepository","com.mumuca.diet.repository.GoalRepository"] }, {"name":"completeRegistration","parameterTypes":["com.mumuca.diet.dto.CompleteRegistrationDTO","java.lang.String"] }, {"name":"generateDiagnosis","parameterTypes":["java.lang.String"] }]
+  "methods":[{"name":"<init>","parameterTypes":["com.mumuca.diet.repository.UserRepository","com.mumuca.diet.repository.BodyRepository","com.mumuca.diet.repository.ProfileRepository","com.mumuca.diet.repository.GoalRepository"] }, {"name":"completeRegistration","parameterTypes":["com.mumuca.diet.dto.CompleteRegistrationDTO","java.lang.String"] }, {"name":"generateDiagnosis","parameterTypes":["java.lang.String"] }, {"name":"getUserProfile","parameterTypes":["java.lang.String"] }, {"name":"resetRegister","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"com.mumuca.diet.service.impl.UserServiceImpl$$SpringCGLIB$$0",
@@ -1060,10 +1112,6 @@
 {
   "name":"com.zaxxer.hikari.pool.PoolEntry",
   "fields":[{"name":"state"}]
-},
-{
-  "name":"float",
-  "queryAllDeclaredMethods":true
 },
 {
   "name":"freemarker.template.Configuration"
@@ -1234,16 +1282,21 @@
   "methods":[{"name":"value","parameterTypes":[] }]
 },
 {
+  "name":"jakarta.persistence.EntityListeners",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"value","parameterTypes":[] }]
+},
+{
   "name":"jakarta.persistence.EntityManager",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":["jdk.proxy2.$Proxy147"] }, {"name":"clear","parameterTypes":[] }, {"name":"close","parameterTypes":[] }, {"name":"contains","parameterTypes":["java.lang.Object"] }, {"name":"createEntityGraph","parameterTypes":["java.lang.Class"] }, {"name":"createEntityGraph","parameterTypes":["java.lang.String"] }, {"name":"createNamedQuery","parameterTypes":["java.lang.String"] }, {"name":"createNamedQuery","parameterTypes":["java.lang.String","java.lang.Class"] }, {"name":"createNamedStoredProcedureQuery","parameterTypes":["java.lang.String"] }, {"name":"createNativeQuery","parameterTypes":["java.lang.String"] }, {"name":"createNativeQuery","parameterTypes":["java.lang.String","java.lang.Class"] }, {"name":"createNativeQuery","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"createQuery","parameterTypes":["jakarta.persistence.criteria.CriteriaDelete"] }, {"name":"createQuery","parameterTypes":["jakarta.persistence.criteria.CriteriaQuery"] }, {"name":"createQuery","parameterTypes":["jakarta.persistence.criteria.CriteriaUpdate"] }, {"name":"createQuery","parameterTypes":["java.lang.String"] }, {"name":"createQuery","parameterTypes":["java.lang.String","java.lang.Class"] }, {"name":"createStoredProcedureQuery","parameterTypes":["java.lang.String"] }, {"name":"createStoredProcedureQuery","parameterTypes":["java.lang.String","java.lang.Class[]"] }, {"name":"createStoredProcedureQuery","parameterTypes":["java.lang.String","java.lang.String[]"] }, {"name":"detach","parameterTypes":["java.lang.Object"] }, {"name":"find","parameterTypes":["java.lang.Class","java.lang.Object"] }, {"name":"find","parameterTypes":["java.lang.Class","java.lang.Object","jakarta.persistence.LockModeType"] }, {"name":"find","parameterTypes":["java.lang.Class","java.lang.Object","jakarta.persistence.LockModeType","java.util.Map"] }, {"name":"find","parameterTypes":["java.lang.Class","java.lang.Object","java.util.Map"] }, {"name":"flush","parameterTypes":[] }, {"name":"from","parameterTypes":["jdk.proxy2.$Proxy147"] }, {"name":"getCriteriaBuilder","parameterTypes":[] }, {"name":"getDelegate","parameterTypes":[] }, {"name":"getEntityGraph","parameterTypes":["java.lang.String"] }, {"name":"getEntityGraphs","parameterTypes":["java.lang.Class"] }, {"name":"getEntityManagerFactory","parameterTypes":[] }, {"name":"getFlushMode","parameterTypes":[] }, {"name":"getLockMode","parameterTypes":["java.lang.Object"] }, {"name":"getMetamodel","parameterTypes":[] }, {"name":"getProperties","parameterTypes":[] }, {"name":"getReference","parameterTypes":["java.lang.Class","java.lang.Object"] }, {"name":"getTransaction","parameterTypes":[] }, {"name":"isJoinedToTransaction","parameterTypes":[] }, {"name":"isOpen","parameterTypes":[] }, {"name":"joinTransaction","parameterTypes":[] }, {"name":"lock","parameterTypes":["java.lang.Object","jakarta.persistence.LockModeType"] }, {"name":"lock","parameterTypes":["java.lang.Object","jakarta.persistence.LockModeType","java.util.Map"] }, {"name":"merge","parameterTypes":["java.lang.Object"] }, {"name":"of","parameterTypes":["jdk.proxy2.$Proxy147"] }, {"name":"persist","parameterTypes":["java.lang.Object"] }, {"name":"refresh","parameterTypes":["java.lang.Object"] }, {"name":"refresh","parameterTypes":["java.lang.Object","jakarta.persistence.LockModeType"] }, {"name":"refresh","parameterTypes":["java.lang.Object","jakarta.persistence.LockModeType","java.util.Map"] }, {"name":"refresh","parameterTypes":["java.lang.Object","java.util.Map"] }, {"name":"remove","parameterTypes":["java.lang.Object"] }, {"name":"setFlushMode","parameterTypes":["jakarta.persistence.FlushModeType"] }, {"name":"setProperty","parameterTypes":["java.lang.String","java.lang.Object"] }, {"name":"unwrap","parameterTypes":["java.lang.Class"] }, {"name":"valueOf","parameterTypes":["jdk.proxy2.$Proxy147"] }]
+  "methods":[{"name":"<init>","parameterTypes":["jdk.proxy2.$Proxy162"] }, {"name":"clear","parameterTypes":[] }, {"name":"close","parameterTypes":[] }, {"name":"contains","parameterTypes":["java.lang.Object"] }, {"name":"createEntityGraph","parameterTypes":["java.lang.Class"] }, {"name":"createEntityGraph","parameterTypes":["java.lang.String"] }, {"name":"createNamedQuery","parameterTypes":["java.lang.String"] }, {"name":"createNamedQuery","parameterTypes":["java.lang.String","java.lang.Class"] }, {"name":"createNamedStoredProcedureQuery","parameterTypes":["java.lang.String"] }, {"name":"createNativeQuery","parameterTypes":["java.lang.String"] }, {"name":"createNativeQuery","parameterTypes":["java.lang.String","java.lang.Class"] }, {"name":"createNativeQuery","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"createQuery","parameterTypes":["jakarta.persistence.criteria.CriteriaDelete"] }, {"name":"createQuery","parameterTypes":["jakarta.persistence.criteria.CriteriaQuery"] }, {"name":"createQuery","parameterTypes":["jakarta.persistence.criteria.CriteriaUpdate"] }, {"name":"createQuery","parameterTypes":["java.lang.String"] }, {"name":"createQuery","parameterTypes":["java.lang.String","java.lang.Class"] }, {"name":"createStoredProcedureQuery","parameterTypes":["java.lang.String"] }, {"name":"createStoredProcedureQuery","parameterTypes":["java.lang.String","java.lang.Class[]"] }, {"name":"createStoredProcedureQuery","parameterTypes":["java.lang.String","java.lang.String[]"] }, {"name":"detach","parameterTypes":["java.lang.Object"] }, {"name":"find","parameterTypes":["java.lang.Class","java.lang.Object"] }, {"name":"find","parameterTypes":["java.lang.Class","java.lang.Object","jakarta.persistence.LockModeType"] }, {"name":"find","parameterTypes":["java.lang.Class","java.lang.Object","jakarta.persistence.LockModeType","java.util.Map"] }, {"name":"find","parameterTypes":["java.lang.Class","java.lang.Object","java.util.Map"] }, {"name":"flush","parameterTypes":[] }, {"name":"from","parameterTypes":["jdk.proxy2.$Proxy162"] }, {"name":"getCriteriaBuilder","parameterTypes":[] }, {"name":"getDelegate","parameterTypes":[] }, {"name":"getEntityGraph","parameterTypes":["java.lang.String"] }, {"name":"getEntityGraphs","parameterTypes":["java.lang.Class"] }, {"name":"getEntityManagerFactory","parameterTypes":[] }, {"name":"getFlushMode","parameterTypes":[] }, {"name":"getLockMode","parameterTypes":["java.lang.Object"] }, {"name":"getMetamodel","parameterTypes":[] }, {"name":"getProperties","parameterTypes":[] }, {"name":"getReference","parameterTypes":["java.lang.Class","java.lang.Object"] }, {"name":"getTransaction","parameterTypes":[] }, {"name":"isJoinedToTransaction","parameterTypes":[] }, {"name":"isOpen","parameterTypes":[] }, {"name":"joinTransaction","parameterTypes":[] }, {"name":"lock","parameterTypes":["java.lang.Object","jakarta.persistence.LockModeType"] }, {"name":"lock","parameterTypes":["java.lang.Object","jakarta.persistence.LockModeType","java.util.Map"] }, {"name":"merge","parameterTypes":["java.lang.Object"] }, {"name":"of","parameterTypes":["jdk.proxy2.$Proxy162"] }, {"name":"persist","parameterTypes":["java.lang.Object"] }, {"name":"refresh","parameterTypes":["java.lang.Object"] }, {"name":"refresh","parameterTypes":["java.lang.Object","jakarta.persistence.LockModeType"] }, {"name":"refresh","parameterTypes":["java.lang.Object","jakarta.persistence.LockModeType","java.util.Map"] }, {"name":"refresh","parameterTypes":["java.lang.Object","java.util.Map"] }, {"name":"remove","parameterTypes":["java.lang.Object"] }, {"name":"setFlushMode","parameterTypes":["jakarta.persistence.FlushModeType"] }, {"name":"setProperty","parameterTypes":["java.lang.String","java.lang.Object"] }, {"name":"unwrap","parameterTypes":["java.lang.Class"] }, {"name":"valueOf","parameterTypes":["jdk.proxy2.$Proxy162"] }]
 },
 {
   "name":"jakarta.persistence.EntityManagerFactory",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":["jdk.proxy2.$Proxy146"] }, {"name":"addNamedEntityGraph","parameterTypes":["java.lang.String","jakarta.persistence.EntityGraph"] }, {"name":"addNamedQuery","parameterTypes":["java.lang.String","jakarta.persistence.Query"] }, {"name":"createEntityManager","parameterTypes":[] }, {"name":"createEntityManager","parameterTypes":["jakarta.persistence.SynchronizationType"] }, {"name":"createEntityManager","parameterTypes":["jakarta.persistence.SynchronizationType","java.util.Map"] }, {"name":"createEntityManager","parameterTypes":["java.util.Map"] }, {"name":"from","parameterTypes":["jdk.proxy2.$Proxy146"] }, {"name":"getCriteriaBuilder","parameterTypes":[] }, {"name":"getMetamodel","parameterTypes":[] }, {"name":"getPersistenceUnitUtil","parameterTypes":[] }, {"name":"getProperties","parameterTypes":[] }, {"name":"isOpen","parameterTypes":[] }, {"name":"of","parameterTypes":["jdk.proxy2.$Proxy146"] }, {"name":"unwrap","parameterTypes":["java.lang.Class"] }, {"name":"valueOf","parameterTypes":["jdk.proxy2.$Proxy146"] }]
+  "methods":[{"name":"<init>","parameterTypes":["jdk.proxy2.$Proxy161"] }, {"name":"addNamedEntityGraph","parameterTypes":["java.lang.String","jakarta.persistence.EntityGraph"] }, {"name":"addNamedQuery","parameterTypes":["java.lang.String","jakarta.persistence.Query"] }, {"name":"createEntityManager","parameterTypes":[] }, {"name":"createEntityManager","parameterTypes":["jakarta.persistence.SynchronizationType"] }, {"name":"createEntityManager","parameterTypes":["jakarta.persistence.SynchronizationType","java.util.Map"] }, {"name":"createEntityManager","parameterTypes":["java.util.Map"] }, {"name":"from","parameterTypes":["jdk.proxy2.$Proxy161"] }, {"name":"getCriteriaBuilder","parameterTypes":[] }, {"name":"getMetamodel","parameterTypes":[] }, {"name":"getPersistenceUnitUtil","parameterTypes":[] }, {"name":"getProperties","parameterTypes":[] }, {"name":"isOpen","parameterTypes":[] }, {"name":"of","parameterTypes":["jdk.proxy2.$Proxy161"] }, {"name":"unwrap","parameterTypes":["java.lang.Class"] }, {"name":"valueOf","parameterTypes":["jdk.proxy2.$Proxy161"] }]
 },
 {
   "name":"jakarta.persistence.Enumerated",
@@ -1289,6 +1342,11 @@
   "methods":[{"name":"value","parameterTypes":[] }]
 },
 {
+  "name":"jakarta.persistence.MappedSuperclass",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"value","parameterTypes":[] }]
+},
+{
   "name":"jakarta.persistence.OneToMany",
   "queryAllDeclaredMethods":true,
   "methods":[{"name":"value","parameterTypes":[] }]
@@ -1316,6 +1374,10 @@
   "methods":[{"name":"value","parameterTypes":[] }]
 },
 {
+  "name":"jakarta.persistence.PreUpdate",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"jakarta.persistence.Table",
   "queryAllDeclaredMethods":true,
   "methods":[{"name":"value","parameterTypes":[] }]
@@ -1333,7 +1395,7 @@
   "name":"jakarta.servlet.Filter",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":["org.springframework.security.web.FilterChainProxy"] }, {"name":"<init>","parameterTypes":["org.springframework.web.servlet.handler.HandlerMappingIntrospector$$Lambda/0x0000015ddcc13890"] }, {"name":"from","parameterTypes":["org.springframework.security.web.FilterChainProxy"] }, {"name":"from","parameterTypes":["org.springframework.web.servlet.handler.HandlerMappingIntrospector$$Lambda/0x0000015ddcc13890"] }, {"name":"of","parameterTypes":["org.springframework.security.web.FilterChainProxy"] }, {"name":"of","parameterTypes":["org.springframework.web.servlet.handler.HandlerMappingIntrospector$$Lambda/0x0000015ddcc13890"] }, {"name":"valueOf","parameterTypes":["org.springframework.security.web.FilterChainProxy"] }, {"name":"valueOf","parameterTypes":["org.springframework.web.servlet.handler.HandlerMappingIntrospector$$Lambda/0x0000015ddcc13890"] }]
+  "methods":[{"name":"<init>","parameterTypes":["org.springframework.security.web.FilterChainProxy"] }, {"name":"<init>","parameterTypes":["org.springframework.web.servlet.handler.HandlerMappingIntrospector$$Lambda/0x0000011752c7a120"] }, {"name":"from","parameterTypes":["org.springframework.security.web.FilterChainProxy"] }, {"name":"from","parameterTypes":["org.springframework.web.servlet.handler.HandlerMappingIntrospector$$Lambda/0x0000011752c7a120"] }, {"name":"of","parameterTypes":["org.springframework.security.web.FilterChainProxy"] }, {"name":"of","parameterTypes":["org.springframework.web.servlet.handler.HandlerMappingIntrospector$$Lambda/0x0000011752c7a120"] }, {"name":"valueOf","parameterTypes":["org.springframework.security.web.FilterChainProxy"] }, {"name":"valueOf","parameterTypes":["org.springframework.web.servlet.handler.HandlerMappingIntrospector$$Lambda/0x0000011752c7a120"] }]
 },
 {
   "name":"jakarta.servlet.GenericFilter",
@@ -1396,12 +1458,6 @@
   "queryAllDeclaredMethods":true
 },
 {
-  "name":"jakarta.validation.ConstraintValidator",
-  "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true,
-  "methods":[{"name":"initialize","parameterTypes":["java.lang.annotation.Annotation"] }]
-},
-{
   "name":"jakarta.validation.ConstraintViolation"
 },
 {
@@ -1451,8 +1507,7 @@
 },
 {
   "name":"jakarta.validation.constraints.NotNull",
-  "queryAllDeclaredMethods":true,
-  "methods":[{"name":"groups","parameterTypes":[] }, {"name":"message","parameterTypes":[] }, {"name":"payload","parameterTypes":[] }]
+  "queryAllDeclaredMethods":true
 },
 {
   "name":"jakarta.validation.constraints.Past",
@@ -1464,8 +1519,7 @@
 },
 {
   "name":"jakarta.validation.constraints.Positive",
-  "queryAllDeclaredMethods":true,
-  "methods":[{"name":"groups","parameterTypes":[] }, {"name":"message","parameterTypes":[] }, {"name":"payload","parameterTypes":[] }]
+  "queryAllDeclaredMethods":true
 },
 {
   "name":"jakarta.validation.constraints.Size",
@@ -1556,7 +1610,7 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"equals","parameterTypes":["java.lang.Object"] }, {"name":"hashCode","parameterTypes":[] }, {"name":"toString","parameterTypes":[] }]
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"equals","parameterTypes":["java.lang.Object"] }, {"name":"hashCode","parameterTypes":[] }]
 },
 {
   "name":"java.lang.Record",
@@ -1771,6 +1825,21 @@
   "name":"java.security.AllPermission"
 },
 {
+  "name":"java.security.Key",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.security.PrivateKey",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.security.PublicKey",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
   "name":"java.security.SecureClassLoader",
   "queryAllDeclaredMethods":true
 },
@@ -1779,6 +1848,26 @@
 },
 {
   "name":"java.security.SecurityPermission"
+},
+{
+  "name":"java.security.interfaces.RSAKey",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.security.interfaces.RSAPrivateCrtKey",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.security.interfaces.RSAPrivateKey",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.security.interfaces.RSAPublicKey",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
 },
 {
   "name":"java.sql.Connection",
@@ -1820,6 +1909,9 @@
   "name":"java.time.DurationEditor"
 },
 {
+  "name":"java.time.Instant"
+},
+{
   "name":"java.time.LocalDate"
 },
 {
@@ -1851,10 +1943,6 @@
 {
   "name":"java.util.SortedSet",
   "methods":[{"name":"getFirst","parameterTypes":[] }]
-},
-{
-  "name":"java.util.concurrent.Callable",
-  "methods":[{"name":"call","parameterTypes":[] }]
 },
 {
   "name":"java.util.concurrent.Executor",
@@ -1940,6 +2028,12 @@
 },
 {
   "name":"javax.naming.ldap.LdapContext"
+},
+{
+  "name":"javax.security.auth.Destroyable",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"destroy","parameterTypes":[] }, {"name":"isDestroyed","parameterTypes":[] }]
 },
 {
   "name":"javax.security.auth.Subject",
@@ -2355,7 +2449,43 @@
   "name":"org.apache.tomcat.websocket.server.WsSci"
 },
 {
+  "name":"org.aspectj.internal.lang.annotation.ajcDeclareParents",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.aspectj.lang.annotation.AfterReturning",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.aspectj.lang.annotation.Aspect",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.aspectj.lang.annotation.Before",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.aspectj.lang.annotation.Pointcut",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.aspectj.lang.annotation.SuppressAjWarnings",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"org.aspectj.weaver.Advice"
+},
+{
+  "name":"org.aspectj.weaver.reflect.Java15AnnotationFinder",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.aspectj.weaver.reflect.Java15ReflectionBasedReferenceTypeDelegate",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.aspectj.weaver.tools.Jdk14TraceFactory",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"org.cache2k.Cache2kBuilder"
@@ -2944,22 +3074,6 @@
   "name":"org.hibernate.validator.HibernateValidator"
 },
 {
-  "name":"org.hibernate.validator.internal.constraintvalidators.bv.NotNullValidator",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "queryAllPublicConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isValid","parameterTypes":["java.lang.Object","jakarta.validation.ConstraintValidatorContext"] }]
-},
-{
-  "name":"org.hibernate.validator.internal.constraintvalidators.bv.number.sign.PositiveValidatorForBigDecimal",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "queryAllPublicConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isValid","parameterTypes":["java.lang.Object","jakarta.validation.ConstraintValidatorContext"] }]
-},
-{
   "name":"org.hibernate.validator.internal.engine.AbstractConfigurationImpl",
   "methods":[{"name":"externalClassLoader","parameterTypes":["java.lang.ClassLoader"] }]
 },
@@ -3132,6 +3246,11 @@
   "queryAllDeclaredMethods":true
 },
 {
+  "name":"org.springframework.aot.hint.RuntimeHintsRegistrar",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
   "name":"org.springframework.aot.hint.annotation.Reflective",
   "queryAllDeclaredMethods":true
 },
@@ -3175,6 +3294,12 @@
   "queryAllPublicMethods":true
 },
 {
+  "name":"org.springframework.beans.factory.ObjectFactory",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean$TargetBeanObjectFactory"] }, {"name":"from","parameterTypes":["org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean$TargetBeanObjectFactory"] }, {"name":"of","parameterTypes":["org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean$TargetBeanObjectFactory"] }, {"name":"valueOf","parameterTypes":["org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean$TargetBeanObjectFactory"] }]
+},
+{
   "name":"org.springframework.beans.factory.SmartInitializingSingleton",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true
@@ -3186,6 +3311,10 @@
 {
   "name":"org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor",
   "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.springframework.beans.factory.annotation.Configurable",
+  "queryAllDeclaredMethods":true
 },
 {
   "name":"org.springframework.beans.factory.annotation.Qualifier",
@@ -3206,6 +3335,31 @@
   "methods":[{"name":"isBeanExcludedFromAotProcessing","parameterTypes":[] }]
 },
 {
+  "name":"org.springframework.beans.factory.aspectj.AbstractDependencyInjectionAspect",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"ajc$afterReturning$org_springframework_beans_factory_aspectj_AbstractDependencyInjectionAspect$2$1ea6722c","parameterTypes":["java.lang.Object"] }, {"name":"ajc$afterReturning$org_springframework_beans_factory_aspectj_AbstractDependencyInjectionAspect$3$6aa27052","parameterTypes":["java.lang.Object"] }, {"name":"ajc$before$org_springframework_beans_factory_aspectj_AbstractDependencyInjectionAspect$1$e854fa65","parameterTypes":["java.lang.Object"] }]
+},
+{
+  "name":"org.springframework.beans.factory.aspectj.AbstractInterfaceDrivenDependencyInjectionAspect",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.springframework.beans.factory.aspectj.AbstractInterfaceDrivenDependencyInjectionAspect$ConfigurableDeserializationSupport"
+},
+{
+  "name":"org.springframework.beans.factory.aspectj.AnnotationBeanConfigurerAspect",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"aspectOf","parameterTypes":[] }, {"name":"configureBean","parameterTypes":["java.lang.Object"] }]
+},
+{
+  "name":"org.springframework.beans.factory.aspectj.ConfigurableObject",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
   "name":"org.springframework.beans.factory.config.AbstractFactoryBean",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -3223,6 +3377,19 @@
 {
   "name":"org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor",
   "queryAllPublicMethods":true
+},
+{
+  "name":"org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"afterPropertiesSet","parameterTypes":[] }, {"name":"getObjectType","parameterTypes":[] }, {"name":"setTargetBeanName","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean$TargetBeanObjectFactory",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"getObject","parameterTypes":[] }, {"name":"toObjectFactory","parameterTypes":[] }]
 },
 {
   "name":"org.springframework.beans.factory.config.SmartInstantiationAwareBeanPostProcessor",
@@ -5791,8 +5958,50 @@
   "queryAllPublicMethods":true
 },
 {
+  "name":"org.springframework.data.annotation.CreatedBy",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"value","parameterTypes":[] }]
+},
+{
+  "name":"org.springframework.data.annotation.CreatedDate",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"value","parameterTypes":[] }]
+},
+{
+  "name":"org.springframework.data.annotation.LastModifiedBy",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"value","parameterTypes":[] }]
+},
+{
+  "name":"org.springframework.data.annotation.LastModifiedDate",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"value","parameterTypes":[] }]
+},
+{
   "name":"org.springframework.data.annotation.QueryAnnotation",
   "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.springframework.data.auditing.AuditingHandler",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"afterPropertiesSet","parameterTypes":[] }, {"name":"from","parameterTypes":["org.springframework.data.mapping.context.MappingContext"] }, {"name":"setAuditorAware","parameterTypes":["org.springframework.data.domain.AuditorAware"] }]
+},
+{
+  "name":"org.springframework.data.auditing.AuditingHandlerSupport",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"setDateTimeForNow","parameterTypes":["boolean"] }, {"name":"setDateTimeProvider","parameterTypes":["org.springframework.data.auditing.DateTimeProvider"] }, {"name":"setModifyOnCreation","parameterTypes":["boolean"] }]
+},
+{
+  "name":"org.springframework.data.auditing.CurrentDateTimeProvider",
+  "methods":[{"name":"toDateTimeProvider","parameterTypes":[] }]
+},
+{
+  "name":"org.springframework.data.auditing.DateTimeProvider",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.springframework.data.auditing.CurrentDateTimeProvider"] }, {"name":"from","parameterTypes":["org.springframework.data.auditing.CurrentDateTimeProvider"] }, {"name":"of","parameterTypes":["org.springframework.data.auditing.CurrentDateTimeProvider"] }, {"name":"valueOf","parameterTypes":["org.springframework.data.auditing.CurrentDateTimeProvider"] }]
 },
 {
   "name":"org.springframework.data.cassandra.ReactiveSession"
@@ -5827,6 +6036,12 @@
   "queryAllDeclaredMethods":true
 },
 {
+  "name":"org.springframework.data.domain.AuditorAware",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":["com.mumuca.diet.audit.AuditService"] }, {"name":"from","parameterTypes":["com.mumuca.diet.audit.AuditService"] }, {"name":"of","parameterTypes":["com.mumuca.diet.audit.AuditService"] }, {"name":"valueOf","parameterTypes":["com.mumuca.diet.audit.AuditService"] }]
+},
+{
   "name":"org.springframework.data.domain.Unpaged"
 },
 {
@@ -5849,6 +6064,19 @@
 },
 {
   "name":"org.springframework.data.jdbc.repository.config.AbstractJdbcConfiguration"
+},
+{
+  "name":"org.springframework.data.jpa.domain.support.AuditingBeanFactoryPostProcessor",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.springframework.data.jpa.domain.support.AuditingEntityListener",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setAuditingHandler","parameterTypes":["org.springframework.beans.factory.ObjectFactory"] }]
 },
 {
   "name":"org.springframework.data.jpa.mapping.JpaMetamodelMappingContext",
@@ -5874,8 +6102,17 @@
   "queryAllDeclaredMethods":true
 },
 {
+  "name":"org.springframework.data.jpa.repository.config.EnableJpaAuditing",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"org.springframework.data.jpa.repository.config.EnableJpaRepositories",
   "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.springframework.data.jpa.repository.config.JpaAuditingRegistrar",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"org.springframework.data.jpa.repository.config.JpaMetamodelMappingContextFactoryBean",
@@ -5990,7 +6227,7 @@
   "name":"org.springframework.data.mapping.context.MappingContext",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":["org.springframework.data.jpa.mapping.JpaMetamodelMappingContext"] }, {"name":"from","parameterTypes":["org.springframework.data.jpa.mapping.JpaMetamodelMappingContext"] }, {"name":"getPersistentEntity","parameterTypes":["java.lang.Class"] }, {"name":"getPersistentEntity","parameterTypes":["org.springframework.data.util.TypeInformation"] }, {"name":"getRequiredPersistentEntity","parameterTypes":["java.lang.Class"] }, {"name":"getRequiredPersistentEntity","parameterTypes":["org.springframework.data.mapping.PersistentProperty"] }, {"name":"getRequiredPersistentEntity","parameterTypes":["org.springframework.data.util.TypeInformation"] }, {"name":"of","parameterTypes":["org.springframework.data.jpa.mapping.JpaMetamodelMappingContext"] }, {"name":"valueOf","parameterTypes":["org.springframework.data.jpa.mapping.JpaMetamodelMappingContext"] }]
+  "methods":[{"name":"<init>","parameterTypes":["org.springframework.data.jpa.mapping.JpaMetamodelMappingContext"] }, {"name":"from","parameterTypes":["org.springframework.data.jpa.mapping.JpaMetamodelMappingContext"] }, {"name":"getPersistentEntity","parameterTypes":["org.springframework.data.mapping.PersistentProperty"] }, {"name":"getPersistentEntity","parameterTypes":["org.springframework.data.util.TypeInformation"] }, {"name":"getRequiredPersistentEntity","parameterTypes":["java.lang.Class"] }, {"name":"getRequiredPersistentEntity","parameterTypes":["org.springframework.data.mapping.PersistentProperty"] }, {"name":"getRequiredPersistentEntity","parameterTypes":["org.springframework.data.util.TypeInformation"] }, {"name":"of","parameterTypes":["org.springframework.data.jpa.mapping.JpaMetamodelMappingContext"] }, {"name":"valueOf","parameterTypes":["org.springframework.data.jpa.mapping.JpaMetamodelMappingContext"] }]
 },
 {
   "name":"org.springframework.data.querydsl.QuerydslPredicateExecutor"
@@ -7512,8 +7749,7 @@
 },
 {
   "name":"org.springframework.web.bind.annotation.GetMapping",
-  "queryAllDeclaredMethods":true,
-  "methods":[{"name":"value","parameterTypes":[] }]
+  "queryAllDeclaredMethods":true
 },
 {
   "name":"org.springframework.web.bind.annotation.Mapping",
@@ -7541,13 +7777,11 @@
 },
 {
   "name":"org.springframework.web.bind.annotation.RequestMapping",
-  "queryAllDeclaredMethods":true,
-  "methods":[{"name":"value","parameterTypes":[] }]
+  "queryAllDeclaredMethods":true
 },
 {
   "name":"org.springframework.web.bind.annotation.RequestParam",
-  "queryAllDeclaredMethods":true,
-  "methods":[{"name":"value","parameterTypes":[] }]
+  "queryAllDeclaredMethods":true
 },
 {
   "name":"org.springframework.web.bind.annotation.ResponseBody",
@@ -7555,8 +7789,7 @@
 },
 {
   "name":"org.springframework.web.bind.annotation.RestController",
-  "queryAllDeclaredMethods":true,
-  "methods":[{"name":"value","parameterTypes":[] }]
+  "queryAllDeclaredMethods":true
 },
 {
   "name":"org.springframework.web.bind.annotation.RestControllerAdvice",
@@ -8070,6 +8303,12 @@
   "methods":[{"name":"getReflectionFactory","parameterTypes":[] }, {"name":"newConstructorForSerialization","parameterTypes":["java.lang.Class","java.lang.reflect.Constructor"] }]
 },
 {
+  "name":"sun.security.pkcs.PKCS8Key",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"clear","parameterTypes":[] }, {"name":"equals","parameterTypes":["java.lang.Object"] }, {"name":"getAlgorithmId","parameterTypes":[] }, {"name":"getEncoded","parameterTypes":[] }, {"name":"getFormat","parameterTypes":[] }, {"name":"hashCode","parameterTypes":[] }]
+},
+{
   "name":"sun.security.provider.DRBG",
   "methods":[{"name":"<init>","parameterTypes":["java.security.SecureRandomParameters"] }]
 },
@@ -8104,5 +8343,34 @@
 {
   "name":"sun.security.rsa.RSAKeyFactory$Legacy",
   "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.rsa.RSAPrivateCrtKeyImpl",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"close","parameterTypes":[] }, {"name":"getAlgorithm","parameterTypes":[] }, {"name":"getCrtCoefficient","parameterTypes":[] }, {"name":"getModulus","parameterTypes":[] }, {"name":"getParams","parameterTypes":[] }, {"name":"getPrimeExponentP","parameterTypes":[] }, {"name":"getPrimeExponentQ","parameterTypes":[] }, {"name":"getPrimeP","parameterTypes":[] }, {"name":"getPrimeQ","parameterTypes":[] }, {"name":"getPrivateExponent","parameterTypes":[] }, {"name":"getPublicExponent","parameterTypes":[] }, {"name":"shutdown","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.rsa.RSAPublicKeyImpl",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"close","parameterTypes":[] }, {"name":"getAlgorithm","parameterTypes":[] }, {"name":"getModulus","parameterTypes":[] }, {"name":"getParams","parameterTypes":[] }, {"name":"getPublicExponent","parameterTypes":[] }, {"name":"shutdown","parameterTypes":[] }, {"name":"toString","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.util.DerEncoder",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"sun.security.util.InternalPrivateKey",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"calculatePublicKey","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.x509.X509Key",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"decode","parameterTypes":["byte[]"] }, {"name":"encode","parameterTypes":[] }, {"name":"encode","parameterTypes":["sun.security.util.DerOutputStream"] }, {"name":"equals","parameterTypes":["java.lang.Object"] }, {"name":"getAlgorithmId","parameterTypes":[] }, {"name":"getEncoded","parameterTypes":[] }, {"name":"getEncodedInternal","parameterTypes":[] }, {"name":"getFormat","parameterTypes":[] }, {"name":"hashCode","parameterTypes":[] }]
 }
 ]

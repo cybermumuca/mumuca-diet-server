@@ -105,17 +105,13 @@
   }, {
     "pattern":"\\QMETA-INF/validation.xml\\E"
   }, {
-    "pattern":"\\Qapp.key\\E"
+    "pattern":"\\Qapplication-default.properties\\E"
   }, {
-    "pattern":"\\Qapp.pub\\E"
+    "pattern":"\\Qapplication-default.xml\\E"
   }, {
-    "pattern":"\\Qapplication-dev-pg.properties\\E"
+    "pattern":"\\Qapplication-default.yaml\\E"
   }, {
-    "pattern":"\\Qapplication-dev-pg.xml\\E"
-  }, {
-    "pattern":"\\Qapplication-dev-pg.yaml\\E"
-  }, {
-    "pattern":"\\Qapplication-dev-pg.yml\\E"
+    "pattern":"\\Qapplication-default.yml\\E"
   }, {
     "pattern":"\\Qapplication.properties\\E"
   }, {
@@ -128,6 +124,10 @@
     "pattern":"\\Qbanner.txt\\E"
   }, {
     "pattern":"\\Qcom/mumuca/diet/\\E"
+  }, {
+    "pattern":"\\Qcom/mumuca/diet/audit/AbstractAuditEntity.class\\E"
+  }, {
+    "pattern":"\\Qcom/mumuca/diet/audit/AuditService.class\\E"
   }, {
     "pattern":"\\Qcom/mumuca/diet/config/CacheConfig.class\\E"
   }, {
@@ -163,6 +163,10 @@
   }, {
     "pattern":"\\Qcom/mumuca/diet/exception/handler/UserControllerExceptionHandler.class\\E"
   }, {
+    "pattern":"\\Qcom/mumuca/diet/hint/AppHintsRegistrar.class\\E"
+  }, {
+    "pattern":"\\Qcom/mumuca/diet/hint/SecurityHintsRegistrar.class\\E"
+  }, {
     "pattern":"\\Qcom/mumuca/diet/interceptor/LoggingInterceptor.class\\E"
   }, {
     "pattern":"\\Qcom/mumuca/diet/model/Body.class\\E"
@@ -178,6 +182,8 @@
     "pattern":"\\Qcom/mumuca/diet/model/MealLogPreference.class\\E"
   }, {
     "pattern":"\\Qcom/mumuca/diet/model/NutritionalInformation.class\\E"
+  }, {
+    "pattern":"\\Qcom/mumuca/diet/model/Portion.class\\E"
   }, {
     "pattern":"\\Qcom/mumuca/diet/model/Profile.class\\E"
   }, {
@@ -198,6 +204,8 @@
     "pattern":"\\Qcom/mumuca/diet/repository/MealRepository.class\\E"
   }, {
     "pattern":"\\Qcom/mumuca/diet/repository/NutritionalInformationRepository.class\\E"
+  }, {
+    "pattern":"\\Qcom/mumuca/diet/repository/PortionRepository.class\\E"
   }, {
     "pattern":"\\Qcom/mumuca/diet/repository/ProfileRepository.class\\E"
   }, {
@@ -221,6 +229,8 @@
   }, {
     "pattern":"\\Qcom/mumuca/diet/service/GoalService.class\\E"
   }, {
+    "pattern":"\\Qcom/mumuca/diet/service/JwtService.class\\E"
+  }, {
     "pattern":"\\Qcom/mumuca/diet/service/MealLogPreferenceService.class\\E"
   }, {
     "pattern":"\\Qcom/mumuca/diet/service/MealLogService.class\\E"
@@ -239,6 +249,8 @@
   }, {
     "pattern":"\\Qcom/mumuca/diet/service/impl/GoalServiceImpl.class\\E"
   }, {
+    "pattern":"\\Qcom/mumuca/diet/service/impl/JwtServiceImpl.class\\E"
+  }, {
     "pattern":"\\Qcom/mumuca/diet/service/impl/MealLogPreferenceServiceImpl.class\\E"
   }, {
     "pattern":"\\Qcom/mumuca/diet/service/impl/MealLogServiceImpl.class\\E"
@@ -249,13 +261,13 @@
   }, {
     "pattern":"\\Qcom/mumuca/diet/service/impl/UserServiceImpl.class\\E"
   }, {
-    "pattern":"\\Qconfig/application-dev-pg.properties\\E"
+    "pattern":"\\Qconfig/application-default.properties\\E"
   }, {
-    "pattern":"\\Qconfig/application-dev-pg.xml\\E"
+    "pattern":"\\Qconfig/application-default.xml\\E"
   }, {
-    "pattern":"\\Qconfig/application-dev-pg.yaml\\E"
+    "pattern":"\\Qconfig/application-default.yaml\\E"
   }, {
-    "pattern":"\\Qconfig/application-dev-pg.yml\\E"
+    "pattern":"\\Qconfig/application-default.yml\\E"
   }, {
     "pattern":"\\Qconfig/application.properties\\E"
   }, {
@@ -275,6 +287,10 @@
   }, {
     "pattern":"\\Qdb/migration/V2__insert_roles.sql\\E"
   }, {
+    "pattern":"\\Qdb/migration/V3__add_portions_to_foods.sql\\E"
+  }, {
+    "pattern":"\\Qdb/migration/V4__add_audit_columns.sql\\E"
+  }, {
     "pattern":"\\Qdb/migration\\E"
   }, {
     "pattern":"\\Qgit.properties\\E"
@@ -282,6 +298,14 @@
     "pattern":"\\Qhibernate.properties\\E"
   }, {
     "pattern":"\\Qjakarta/servlet/Filter.class\\E"
+  }, {
+    "pattern":"\\Qjakarta/servlet/ServletRequest.class\\E"
+  }, {
+    "pattern":"\\Qjakarta/servlet/ServletRequestWrapper.class\\E"
+  }, {
+    "pattern":"\\Qjakarta/servlet/http/HttpServletRequest.class\\E"
+  }, {
+    "pattern":"\\Qjakarta/servlet/http/HttpServletRequestWrapper.class\\E"
   }, {
     "pattern":"\\Qjakarta/validation/ConstraintValidator.class\\E"
   }, {
@@ -889,6 +913,8 @@
   }, {
     "pattern":"\\Qorg/springframework/core/env/EnvironmentCapable.class\\E"
   }, {
+    "pattern":"\\Qorg/springframework/data/domain/AuditorAware.class\\E"
+  }, {
     "pattern":"\\Qorg/springframework/data/jpa/repository/JpaRepository.class\\E"
   }, {
     "pattern":"\\Qorg/springframework/data/jpa/repository/support/JpaRepositoryFactoryBean.class\\E"
@@ -1010,16 +1036,10 @@
     "pattern":"java.base:\\Qjdk/internal/icu/impl/data/icudt72b/nfkc.nrm\\E"
   }]},
   "bundles":[{
-    "name":"jakarta.servlet.LocalStrings",
-    "locales":[""]
-  }, {
     "name":"jakarta.servlet.http.LocalStrings",
     "locales":[""]
   }, {
     "name":"org.apache.catalina.authenticator.LocalStrings",
-    "locales":[""]
-  }, {
-    "name":"org.apache.catalina.authenticator.jaspic.LocalStrings",
     "locales":[""]
   }, {
     "name":"org.apache.catalina.connector.LocalStrings",
@@ -1067,9 +1087,6 @@
     "name":"org.apache.coyote.http11.LocalStrings",
     "locales":[""]
   }, {
-    "name":"org.apache.coyote.http11.filters.LocalStrings",
-    "locales":[""]
-  }, {
     "name":"org.apache.naming.LocalStrings",
     "locales":[""]
   }, {
@@ -1107,6 +1124,9 @@
     "locales":[""]
   }, {
     "name":"org.apache.tomcat.websocket.server.LocalStrings",
+    "locales":[""]
+  }, {
+    "name":"org.aspectj.weaver.weaver-messages",
     "locales":[""]
   }]
 }
