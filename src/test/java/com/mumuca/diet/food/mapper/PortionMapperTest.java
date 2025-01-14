@@ -2,6 +2,7 @@ package com.mumuca.diet.food.mapper;
 
 import com.mumuca.diet.food.dto.CreatePortionDTO;
 import com.mumuca.diet.food.dto.PortionDTO;
+import com.mumuca.diet.food.dto.UpdatePortionDTO;
 import com.mumuca.diet.food.model.Portion;
 import com.mumuca.diet.model.Unit;
 import org.junit.jupiter.api.DisplayName;
@@ -73,5 +74,49 @@ class PortionMapperTest {
         assertThat(result.getAmount()).isEqualTo(10);
         assertThat(result.getUnit()).isEqualTo(Unit.GRAM);
         assertThat(result.getDescription()).isEqualTo("test");
+    }
+
+    @Test
+    @DisplayName("should update Portion from UpdatePortionDTO")
+    void shouldUpdatePortionFromUpdatePortionDTO() {
+        // Arrange
+        Portion portion = new Portion();
+        portion.setId("123");
+        portion.setAmount(10);
+        portion.setUnit(Unit.GRAM);
+        portion.setDescription("test");
+
+        UpdatePortionDTO updatePortionDTO = new UpdatePortionDTO(5, Unit.KILOGRAM, "updated");
+
+        // Act
+        sut.updatePortionFromUpdatePortionDTO(updatePortionDTO, portion);
+
+        // Assert
+        assertThat(portion.getId()).isEqualTo("123");
+        assertThat(portion.getAmount()).isEqualTo(5);
+        assertThat(portion.getUnit()).isEqualTo(Unit.KILOGRAM);
+        assertThat(portion.getDescription()).isEqualTo("updated");
+    }
+
+    @Test
+    @DisplayName("should ignore null fields when updating Portion from UpdatePortionDTO")
+    void shouldIgnoreNullFieldsInUpdatePortionFromUpdatePortionDTO() {
+        // Arrange
+        Portion portion = new Portion();
+        portion.setId("123");
+        portion.setAmount(10);
+        portion.setUnit(Unit.GRAM);
+        portion.setDescription("test");
+
+        UpdatePortionDTO updatePortionDTO = new UpdatePortionDTO(5, null, null);
+
+        // Act
+        sut.updatePortionFromUpdatePortionDTO(updatePortionDTO, portion);
+
+        // Assert
+        assertThat(portion.getId()).isEqualTo("123");
+        assertThat(portion.getAmount()).isEqualTo(5);
+        assertThat(portion.getUnit()).isEqualTo(Unit.GRAM);
+        assertThat(portion.getDescription()).isEqualTo("test");
     }
 }
