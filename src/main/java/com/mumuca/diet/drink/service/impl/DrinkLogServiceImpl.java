@@ -38,9 +38,8 @@ public class DrinkLogServiceImpl implements DrinkLogService {
     @Override
     @Transactional
     public DrinkLogDTO createDrinkLog(CreateDrinkLogDTO createDrinkLogDTO, String userId) {
-        User user = new User(userId);
-
-        DrinkLog drinkLog = drinkLogMapper.fromCreateDrinkLogDTOToDrinkLog(createDrinkLogDTO, user);
+        DrinkLog drinkLog = drinkLogMapper.fromCreateDrinkLogDTOToDrinkLog(createDrinkLogDTO);
+        drinkLog.setUser(new User(userId));
 
         drinkLogRepository.save(drinkLog);
 

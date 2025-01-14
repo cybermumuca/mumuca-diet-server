@@ -4,7 +4,6 @@ import com.mumuca.diet.drink.dto.CreateDrinkLogDTO;
 import com.mumuca.diet.drink.dto.DrinkLogDTO;
 import com.mumuca.diet.drink.dto.UpdateDrinkLogDTO;
 import com.mumuca.diet.drink.model.DrinkLog;
-import com.mumuca.diet.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,16 +55,14 @@ class DrinkLogMapperTest {
                 LocalTime.of(18, 30),
                 new BigDecimal("500.0")
         );
-        User user = new User("userId-1");
 
         // Act
-        DrinkLog drinkLog = sut.fromCreateDrinkLogDTOToDrinkLog(dto, user);
+        DrinkLog drinkLog = sut.fromCreateDrinkLogDTOToDrinkLog(dto);
 
         // Assert
         assertThat(drinkLog.getDate()).isEqualTo(LocalDate.of(2025, 1, 1));
         assertThat(drinkLog.getTime()).isEqualTo(LocalTime.of(18, 30));
         assertThat(drinkLog.getLiquidIntake()).isEqualTo(new BigDecimal("500.0"));
-        assertThat(drinkLog.getUser().getId()).isEqualTo("userId-1");
     }
 
     @Test
