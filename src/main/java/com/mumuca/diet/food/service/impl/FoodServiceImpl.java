@@ -3,6 +3,8 @@ package com.mumuca.diet.food.service.impl;
 import com.mumuca.diet.dto.meal.MealDTO;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.food.dto.*;
+import com.mumuca.diet.food.mapper.NutritionalInformationMapper;
+import com.mumuca.diet.food.mapper.PortionMapper;
 import com.mumuca.diet.food.repository.FoodRepository;
 import com.mumuca.diet.food.repository.NutritionalInformationRepository;
 import com.mumuca.diet.food.repository.PortionRepository;
@@ -33,6 +35,9 @@ public class FoodServiceImpl implements FoodService {
     private final PortionRepository portionRepository;
     private final MealRepository mealRepository;
 
+    private final NutritionalInformationMapper nutritionalInformationMapper;
+    private final PortionMapper portionMapper;
+
     @Override
     @Transactional
     public FoodDTO createFood(CreateFoodDTO createFoodDTO, String userId) {
@@ -47,70 +52,23 @@ public class FoodServiceImpl implements FoodService {
 
         foodRepository.save(food);
 
-        CreateNutritionalInformationDTO nutritionalInfoDTO = createFoodDTO.nutritionalInformation();
-
-        NutritionalInformation nutritionalInformation = new NutritionalInformation();
-
-        nutritionalInformation.setCalories(nutritionalInfoDTO.calories());
-        nutritionalInformation.setCarbohydrates(nutritionalInfoDTO.carbohydrates());
-        nutritionalInformation.setProtein(nutritionalInfoDTO.protein());
-        nutritionalInformation.setFat(nutritionalInfoDTO.fat());
-        nutritionalInformation.setMonounsaturatedFat(nutritionalInfoDTO.monounsaturatedFat());
-        nutritionalInformation.setSaturatedFat(nutritionalInfoDTO.saturatedFat());
-        nutritionalInformation.setPolyunsaturatedFat(nutritionalInfoDTO.polyunsaturatedFat());
-        nutritionalInformation.setTransFat(nutritionalInfoDTO.transFat());
-        nutritionalInformation.setCholesterol(nutritionalInfoDTO.cholesterol());
-        nutritionalInformation.setSodium(nutritionalInfoDTO.sodium());
-        nutritionalInformation.setPotassium(nutritionalInfoDTO.potassium());
-        nutritionalInformation.setFiber(nutritionalInfoDTO.fiber());
-        nutritionalInformation.setSugar(nutritionalInfoDTO.sugar());
-        nutritionalInformation.setCalcium(nutritionalInfoDTO.calcium());
-        nutritionalInformation.setIron(nutritionalInfoDTO.iron());
-        nutritionalInformation.setVitaminA(nutritionalInfoDTO.vitaminA());
-        nutritionalInformation.setVitaminC(nutritionalInfoDTO.vitaminC());
+        NutritionalInformation nutritionalInformation = nutritionalInformationMapper.fromCreateNIDTOToNI(createFoodDTO.nutritionalInformation());
 
         nutritionalInformation.setFood(food);
         food.setNutritionalInformation(nutritionalInformation);
 
         nutritionalInformationRepository.save(nutritionalInformation);
 
-        NutritionalInformationDTO nutritionalInformationDTO = null;
+        NutritionalInformationDTO nutritionalInformationDTO = nutritionalInformationMapper.fromNIToNIDTO(nutritionalInformation);
 
-        if (food.getNutritionalInformation() != null) {
-            NutritionalInformation ni = food.getNutritionalInformation();
-            nutritionalInformationDTO = new NutritionalInformationDTO(
-                    ni.getId(),
-                    ni.getCalories(),
-                    ni.getCarbohydrates(),
-                    ni.getProtein(),
-                    ni.getFat(),
-                    ni.getMonounsaturatedFat(),
-                    ni.getSaturatedFat(),
-                    ni.getPolyunsaturatedFat(),
-                    ni.getTransFat(),
-                    ni.getCholesterol(),
-                    ni.getSodium(),
-                    ni.getPotassium(),
-                    ni.getFiber(),
-                    ni.getSugar(),
-                    ni.getCalcium(),
-                    ni.getIron(),
-                    ni.getVitaminA(),
-                    ni.getVitaminC()
-            );
-        }
-
-        Portion portion = new Portion();
-        portion.setAmount(createFoodDTO.portion().amount());
-        portion.setUnit(createFoodDTO.portion().unit());
-        portion.setDescription(createFoodDTO.portion().description());
+        Portion portion = portionMapper.fromCreatePortionDTOToPortion(createFoodDTO.portion());
 
         portion.setFood(food);
         food.setPortion(portion);
 
         portionRepository.save(portion);
 
-        PortionDTO portionDTO = new PortionDTO(portion.getId(), portion.getAmount(), portion.getUnit(), portion.getDescription());
+        PortionDTO portionDTO = portionMapper.fromPortionToPortionDTO(portion);
 
         return new FoodDTO(
                 food.getId(),
@@ -127,38 +85,9 @@ public class FoodServiceImpl implements FoodService {
         Food food = foodRepository.findByIdAndUserId(foodId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Food not found."));
 
-        NutritionalInformationDTO nutritionalInformationDTO = null;
+        NutritionalInformationDTO nutritionalInformationDTO = nutritionalInformationMapper.fromNIToNIDTO(food.getNutritionalInformation());
 
-        if (food.getNutritionalInformation() != null) {
-            NutritionalInformation ni = food.getNutritionalInformation();
-            nutritionalInformationDTO = new NutritionalInformationDTO(
-                    ni.getId(),
-                    ni.getCalories(),
-                    ni.getCarbohydrates(),
-                    ni.getProtein(),
-                    ni.getFat(),
-                    ni.getMonounsaturatedFat(),
-                    ni.getSaturatedFat(),
-                    ni.getPolyunsaturatedFat(),
-                    ni.getTransFat(),
-                    ni.getCholesterol(),
-                    ni.getSodium(),
-                    ni.getPotassium(),
-                    ni.getFiber(),
-                    ni.getSugar(),
-                    ni.getCalcium(),
-                    ni.getIron(),
-                    ni.getVitaminA(),
-                    ni.getVitaminC()
-            );
-        }
-
-        PortionDTO portionDTO = new PortionDTO(
-                food.getPortion().getId(),
-                food.getPortion().getAmount(),
-                food.getPortion().getUnit(),
-                food.getPortion().getDescription()
-        );
+        PortionDTO portionDTO = portionMapper.fromPortionToPortionDTO(food.getPortion());
 
         return new FoodDTO(
                 food.getId(),
@@ -181,26 +110,7 @@ public class FoodServiceImpl implements FoodService {
             throw new ResourceNotFoundException("Nutritional information not found for the specified food.");
         }
 
-        return new NutritionalInformationDTO(
-                ni.getId(),
-                ni.getCalories(),
-                ni.getCarbohydrates(),
-                ni.getProtein(),
-                ni.getFat(),
-                ni.getMonounsaturatedFat(),
-                ni.getSaturatedFat(),
-                ni.getPolyunsaturatedFat(),
-                ni.getTransFat(),
-                ni.getCholesterol(),
-                ni.getSodium(),
-                ni.getPotassium(),
-                ni.getFiber(),
-                ni.getSugar(),
-                ni.getCalcium(),
-                ni.getIron(),
-                ni.getVitaminA(),
-                ni.getVitaminC()
-        );
+        return nutritionalInformationMapper.fromNIToNIDTO(ni);
     }
 
     // TODO: test this
@@ -275,38 +185,9 @@ public class FoodServiceImpl implements FoodService {
             foodRepository.save(foodToUpdate);
         }
 
-        NutritionalInformationDTO nutritionalInformationDTO = null;
+        NutritionalInformationDTO nutritionalInformationDTO = nutritionalInformationMapper.fromNIToNIDTO(foodToUpdate.getNutritionalInformation());
 
-        if (foodToUpdate.getNutritionalInformation() != null) {
-            NutritionalInformation ni = foodToUpdate.getNutritionalInformation();
-            nutritionalInformationDTO = new NutritionalInformationDTO(
-                    ni.getId(),
-                    ni.getCalories(),
-                    ni.getCarbohydrates(),
-                    ni.getProtein(),
-                    ni.getFat(),
-                    ni.getMonounsaturatedFat(),
-                    ni.getSaturatedFat(),
-                    ni.getPolyunsaturatedFat(),
-                    ni.getTransFat(),
-                    ni.getCholesterol(),
-                    ni.getSodium(),
-                    ni.getPotassium(),
-                    ni.getFiber(),
-                    ni.getSugar(),
-                    ni.getCalcium(),
-                    ni.getIron(),
-                    ni.getVitaminA(),
-                    ni.getVitaminC()
-            );
-        }
-
-        var portionDTO = new PortionDTO(
-                foodToUpdate.getPortion().getId(),
-                foodToUpdate.getPortion().getAmount(),
-                foodToUpdate.getPortion().getUnit(),
-                foodToUpdate.getPortion().getDescription()
-        );
+        PortionDTO portionDTO = portionMapper.fromPortionToPortionDTO(foodToUpdate.getPortion());
 
         return new FoodDTO(
                 foodToUpdate.getId(),
@@ -448,38 +329,9 @@ public class FoodServiceImpl implements FoodService {
     public Page<FoodDTO> getFoods(Pageable pageable, String userId) {
         return foodRepository.findByUserId(pageable, userId)
                 .map(food -> {
-                    NutritionalInformationDTO nutritionalInformationDTO = null;
+                    NutritionalInformationDTO nutritionalInformationDTO = nutritionalInformationMapper.fromNIToNIDTO(food.getNutritionalInformation());
 
-                    if (food.getNutritionalInformation() != null) {
-                        NutritionalInformation ni = food.getNutritionalInformation();
-                        nutritionalInformationDTO = new NutritionalInformationDTO(
-                                ni.getId(),
-                                ni.getCalories(),
-                                ni.getCarbohydrates(),
-                                ni.getProtein(),
-                                ni.getFat(),
-                                ni.getMonounsaturatedFat(),
-                                ni.getSaturatedFat(),
-                                ni.getPolyunsaturatedFat(),
-                                ni.getTransFat(),
-                                ni.getCholesterol(),
-                                ni.getSodium(),
-                                ni.getPotassium(),
-                                ni.getFiber(),
-                                ni.getSugar(),
-                                ni.getCalcium(),
-                                ni.getIron(),
-                                ni.getVitaminA(),
-                                ni.getVitaminC()
-                        );
-                    }
-
-                    var portionDTO = new PortionDTO(
-                            food.getPortion().getId(),
-                            food.getPortion().getAmount(),
-                            food.getPortion().getUnit(),
-                            food.getPortion().getDescription()
-                    );
+                    PortionDTO portionDTO = portionMapper.fromPortionToPortionDTO(food.getPortion());
 
                     return new FoodDTO(
                             food.getId(),
