@@ -1,9 +1,9 @@
-package com.mumuca.diet.controller;
+package com.mumuca.diet.drink.controller;
 
-import com.mumuca.diet.dto.drinklog.CreateDrinkLogDTO;
-import com.mumuca.diet.dto.drinklog.DrinkLogDTO;
-import com.mumuca.diet.dto.drinklog.UpdateDrinkLogDTO;
-import com.mumuca.diet.service.DrinkLogService;
+import com.mumuca.diet.drink.dto.CreateDrinkLogDTO;
+import com.mumuca.diet.drink.dto.DrinkLogDTO;
+import com.mumuca.diet.drink.dto.UpdateDrinkLogDTO;
+import com.mumuca.diet.drink.service.DrinkLogService;
 import com.mumuca.diet.validator.ValidUUID;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

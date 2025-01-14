@@ -1,4 +1,4 @@
-package com.mumuca.diet.dto.drinklog;
+package com.mumuca.diet.drink.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

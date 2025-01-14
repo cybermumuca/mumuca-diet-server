@@ -1,6 +1,7 @@
-package com.mumuca.diet.model;
+package com.mumuca.diet.drink.model;
 
 import com.mumuca.diet.audit.AbstractAuditEntity;
+import com.mumuca.diet.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 

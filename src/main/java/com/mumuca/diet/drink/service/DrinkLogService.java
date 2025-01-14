@@ -1,9 +1,8 @@
-package com.mumuca.diet.service;
+package com.mumuca.diet.drink.service;
 
-import com.mumuca.diet.dto.drinklog.CreateDrinkLogDTO;
-import com.mumuca.diet.dto.drinklog.DrinkLogDTO;
-import com.mumuca.diet.dto.drinklog.UpdateDrinkLogDTO;
-import jakarta.validation.Valid;
+import com.mumuca.diet.drink.dto.CreateDrinkLogDTO;
+import com.mumuca.diet.drink.dto.DrinkLogDTO;
+import com.mumuca.diet.drink.dto.UpdateDrinkLogDTO;
 
 import java.time.LocalDate;
 import java.util.List;

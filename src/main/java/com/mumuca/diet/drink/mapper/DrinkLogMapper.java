@@ -1,9 +1,9 @@
-package com.mumuca.diet.drinklog.mapper;
+package com.mumuca.diet.drink.mapper;
 
-import com.mumuca.diet.dto.drinklog.CreateDrinkLogDTO;
-import com.mumuca.diet.dto.drinklog.DrinkLogDTO;
-import com.mumuca.diet.dto.drinklog.UpdateDrinkLogDTO;
-import com.mumuca.diet.model.DrinkLog;
+import com.mumuca.diet.drink.dto.CreateDrinkLogDTO;
+import com.mumuca.diet.drink.dto.DrinkLogDTO;
+import com.mumuca.diet.drink.dto.UpdateDrinkLogDTO;
+import com.mumuca.diet.drink.model.DrinkLog;
 import com.mumuca.diet.model.User;
 import org.mapstruct.*;
 

@@ -1,16 +1,14 @@
-package com.mumuca.diet.drinklog.service;
+package com.mumuca.diet.drink.service;
 
-import com.mumuca.diet.dto.drinklog.CreateDrinkLogDTO;
-import com.mumuca.diet.dto.drinklog.DrinkLogDTO;
-import com.mumuca.diet.dto.drinklog.UpdateDrinkLogDTO;
-import com.mumuca.diet.model.DrinkLog;
+import com.mumuca.diet.drink.dto.CreateDrinkLogDTO;
+import com.mumuca.diet.drink.dto.DrinkLogDTO;
+import com.mumuca.diet.drink.dto.UpdateDrinkLogDTO;
+import com.mumuca.diet.drink.model.DrinkLog;
 import com.mumuca.diet.model.User;
-import com.mumuca.diet.repository.DrinkLogRepository;
+import com.mumuca.diet.drink.repository.DrinkLogRepository;
 import com.mumuca.diet.repository.UserRepository;
-import com.mumuca.diet.service.impl.DrinkLogServiceImpl;
+import com.mumuca.diet.drink.service.impl.DrinkLogServiceImpl;
 import com.mumuca.diet.testutil.EntityGeneratorUtil;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

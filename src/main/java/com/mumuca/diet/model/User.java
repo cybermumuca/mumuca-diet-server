@@ -1,9 +1,8 @@
 package com.mumuca.diet.model;
 
+import com.mumuca.diet.drink.model.DrinkLog;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
 
 import java.util.*;
 

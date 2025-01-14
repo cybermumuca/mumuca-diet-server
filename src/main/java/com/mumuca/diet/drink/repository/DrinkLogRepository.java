@@ -1,6 +1,6 @@
-package com.mumuca.diet.repository;
+package com.mumuca.diet.drink.repository;
 
-import com.mumuca.diet.model.DrinkLog;
+import com.mumuca.diet.drink.model.DrinkLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
