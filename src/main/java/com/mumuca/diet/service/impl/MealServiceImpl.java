@@ -140,14 +140,14 @@ public class MealServiceImpl implements MealService {
 
         updated |= UpdateUtils.updateIfDifferent(
                 mealToUpdate::getDescription,
-                mealToUpdate::setTitle,
+                mealToUpdate::setDescription,
                 updateMealDTO.description()
         );
 
         updated |= UpdateUtils.updateIfDifferent(
-                mealToUpdate::getTitle,
-                mealToUpdate::setTitle,
-                updateMealDTO.title()
+                mealToUpdate::getType,
+                mealToUpdate::setType,
+                updateMealDTO.type()
         );
 
         if (updated) {
