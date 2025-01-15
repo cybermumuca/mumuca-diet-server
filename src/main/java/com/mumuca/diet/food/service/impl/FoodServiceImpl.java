@@ -11,6 +11,7 @@ import com.mumuca.diet.food.repository.PortionRepository;
 import com.mumuca.diet.food.model.Food;
 import com.mumuca.diet.food.model.NutritionalInformation;
 import com.mumuca.diet.food.model.Portion;
+import com.mumuca.diet.meal.mapper.MealMapper;
 import com.mumuca.diet.model.User;
 import com.mumuca.diet.repository.*;
 import com.mumuca.diet.food.service.FoodService;
@@ -37,6 +38,7 @@ public class FoodServiceImpl implements FoodService {
 
     private final NutritionalInformationMapper nutritionalInformationMapper;
     private final PortionMapper portionMapper;
+    private final MealMapper mealMapper;
 
     @Override
     @Transactional
@@ -170,12 +172,8 @@ public class FoodServiceImpl implements FoodService {
     public List<MealDTO> getFoodMeals(String foodId, String userId) {
         return mealRepository.findByFoodsIdAndUserId(foodId, userId)
                 .stream()
-                .map(meal -> new MealDTO(
-                        meal.getId(),
-                        meal.getTitle(),
-                        meal.getDescription(),
-                        meal.getType()
-                )).toList();
+                .map(mealMapper::fromMealToMealDTO)
+                .toList();
     }
 
     @Override
