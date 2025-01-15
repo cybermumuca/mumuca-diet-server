@@ -5,7 +5,11 @@ import com.mumuca.diet.food.dto.NutritionalInformationDTO;
 import com.mumuca.diet.food.dto.PortionDTO;
 import com.mumuca.diet.dto.meal.*;
 import com.mumuca.diet.exception.ResourceNotFoundException;
+import com.mumuca.diet.food.mapper.NutritionalInformationMapper;
+import com.mumuca.diet.food.mapper.PortionMapper;
 import com.mumuca.diet.food.model.Food;
+import com.mumuca.diet.food.model.Portion;
+import com.mumuca.diet.meal.mapper.MealMapper;
 import com.mumuca.diet.model.Meal;
 import com.mumuca.diet.food.model.NutritionalInformation;
 import com.mumuca.diet.model.User;
@@ -31,6 +35,10 @@ public class MealServiceImpl implements MealService {
     private final FoodRepository foodRepository;
     private final MealRepository mealRepository;
 
+    private final MealMapper mealMapper;
+    private final NutritionalInformationMapper nutritionalInformationMapper;
+    private final PortionMapper portionMapper;
+
     @Override
     @Transactional
     public MealDTO createMeal(CreateMealDTO createMealDTO, String userId) {
@@ -49,7 +57,7 @@ public class MealServiceImpl implements MealService {
 
         mealRepository.save(meal);
 
-        return new MealDTO(meal.getId(), meal.getTitle(), meal.getDescription(), meal.getType());
+        return mealMapper.fromMealToMealDTO(meal);
     }
 
     @Override
@@ -61,38 +69,11 @@ public class MealServiceImpl implements MealService {
                         meal.getDescription(),
                         meal.getType(),
                         meal.getFoods().stream().map(food -> {
-                            NutritionalInformationDTO nutritionalInformationDTO = null;
+                            NutritionalInformation ni = food.getNutritionalInformation();
+                            NutritionalInformationDTO niDTO = nutritionalInformationMapper.fromNIToNIDTO(ni);
 
-                            if (food.getNutritionalInformation() != null) {
-                                NutritionalInformation ni = food.getNutritionalInformation();
-                                nutritionalInformationDTO = new NutritionalInformationDTO(
-                                        ni.getId(),
-                                        ni.getCalories(),
-                                        ni.getCarbohydrates(),
-                                        ni.getProtein(),
-                                        ni.getFat(),
-                                        ni.getMonounsaturatedFat(),
-                                        ni.getSaturatedFat(),
-                                        ni.getPolyunsaturatedFat(),
-                                        ni.getTransFat(),
-                                        ni.getCholesterol(),
-                                        ni.getSodium(),
-                                        ni.getPotassium(),
-                                        ni.getFiber(),
-                                        ni.getSugar(),
-                                        ni.getCalcium(),
-                                        ni.getIron(),
-                                        ni.getVitaminA(),
-                                        ni.getVitaminC()
-                                );
-                            }
-
-                            var portionDTO = new PortionDTO(
-                                    food.getPortion().getId(),
-                                    food.getPortion().getAmount(),
-                                    food.getPortion().getUnit(),
-                                    food.getPortion().getDescription()
-                            );
+                            Portion portion = food.getPortion();
+                            PortionDTO portionDTO = portionMapper.fromPortionToPortionDTO(portion);
 
                             return new FoodDTO(
                                     food.getId(),
@@ -100,7 +81,7 @@ public class MealServiceImpl implements MealService {
                                     food.getBrand(),
                                     food.getDescription(),
                                     portionDTO,
-                                    nutritionalInformationDTO
+                                    niDTO
                             );
                         }).toList()
                 ))
@@ -155,12 +136,7 @@ public class MealServiceImpl implements MealService {
         }
 
 
-        return new MealDTO(
-                mealToUpdate.getId(),
-                mealToUpdate.getTitle(),
-                mealToUpdate.getDescription(),
-                mealToUpdate.getType()
-        );
+        return mealMapper.fromMealToMealDTO(mealToUpdate);
     }
 
     @Override
@@ -220,6 +196,6 @@ public class MealServiceImpl implements MealService {
     @Override
     public Page<MealDTO> getMeals(Pageable pageable, String userId) {
         return mealRepository.findByUserId(pageable, userId)
-                .map((meal -> new MealDTO(meal.getId(), meal.getTitle(), meal.getDescription(), meal.getType())));
+                .map(mealMapper::fromMealToMealDTO);
     }
 }
