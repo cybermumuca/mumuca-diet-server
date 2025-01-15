@@ -123,9 +123,13 @@ public class MealLogServiceImpl implements MealLogService {
         return mealLogs
                 .stream()
                 .map(mealLog -> {
-                    var caloriesConsumed = mealLogRepository
-                            .sumFoodsAndMealsCaloriesByMealLogIdAndUserId(mealLog.getId(), userId)
-                            .orElse(0);
+                    var foodsCalories = mealLogRepository
+                            .sumCaloriesFromFoodsByMealLogIdAndUserId(mealLog.getId(), userId);
+
+                    var mealCalories = mealLogRepository
+                            .sumCaloriesFromMealsByMealLogIdAndUserId(mealLog.getId(), userId);
+
+                    var caloriesConsumed = foodsCalories + mealCalories;
 
                     return new MealLogWithCaloriesConsumedDTO(
                             mealLog.getId(),

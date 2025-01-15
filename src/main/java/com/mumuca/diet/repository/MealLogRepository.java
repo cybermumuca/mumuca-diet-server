@@ -89,16 +89,23 @@ public interface MealLogRepository extends JpaRepository<MealLog, String> {
 
     //TODO: Test this
     @Query("""
-       SELECT SUM(COALESCE(ni.calories, 0)) + SUM(COALESCE(mfi.calories, 0))
+       SELECT COALESCE(SUM(ni.calories), 0)
        FROM MealLog ml
        LEFT JOIN ml.foods mealLogFoods
        LEFT JOIN mealLogFoods.nutritionalInformation ni
+       WHERE ml.id = :mealLogId AND ml.user.id = :userId
+       """)
+    Integer sumCaloriesFromFoodsByMealLogIdAndUserId(@Param("mealLogId") String mealLogId, @Param("userId") String userId);
+
+    @Query("""
+       SELECT COALESCE(SUM(mfi.calories), 0)
+       FROM MealLog ml
        LEFT JOIN ml.meals mealLogMeals
        LEFT JOIN mealLogMeals.foods mealFoods
        LEFT JOIN mealFoods.nutritionalInformation mfi
        WHERE ml.id = :mealLogId AND ml.user.id = :userId
-    """)
-    Optional<Integer> sumFoodsAndMealsCaloriesByMealLogIdAndUserId(@Param("mealLogId") String mealLogId, @Param("userId") String userId);
+       """)
+    Integer sumCaloriesFromMealsByMealLogIdAndUserId(@Param("mealLogId") String mealLogId, @Param("userId") String userId);
 
     List<MealLog> findByDateAndUserId(LocalDate date, String userId);
 
