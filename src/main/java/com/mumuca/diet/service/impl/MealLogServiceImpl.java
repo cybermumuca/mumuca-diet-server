@@ -252,7 +252,6 @@ public class MealLogServiceImpl implements MealLogService {
                 .toList();
     }
 
-    // TODO: TEST THIS
     @Override
     public Optional<MealNutritionalInformationDTO> getMealLogNutritionalInformation(String mealLogId, String userId) {
         boolean mealLogExists = mealLogRepository.existsByIdAndUserId(mealLogId, userId);

@@ -1,5 +1,6 @@
 package com.mumuca.diet.meal.service;
 
+import com.mumuca.diet.dto.meal.MealNutritionalInformationDTO;
 import com.mumuca.diet.dto.meal.MealWithFoodsDTO;
 import com.mumuca.diet.dto.meallog.CreateMealLogDTO;
 import com.mumuca.diet.dto.meallog.MealLogDTO;
@@ -32,6 +33,7 @@ import org.springframework.cglib.core.Local;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -686,5 +688,247 @@ public class MealLogServiceImplIntegrationTest {
         }
     }
 
+    @Nested
+    @DisplayName("getMealLogNutritionalInformation tests")
+    class GetMealLogNutritionalInformationTests {
 
+        @Test
+        @DisplayName("should be able to return empty nutritional information for meal log")
+        void shouldBeAbleToReturnEmptyNutritionalInformationForMealLog() {
+            // Arrange
+            User user = createUser();
+            userRepository.save(user);
+
+            MealLog mealLog = MealLog.builder()
+                    .type(MealType.LUNCH)
+                    .date(LocalDate.of(2036, 1, 1))
+                    .time(LocalTime.of(15, 0))
+                    .caloriesGoal(900)
+                    .user(user)
+                    .build();
+
+            mealLogRepository.save(mealLog);
+
+            // Act
+            Optional<MealNutritionalInformationDTO> result = sut.getMealLogNutritionalInformation(mealLog.getId(), user.getId());
+
+            // Assert
+            assertThat(result).isEmpty();
+        }
+
+        @Test
+        @DisplayName("should be able to return nutritional information for meal log")
+        void shouldBeAbleToReturnNutritionalInformationForMealLog() {
+            // Arrange
+            User user = createUser();
+            userRepository.save(user);
+
+            Food food1 = createFood();
+            food1.setUser(user);
+
+            Food food2 = createFood();
+            food2.setUser(user);
+
+            Food food3 = createFood();
+            food3.setUser(user);
+
+            foodRepository.saveAll(List.of(food1, food2, food3));
+
+            NutritionalInformation nutritionalInformation1 = createNutritionalInformation();
+            nutritionalInformation1.setFood(food1);
+            food1.setNutritionalInformation(nutritionalInformation1);
+
+            NutritionalInformation nutritionalInformation2 = createNutritionalInformation();
+            nutritionalInformation2.setFood(food2);
+            food2.setNutritionalInformation(nutritionalInformation2);
+
+            NutritionalInformation nutritionalInformation3 = createNutritionalInformation();
+            nutritionalInformation3.setFood(food3);
+            food3.setNutritionalInformation(nutritionalInformation3);
+
+            nutritionalInformationRepository.saveAll(List.of(nutritionalInformation1, nutritionalInformation2, nutritionalInformation3));
+
+            Portion portion1 = createPortion();
+            portion1.setFood(food1);
+            food1.setPortion(portion1);
+
+            Portion portion2 = createPortion();
+            portion2.setFood(food2);
+            food2.setPortion(portion2);
+
+            Portion portion3 = createPortion();
+            portion3.setFood(food3);
+            food3.setPortion(portion3);
+
+            portionRepository.saveAll(List.of(portion1, portion2, portion3));
+
+            Meal meal1 = createMeal();
+            meal1.setUser(user);
+            meal1.setFoods(Set.of(food1));
+
+            Meal meal2 = createMeal();
+            meal2.setUser(user);
+            meal2.setFoods(Set.of(food2));
+
+            mealRepository.saveAll(List.of(meal1, meal2));
+
+            MealLog mealLog = MealLog.builder()
+                    .type(MealType.LUNCH)
+                    .date(LocalDate.of(2036, 1, 1))
+                    .time(LocalTime.of(15, 0))
+                    .caloriesGoal(900)
+                    .meals(Set.of(meal1, meal2))
+                    .foods(Set.of(food3))
+                    .user(user)
+                    .build();
+
+            mealLogRepository.save(mealLog);
+
+            // Act
+            Optional<MealNutritionalInformationDTO> optionalResult = sut.getMealLogNutritionalInformation(mealLog.getId(), user.getId());
+
+            // Assert
+            assertThat(optionalResult).isPresent();
+
+            var result = optionalResult.get();
+
+            var caloriesSum = nutritionalInformation1.getCalories()
+                    .add(nutritionalInformation2.getCalories())
+                    .add(nutritionalInformation3.getCalories());
+            assertThat(result.calories()).isEqualTo(caloriesSum);
+
+            var carbohydratesSum = nutritionalInformation1.getCarbohydrates()
+                    .add(nutritionalInformation2.getCarbohydrates())
+                    .add(nutritionalInformation3.getCarbohydrates());
+
+            assertThat(result.carbohydrates()).isEqualTo(carbohydratesSum);
+
+            var proteinSum = nutritionalInformation1.getProtein()
+                    .add(nutritionalInformation2.getProtein())
+                    .add(nutritionalInformation3.getProtein());
+
+            assertThat(result.protein()).isEqualTo(proteinSum);
+
+            var fatSum = nutritionalInformation1.getFat()
+                    .add(nutritionalInformation2.getFat())
+                    .add(nutritionalInformation3.getFat());
+
+            assertThat(result.fat()).isEqualTo(fatSum);
+
+            var monounsaturatedFatSum = nutritionalInformation1.getMonounsaturatedFat()
+                    .add(nutritionalInformation2.getMonounsaturatedFat())
+                    .add(nutritionalInformation3.getMonounsaturatedFat());
+
+            assertThat(result.monounsaturatedFat()).isEqualTo(monounsaturatedFatSum);
+
+            var saturatedFatSum = nutritionalInformation1.getSaturatedFat()
+                    .add(nutritionalInformation2.getSaturatedFat())
+                    .add(nutritionalInformation3.getSaturatedFat());
+
+            assertThat(result.saturatedFat()).isEqualTo(saturatedFatSum);
+
+            var polyunsaturatedFatSum = nutritionalInformation1.getPolyunsaturatedFat()
+                    .add(nutritionalInformation2.getPolyunsaturatedFat())
+                    .add(nutritionalInformation3.getPolyunsaturatedFat());
+
+            assertThat(result.polyunsaturatedFat()).isEqualTo(polyunsaturatedFatSum);
+
+            var transFatSum = nutritionalInformation1.getTransFat()
+                    .add(nutritionalInformation2.getTransFat())
+                    .add(nutritionalInformation3.getTransFat());
+
+            assertThat(result.transFat()).isEqualByComparingTo(transFatSum);
+
+            var cholesterolSum = nutritionalInformation1.getCholesterol()
+                    .add(nutritionalInformation2.getCholesterol())
+                    .add(nutritionalInformation3.getCholesterol());
+
+            assertThat(result.cholesterol()).isEqualByComparingTo(cholesterolSum);
+
+            var sodiumSum = nutritionalInformation1.getSodium()
+                    .add(nutritionalInformation2.getSodium())
+                    .add(nutritionalInformation3.getSodium());
+
+            assertThat(result.sodium()).isEqualByComparingTo(sodiumSum);
+
+            var potassiumSum = nutritionalInformation1.getPotassium()
+                    .add(nutritionalInformation2.getPotassium())
+                    .add(nutritionalInformation3.getPotassium());
+
+            assertThat(result.potassium()).isEqualByComparingTo(potassiumSum);
+
+            var fiberSum = nutritionalInformation1.getFiber()
+                    .add(nutritionalInformation2.getFiber())
+                    .add(nutritionalInformation3.getFiber());
+
+            assertThat(result.fiber()).isEqualByComparingTo(fiberSum);
+
+            var sugarSum = nutritionalInformation1.getSugar()
+                    .add(nutritionalInformation2.getSugar())
+                    .add(nutritionalInformation3.getSugar());
+
+            assertThat(result.sugar()).isEqualByComparingTo(sugarSum);
+
+            var calciumSum = nutritionalInformation1.getCalcium()
+                    .add(nutritionalInformation2.getCalcium())
+                    .add(nutritionalInformation3.getCalcium());
+
+            assertThat(result.calcium()).isEqualByComparingTo(calciumSum);
+
+            var ironSum = nutritionalInformation1.getIron()
+                    .add(nutritionalInformation2.getIron())
+                    .add(nutritionalInformation3.getIron());
+
+            assertThat(result.iron()).isEqualByComparingTo(ironSum);
+
+            var vitaminASum = nutritionalInformation1.getVitaminA()
+                    .add(nutritionalInformation2.getVitaminA())
+                    .add(nutritionalInformation3.getVitaminA());
+
+            assertThat(result.vitaminA()).isEqualByComparingTo(vitaminASum);
+
+            var vitaminCSum = nutritionalInformation1.getVitaminC()
+                    .add(nutritionalInformation2.getVitaminC())
+                    .add(nutritionalInformation3.getVitaminC());
+
+            assertThat(result.vitaminC()).isEqualByComparingTo(vitaminCSum);
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("should throw ResourceNotFoundException if meal log does not exist")
+        void shouldThrowResourceNotFoundExceptionIfMealLogDoesNotExist() {
+            // Act & Assert
+            assertThatThrownBy(() -> sut.getMealLogNutritionalInformation(UUID.randomUUID().toString(), UUID.randomUUID().toString()))
+                    .isInstanceOf(ResourceNotFoundException.class)
+                    .hasMessageContaining("Meal Log not found.");
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("should throw ResourceNotFoundException if meal log does not belong to the user")
+        void shouldThrowResourceNotFoundExceptionIfMealLogDoesNotBelongToUser() {
+            // Arrange
+            User owner = createUser();
+            userRepository.save(owner);
+
+            User anotherUser = createUser();
+            userRepository.save(anotherUser);
+
+            MealLog mealLog = MealLog.builder()
+                    .type(MealType.LUNCH)
+                    .date(LocalDate.of(2036, 1, 1))
+                    .time(LocalTime.of(15, 0))
+                    .caloriesGoal(900)
+                    .user(owner)
+                    .build();
+
+            mealLogRepository.save(mealLog);
+
+            // Act & Assert
+            assertThatThrownBy(() -> sut.getMealLogNutritionalInformation(mealLog.getId(), anotherUser.getId()))
+                    .isInstanceOf(ResourceNotFoundException.class)
+                    .hasMessageContaining("Meal Log not found.");
+        }
+    }
 }
