@@ -1,3 +1,9 @@
+server:
+  port: ${APP_PORT:8081}
+  error:
+    whitelabel:
+      enabled: false
+
 spring:
   threads:
     virtual:
@@ -56,8 +62,14 @@ log:
   level: info
   path: logs
 
-server:
-  port: ${APP_PORT:8081}
-  error:
-    whitelabel:
-      enabled: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health # Expõe apenas o endpoint de health
+  endpoint:
+    health:
+      show-details: never # Oculta detalhes do health check para segurança
+  health:
+    defaults:
+      enabled: true # Habilita verificações básicas de saúde

@@ -1,3 +1,9 @@
+server:
+  port: 8081
+  error:
+    whitelabel:
+      enabled: false
+
 spring:
   threads:
     virtual:
@@ -88,8 +94,8 @@ log:
   level: info
   path: logs
 
-server:
-  port: 8081
-  error:
-    whitelabel:
-      enabled: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

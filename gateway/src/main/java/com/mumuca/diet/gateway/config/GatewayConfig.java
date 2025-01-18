@@ -35,6 +35,7 @@ public class GatewayConfig {
                                 .requestRateLimiter(c -> c.setRateLimiter(publicRouteRateLimiter).setKeyResolver(keyResolver))
                                 .rewritePath("/v1/(?<segment>.*)", "/api/v1/${segment}"))
                         .uri(apiUrl))
+                .route(route -> route.path("/actuator/**").uri(apiUrl))
                 .build();
     }
 }
