@@ -1,13 +1,13 @@
 package com.mumuca.diet.service.impl;
 
 import com.mumuca.diet.dto.MacronutrientDTO;
-import com.mumuca.diet.dto.meal.MealNutritionalInformationDTO;
+import com.mumuca.diet.meal.dto.MealNutritionalInformationDTO;
 import com.mumuca.diet.dto.progress.DailyProgressDTO;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.exception.UserNotRegisteredYetException;
 import com.mumuca.diet.model.Goal;
 import com.mumuca.diet.repository.GoalRepository;
-import com.mumuca.diet.repository.MealLogRepository;
+import com.mumuca.diet.meal.repository.MealLogRepository;
 import com.mumuca.diet.service.ProgressService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

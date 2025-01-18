@@ -1,6 +1,6 @@
 package com.mumuca.diet.food.service.impl;
 
-import com.mumuca.diet.dto.meal.MealDTO;
+import com.mumuca.diet.meal.dto.MealDTO;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.food.dto.*;
 import com.mumuca.diet.food.mapper.NutritionalInformationMapper;
@@ -12,8 +12,8 @@ import com.mumuca.diet.food.model.Food;
 import com.mumuca.diet.food.model.NutritionalInformation;
 import com.mumuca.diet.food.model.Portion;
 import com.mumuca.diet.meal.mapper.MealMapper;
+import com.mumuca.diet.meal.repository.MealRepository;
 import com.mumuca.diet.model.User;
-import com.mumuca.diet.repository.*;
 import com.mumuca.diet.food.service.FoodService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;

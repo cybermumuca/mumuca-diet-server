@@ -1,7 +1,7 @@
 package com.mumuca.diet.meal.mapper;
 
-import com.mumuca.diet.dto.meal.MealDTO;
-import com.mumuca.diet.model.Meal;
+import com.mumuca.diet.meal.dto.MealDTO;
+import com.mumuca.diet.meal.model.Meal;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 

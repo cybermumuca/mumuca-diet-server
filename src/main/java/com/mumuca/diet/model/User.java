@@ -2,6 +2,9 @@ package com.mumuca.diet.model;
 
 import com.mumuca.diet.drink.model.DrinkLog;
 import com.mumuca.diet.food.model.Food;
+import com.mumuca.diet.meal.model.Meal;
+import com.mumuca.diet.meal.model.MealLog;
+import com.mumuca.diet.meal.model.MealLogPreference;
 import jakarta.persistence.*;
 import lombok.*;
 

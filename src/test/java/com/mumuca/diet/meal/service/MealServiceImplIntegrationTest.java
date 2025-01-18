@@ -1,7 +1,6 @@
 package com.mumuca.diet.meal.service;
 
 
-import com.mumuca.diet.dto.meal.*;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.food.model.Food;
 import com.mumuca.diet.food.model.NutritionalInformation;
@@ -9,13 +8,13 @@ import com.mumuca.diet.food.model.Portion;
 import com.mumuca.diet.food.repository.FoodRepository;
 import com.mumuca.diet.food.repository.NutritionalInformationRepository;
 import com.mumuca.diet.food.repository.PortionRepository;
-import com.mumuca.diet.model.Meal;
-import com.mumuca.diet.model.MealType;
+import com.mumuca.diet.meal.dto.*;
+import com.mumuca.diet.meal.model.Meal;
+import com.mumuca.diet.meal.model.MealType;
 import com.mumuca.diet.model.User;
-import com.mumuca.diet.repository.MealRepository;
+import com.mumuca.diet.meal.repository.MealRepository;
 import com.mumuca.diet.repository.UserRepository;
-import com.mumuca.diet.service.impl.MealServiceImpl;
-import com.mumuca.diet.testutil.EntityGeneratorUtil;
+import com.mumuca.diet.meal.service.impl.MealServiceImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.hibernate.Hibernate;

@@ -1,6 +1,6 @@
 package com.mumuca.diet.food.service;
 
-import com.mumuca.diet.dto.meal.MealDTO;
+import com.mumuca.diet.meal.dto.MealDTO;
 import com.mumuca.diet.food.dto.*;
 import com.mumuca.diet.food.model.Food;
 import com.mumuca.diet.food.model.NutritionalInformation;
@@ -9,10 +9,10 @@ import com.mumuca.diet.food.repository.FoodRepository;
 import com.mumuca.diet.food.repository.NutritionalInformationRepository;
 import com.mumuca.diet.food.repository.PortionRepository;
 import com.mumuca.diet.food.service.impl.FoodServiceImpl;
-import com.mumuca.diet.model.Meal;
+import com.mumuca.diet.meal.model.Meal;
 import com.mumuca.diet.food.model.Unit;
 import com.mumuca.diet.model.User;
-import com.mumuca.diet.repository.MealRepository;
+import com.mumuca.diet.meal.repository.MealRepository;
 import com.mumuca.diet.repository.UserRepository;
 import com.mumuca.diet.testutil.EntityGeneratorUtil;
 import org.junit.jupiter.api.DisplayName;

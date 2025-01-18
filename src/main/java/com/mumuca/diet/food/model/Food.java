@@ -1,8 +1,8 @@
 package com.mumuca.diet.food.model;
 
 import com.mumuca.diet.audit.AbstractAuditEntity;
-import com.mumuca.diet.model.Meal;
-import com.mumuca.diet.model.MealLog;
+import com.mumuca.diet.meal.model.Meal;
+import com.mumuca.diet.meal.model.MealLog;
 import com.mumuca.diet.model.User;
 import jakarta.persistence.*;
 import lombok.*;
