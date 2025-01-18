@@ -33,7 +33,7 @@ public class BodyServiceImpl implements BodyService {
 
         bodyRepository.save(body);
 
-        return new BodyDTO(body.getId(), bodyRegistryDTO.height(), bodyRegistryDTO.weight(), bodyRegistryDTO.date());
+        return new BodyDTO(body.getId(), bodyRegistryDTO.weight(), bodyRegistryDTO.height(), bodyRegistryDTO.date());
     }
 
     @Override
