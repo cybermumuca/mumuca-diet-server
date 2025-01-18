@@ -19,7 +19,6 @@ import com.mumuca.diet.repository.MealLogRepository;
 import com.mumuca.diet.repository.MealRepository;
 import com.mumuca.diet.repository.UserRepository;
 import com.mumuca.diet.service.impl.MealLogServiceImpl;
-import org.hibernate.Hibernate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -36,7 +35,6 @@ import java.time.LocalTime;
 import java.util.*;
 
 import static com.mumuca.diet.testutil.EntityGeneratorUtil.*;
-import static com.mumuca.diet.testutil.EntityGeneratorUtil.createPortion;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
 
@@ -1242,4 +1240,293 @@ public class MealLogServiceImplIntegrationTest {
         }
     }
 
+    @Nested
+    @DisplayName("removeMealLogFoods tests")
+    class RemoveMealLogFoodsTests {
+        @Test
+        @Transactional
+        @DisplayName("should be able to remove meal log foods")
+        void shouldBeAbleToRemoveMealLogFoods() {
+            // Arrange
+            User user = createUser();
+            userRepository.save(user);
+
+            Food food1 = createFood();
+            food1.setUser(user);
+
+            Food food2 = createFood();
+            food2.setUser(user);
+
+            foodRepository.saveAll(List.of(food1, food2));
+
+            NutritionalInformation nutritionalInformation1 = createNutritionalInformation();
+            nutritionalInformation1.setFood(food1);
+            food1.setNutritionalInformation(nutritionalInformation1);
+
+            NutritionalInformation nutritionalInformation2 = createNutritionalInformation();
+            nutritionalInformation2.setFood(food2);
+            food2.setNutritionalInformation(nutritionalInformation2);
+
+            nutritionalInformationRepository.saveAll(List.of(nutritionalInformation1, nutritionalInformation2));
+
+            Portion portion1 = createPortion();
+            portion1.setFood(food1);
+            food1.setPortion(portion1);
+
+            Portion portion2 = createPortion();
+            portion2.setFood(food2);
+            food2.setPortion(portion2);
+
+            portionRepository.saveAll(List.of(portion1, portion2));
+
+            Set<Food> foods = new HashSet<>();
+            foods.add(food1);
+            foods.add(food2);
+
+            MealLog mealLog = MealLog.builder()
+                    .type(MealType.LUNCH)
+                    .date(LocalDate.of(2036, 1, 1))
+                    .time(LocalTime.of(15, 0))
+                    .caloriesGoal(900)
+                    .foods(foods)
+                    .user(user)
+                    .build();
+
+            mealLogRepository.save(mealLog);
+
+            DeleteMealLogFoodsDTO deleteMealLogFoodsDTO = new DeleteMealLogFoodsDTO(
+                Set.of(food1.getId(), food2.getId())
+            );
+
+            // Act
+            sut.removeMealLogFoods(mealLog.getId(), deleteMealLogFoodsDTO, user.getId());
+
+            // Assert
+            MealLog mealLogInDatabase = mealLogRepository
+                    .findMealLogByIdAndUserId(mealLog.getId(), user.getId())
+                    .orElseThrow();
+
+            assertThat(mealLogInDatabase.getFoods()).hasSize(0);
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("should throw ResourceNotFoundException if meal log does not exist")
+        void shouldThrowResourceNotFoundExceptionIfMealLogDoesNotExist() {
+            // Arrange
+            User user = createUser();
+            userRepository.save(user);
+
+            Food food1 = createFood();
+            food1.setUser(user);
+
+            Food food2 = createFood();
+            food2.setUser(user);
+
+            foodRepository.saveAll(List.of(food1, food2));
+
+            NutritionalInformation nutritionalInformation1 = createNutritionalInformation();
+            nutritionalInformation1.setFood(food1);
+            food1.setNutritionalInformation(nutritionalInformation1);
+
+            NutritionalInformation nutritionalInformation2 = createNutritionalInformation();
+            nutritionalInformation2.setFood(food2);
+            food2.setNutritionalInformation(nutritionalInformation2);
+
+            nutritionalInformationRepository.saveAll(List.of(nutritionalInformation1, nutritionalInformation2));
+
+            Portion portion1 = createPortion();
+            portion1.setFood(food1);
+            food1.setPortion(portion1);
+
+            Portion portion2 = createPortion();
+            portion2.setFood(food2);
+            food2.setPortion(portion2);
+
+            portionRepository.saveAll(List.of(portion1, portion2));
+
+            DeleteMealLogFoodsDTO deleteMealLogFoodsDTO = new DeleteMealLogFoodsDTO(
+                    Set.of(food1.getId(), food2.getId())
+            );
+
+            // Act & Assert
+            assertThatThrownBy(() -> sut.removeMealLogFoods(randomUUID().toString(), deleteMealLogFoodsDTO, user.getId()))
+                    .isInstanceOf(ResourceNotFoundException.class)
+                    .hasMessageContaining("Meal Log not found.");
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("should throw ResourceNotFoundException if some foods were not found")
+        void shouldThrowResourceNotFoundExceptionIfSomeFoodsWereNotFound() {
+            // Arrange
+            User user = createUser();
+            userRepository.save(user);
+
+            Food food1 = createFood();
+            food1.setUser(user);
+
+            foodRepository.save(food1);
+
+            NutritionalInformation nutritionalInformation1 = createNutritionalInformation();
+            nutritionalInformation1.setFood(food1);
+            food1.setNutritionalInformation(nutritionalInformation1);
+
+            nutritionalInformationRepository.save(nutritionalInformation1);
+
+            Portion portion1 = createPortion();
+            portion1.setFood(food1);
+            food1.setPortion(portion1);
+
+            portionRepository.save(portion1);
+
+            Set<Food> foods = new HashSet<>();
+            foods.add(food1);
+
+            MealLog mealLog = MealLog.builder()
+                    .type(MealType.LUNCH)
+                    .date(LocalDate.of(2036, 1, 1))
+                    .time(LocalTime.of(15, 0))
+                    .caloriesGoal(900)
+                    .foods(foods)
+                    .user(user)
+                    .build();
+
+            mealLogRepository.save(mealLog);
+
+            // Act
+            DeleteMealLogFoodsDTO deleteMealLogFoodsDTO = new DeleteMealLogFoodsDTO(
+                    Set.of(food1.getId(), randomUUID().toString())
+            );
+
+            // Act & Assert
+            assertThatThrownBy(() -> sut.removeMealLogFoods(mealLog.getId(), deleteMealLogFoodsDTO, user.getId()))
+                    .isInstanceOf(ResourceNotFoundException.class)
+                    .hasMessageContaining("Some foods were not found.");
+
+            MealLog mealLogInDatabase = mealLogRepository
+                    .findMealLogByIdAndUserId(mealLog.getId(), user.getId())
+                    .orElseThrow();
+
+            assertThat(mealLogInDatabase.getFoods()).hasSize(1);
+        }
+    }
+
+    @Nested
+    @DisplayName("removeMealLogMeals tests")
+    class RemoveMealLogMealsTests {
+        @Test
+        @Transactional
+        @DisplayName("should be able to remove meal log meals")
+        void shouldBeAbleToRemoveMealLogMeals() {
+            // Arrange
+            User user = createUser();
+            userRepository.save(user);
+
+            Meal meal1 = createMeal();
+            Meal meal2 = createMeal();
+            meal1.setUser(user);
+            meal2.setUser(user);
+
+            mealRepository.saveAll(List.of(meal1, meal2));
+
+            Set<Meal> meals = new HashSet<>();
+            meals.add(meal1);
+            meals.add(meal2);
+
+            MealLog mealLog = MealLog.builder()
+                    .type(MealType.LUNCH)
+                    .date(LocalDate.of(2036, 1, 1))
+                    .time(LocalTime.of(15, 0))
+                    .caloriesGoal(900)
+                    .meals(meals)
+                    .user(user)
+                    .build();
+
+            mealLogRepository.save(mealLog);
+
+            DeleteMealLogMealsDTO deleteMealLogMealsDTO = new DeleteMealLogMealsDTO(
+                    Set.of(meal1.getId(), meal2.getId())
+            );
+
+            // Act
+            sut.removeMealLogMeals(mealLog.getId(), deleteMealLogMealsDTO, user.getId());
+
+            // Assert
+            MealLog mealLogInDatabase = mealLogRepository
+                    .findMealLogByIdAndUserId(mealLog.getId(), user.getId())
+                    .orElseThrow();
+
+            assertThat(mealLogInDatabase.getMeals()).hasSize(0);
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("should throw ResourceNotFoundException if meal log does not exist")
+        void shouldThrowResourceNotFoundExceptionIfMealLogDoesNotExist() {
+            // Arrange
+            User user = createUser();
+            userRepository.save(user);
+
+            Meal meal1 = createMeal();
+            Meal meal2 = createMeal();
+            meal1.setUser(user);
+            meal2.setUser(user);
+
+            mealRepository.saveAll(List.of(meal1, meal2));
+
+            DeleteMealLogMealsDTO deleteMealLogMealsDTO = new DeleteMealLogMealsDTO(
+                    Set.of(meal1.getId(), meal2.getId())
+            );
+
+            // Act & Assert
+            assertThatThrownBy(() -> sut.removeMealLogMeals(randomUUID().toString(), deleteMealLogMealsDTO, user.getId()))
+                    .isInstanceOf(ResourceNotFoundException.class)
+                    .hasMessageContaining("Meal Log not found.");
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("should throw ResourceNotFoundException if some foods were not found")
+        void shouldThrowResourceNotFoundExceptionIfSomeFoodsWereNotFound() {
+            // Arrange
+            User user = createUser();
+            userRepository.save(user);
+
+            Meal meal1 = createMeal();
+            meal1.setUser(user);
+
+            mealRepository.save(meal1);
+
+            Set<Meal> meals = new HashSet<>();
+            meals.add(meal1);
+
+            MealLog mealLog = MealLog.builder()
+                    .type(MealType.LUNCH)
+                    .date(LocalDate.of(2036, 1, 1))
+                    .time(LocalTime.of(15, 0))
+                    .caloriesGoal(900)
+                    .meals(meals)
+                    .user(user)
+                    .build();
+
+            mealLogRepository.save(mealLog);
+
+            // Act
+            DeleteMealLogMealsDTO deleteMealLogMealsDTO = new DeleteMealLogMealsDTO(
+                    Set.of(meal1.getId(), randomUUID().toString())
+            );
+
+            // Act & Assert
+            assertThatThrownBy(() -> sut.removeMealLogMeals(mealLog.getId(), deleteMealLogMealsDTO, user.getId()))
+                    .isInstanceOf(ResourceNotFoundException.class)
+                    .hasMessageContaining("Some meals were not found.");
+
+            MealLog mealLogInDatabase = mealLogRepository
+                    .findMealLogByIdAndUserId(mealLog.getId(), user.getId())
+                    .orElseThrow();
+
+            assertThat(mealLogInDatabase.getMeals()).hasSize(1);
+        }
+    }
 }
