@@ -1,4 +1,4 @@
-package com.mumuca.diet.exception;
+package com.mumuca.diet.meal.exception;
 
 public class UniqueMealLogPreferenceException extends RuntimeException {
     public UniqueMealLogPreferenceException(String message) {

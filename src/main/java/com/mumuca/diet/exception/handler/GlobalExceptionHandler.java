@@ -4,6 +4,7 @@ import com.mumuca.diet.auth.exception.CredentialsMismatchException;
 import com.mumuca.diet.auth.exception.UserAlreadyExistsException;
 import com.mumuca.diet.dto.ErrorResponseDTO;
 import com.mumuca.diet.exception.*;
+import com.mumuca.diet.meal.exception.UniqueMealLogPreferenceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.support.DefaultMessageSourceResolvable;

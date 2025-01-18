@@ -5,7 +5,7 @@ import com.mumuca.diet.meal.dto.CreateMealLogPreferenceDTO;
 import com.mumuca.diet.meal.dto.MealLogPreferenceDTO;
 import com.mumuca.diet.meal.dto.UpdateMealLogPreferenceDTO;
 import com.mumuca.diet.exception.ResourceNotFoundException;
-import com.mumuca.diet.exception.UniqueMealLogPreferenceException;
+import com.mumuca.diet.meal.exception.UniqueMealLogPreferenceException;
 import com.mumuca.diet.exception.UserNotRegisteredYetException;
 import com.mumuca.diet.meal.model.MealLogPreference;
 import com.mumuca.diet.meal.model.MealType;
