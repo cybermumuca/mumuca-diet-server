@@ -9,7 +9,7 @@ import com.mumuca.diet.auth.model.Role;
 import com.mumuca.diet.auth.model.User;
 import com.mumuca.diet.auth.repository.RoleRepository;
 import com.mumuca.diet.auth.repository.UserRepository;
-import com.mumuca.diet.security.JwtBlacklist;
+import com.mumuca.diet.service.impl.JwtBlacklist;
 import com.mumuca.diet.auth.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

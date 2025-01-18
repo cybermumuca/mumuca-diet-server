@@ -1,4 +1,4 @@
-package com.mumuca.diet.security;
+package com.mumuca.diet.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

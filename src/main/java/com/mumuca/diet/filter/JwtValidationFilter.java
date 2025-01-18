@@ -1,9 +1,8 @@
-package com.mumuca.diet.security.filter;
+package com.mumuca.diet.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mumuca.diet.dto.ErrorResponseDTO;
-import com.mumuca.diet.security.JwtBlacklist;
-import com.mumuca.diet.service.JwtService;
+import com.mumuca.diet.service.impl.JwtBlacklist;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -13,7 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,15 +19,14 @@ import org.springframework.security.oauth2.core.DefaultOAuth2AuthenticatedPrinci
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
-import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,7 +38,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @AllArgsConstructor
 public class JwtValidationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final JwtDecoder jwtDecoder;
     private final JwtBlacklist jwtBlacklist;
     private final ObjectMapper objectMapper;
 
@@ -78,7 +75,7 @@ public class JwtValidationFilter extends OncePerRequestFilter {
         }
 
         try {
-            Jwt jwt = jwtService.decode(jwtFromCookie);
+            Jwt jwt = jwtDecoder.decode(jwtFromCookie);
 
             if (jwtBlacklist.isTokenBlacklisted(jwt.getTokenValue())) {
                 ErrorResponseDTO<Void> errorResponse = new ErrorResponseDTO<>(
