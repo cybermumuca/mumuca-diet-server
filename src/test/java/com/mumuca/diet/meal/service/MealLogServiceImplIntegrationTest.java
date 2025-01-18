@@ -41,6 +41,7 @@ import static org.assertj.core.api.Assertions.*;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DisplayName("MealLogServiceImpl Integration Tests")
 public class MealLogServiceImplIntegrationTest {
+
     @Autowired
     private MealLogServiceImpl sut;
 
@@ -1121,16 +1122,12 @@ public class MealLogServiceImplIntegrationTest {
 
             mealRepository.saveAll(List.of(meal1, meal2));
 
-            Set<Meal> meals = new HashSet<>();
-            meals.add(meal1);
-            meals.add(meal2);
-
             MealLog mealLog = MealLog.builder()
                     .type(MealType.LUNCH)
                     .date(LocalDate.of(2036, 1, 1))
                     .time(LocalTime.of(15, 0))
                     .caloriesGoal(900)
-                    .meals(meals)
+                    .meals(new HashSet<>())
                     .user(user)
                     .build();
 
