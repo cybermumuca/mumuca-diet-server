@@ -3,11 +3,14 @@ package com.mumuca.diet.meal.service.impl;
 import com.mumuca.diet.food.dto.FoodDTO;
 import com.mumuca.diet.food.dto.NutritionalInformationDTO;
 import com.mumuca.diet.food.dto.PortionDTO;
+import com.mumuca.diet.food.mapper.NutritionalInformationMapper;
+import com.mumuca.diet.food.mapper.PortionMapper;
 import com.mumuca.diet.meal.dto.*;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.food.model.Food;
 import com.mumuca.diet.food.model.NutritionalInformation;
 import com.mumuca.diet.food.repository.FoodRepository;
+import com.mumuca.diet.meal.mapper.MealLogMapper;
 import com.mumuca.diet.meal.model.Meal;
 import com.mumuca.diet.meal.model.MealLog;
 import com.mumuca.diet.meal.repository.MealLogRepository;
@@ -36,6 +39,10 @@ public class MealLogServiceImpl implements MealLogService {
     private final MealLogRepository mealLogRepository;
     private final FoodRepository foodRepository;
     private final MealRepository mealRepository;
+
+    private final MealLogMapper mealLogMapper;
+    private final NutritionalInformationMapper nutritionalInformationMapper;
+    private final PortionMapper portionMapper;
 
     private MealNutritionalInformationDTO getDefaultNutritionalInformation() {
         return new MealNutritionalInformationDTO(
@@ -86,13 +93,7 @@ public class MealLogServiceImpl implements MealLogService {
 
         mealLogRepository.save(mealLog);
 
-        return new MealLogDTO(
-                mealLog.getId(),
-                mealLog.getType(),
-                mealLog.getDate(),
-                mealLog.getTime(),
-                mealLog.getCaloriesGoal()
-        );
+        return mealLogMapper.fromMealLogToMealLogDTO(mealLog);
     }
 
     @Override
@@ -106,13 +107,7 @@ public class MealLogServiceImpl implements MealLogService {
     @Override
     public MealLogDTO getMealLog(String mealLogId, String userId) {
         return mealLogRepository.findMealLogByIdAndUserId(mealLogId, userId)
-                .map(mealLog -> new MealLogDTO(
-                        mealLog.getId(),
-                        mealLog.getType(),
-                        mealLog.getDate(),
-                        mealLog.getTime(),
-                        mealLog.getCaloriesGoal()
-                ))
+                .map(mealLogMapper::fromMealLogToMealLogDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Meal Log not found."));
     }
 
@@ -150,37 +145,9 @@ public class MealLogServiceImpl implements MealLogService {
                 .findAllByMealLogsIdAndUserId(mealLogId, userId)
                 .stream()
                 .map(food -> {
-                    NutritionalInformationDTO nutritionalInformationDTO = null;
+                    NutritionalInformationDTO nutritionalInformationDTO = nutritionalInformationMapper.fromNIToNIDTO(food.getNutritionalInformation());
 
-                    if (food.getNutritionalInformation() != null) {
-                        NutritionalInformation ni = food.getNutritionalInformation();
-                        nutritionalInformationDTO = new NutritionalInformationDTO(
-                                ni.getId(),
-                                ni.getCalories(),
-                                ni.getCarbohydrates(),
-                                ni.getProtein(),
-                                ni.getFat(),
-                                ni.getMonounsaturatedFat(),
-                                ni.getSaturatedFat(),
-                                ni.getPolyunsaturatedFat(),
-                                ni.getTransFat(),
-                                ni.getCholesterol(),
-                                ni.getSodium(),
-                                ni.getPotassium(),
-                                ni.getFiber(),
-                                ni.getSugar(),
-                                ni.getCalcium(),
-                                ni.getIron(),
-                                ni.getVitaminA(),
-                                ni.getVitaminC()
-                        );
-                    }
-                    var portionDTO = new PortionDTO(
-                            food.getPortion().getId(),
-                            food.getPortion().getAmount(),
-                            food.getPortion().getUnit(),
-                            food.getPortion().getDescription()
-                    );
+                    PortionDTO portionDTO = portionMapper.fromPortionToPortionDTO(food.getPortion());
 
                     return new FoodDTO(
                             food.getId(),
@@ -207,38 +174,9 @@ public class MealLogServiceImpl implements MealLogService {
                         meal.getFoods()
                                 .stream()
                                 .map(food -> {
-                                    NutritionalInformationDTO nutritionalInformationDTO = null;
+                                    NutritionalInformationDTO nutritionalInformationDTO = nutritionalInformationMapper.fromNIToNIDTO(food.getNutritionalInformation());
 
-                                    if (food.getNutritionalInformation() != null) {
-                                        NutritionalInformation ni = food.getNutritionalInformation();
-                                        nutritionalInformationDTO = new NutritionalInformationDTO(
-                                                ni.getId(),
-                                                ni.getCalories(),
-                                                ni.getCarbohydrates(),
-                                                ni.getProtein(),
-                                                ni.getFat(),
-                                                ni.getMonounsaturatedFat(),
-                                                ni.getSaturatedFat(),
-                                                ni.getPolyunsaturatedFat(),
-                                                ni.getTransFat(),
-                                                ni.getCholesterol(),
-                                                ni.getSodium(),
-                                                ni.getPotassium(),
-                                                ni.getFiber(),
-                                                ni.getSugar(),
-                                                ni.getCalcium(),
-                                                ni.getIron(),
-                                                ni.getVitaminA(),
-                                                ni.getVitaminC()
-                                        );
-                                    }
-
-                                    var portionDTO = new PortionDTO(
-                                            food.getPortion().getId(),
-                                            food.getPortion().getAmount(),
-                                            food.getPortion().getUnit(),
-                                            food.getPortion().getDescription()
-                                    );
+                                    PortionDTO portionDTO = portionMapper.fromPortionToPortionDTO(food.getPortion());
 
                                     return new FoodDTO(
                                             food.getId(),
@@ -329,12 +267,6 @@ public class MealLogServiceImpl implements MealLogService {
 
             return Optional.of(nutritionalInformation);
         } catch (CompletionException e) {
-            Throwable cause = e.getCause();
-
-            if (cause instanceof ResourceNotFoundException) {
-                throw (ResourceNotFoundException) cause;
-            }
-
             throw new RuntimeException("Failed to calculate nutritional information for Meal Log with ID: " + mealLogId, e);
         }
     }
