@@ -8,6 +8,9 @@ import com.mumuca.diet.food.model.Unit;
 import com.mumuca.diet.model.*;
 
 import java.math.BigDecimal;
+import java.util.concurrent.TimeUnit;
+
+import static java.time.ZoneId.systemDefault;
 
 public class EntityGeneratorUtil {
     public static final Faker faker = new Faker();
@@ -65,5 +68,18 @@ public class EntityGeneratorUtil {
                 .type(MealType.LUNCH)
                 .description(faker.lorem().characters(15))
                 .build();
+    }
+
+    public static Goal createGoal() {
+        Goal goal = new Goal();
+        goal.setGoalType(faker.options().option(GoalType.class));
+        goal.setTargetCalories(faker.number().numberBetween(1500, 4000));
+        goal.setTargetWeight(BigDecimal.valueOf(faker.number().numberBetween(10, 100)));
+        goal.setCarbsTarget(BigDecimal.valueOf(faker.number().numberBetween(10, 100)));
+        goal.setProteinTarget(BigDecimal.valueOf(faker.number().numberBetween(1, 30)));
+        goal.setFatTarget(BigDecimal.valueOf(faker.number().numberBetween(0, 50)));
+        goal.setWaterIntakeTarget(BigDecimal.valueOf(faker.number().numberBetween(1, 4)));
+        goal.setDeadline(faker.date().future(120, TimeUnit.DAYS).toInstant().atZone(systemDefault()).toLocalDate());
+        return goal;
     }
 }
