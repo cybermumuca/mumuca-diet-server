@@ -1,5 +1,6 @@
 package com.mumuca.diet.service.impl;
 
+import com.mumuca.diet.auth.model.User;
 import com.mumuca.diet.dto.*;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.exception.UserAlreadyRegisteredException;
@@ -8,7 +9,7 @@ import com.mumuca.diet.model.*;
 import com.mumuca.diet.repository.BodyRepository;
 import com.mumuca.diet.repository.GoalRepository;
 import com.mumuca.diet.repository.ProfileRepository;
-import com.mumuca.diet.repository.UserRepository;
+import com.mumuca.diet.auth.repository.UserRepository;
 import com.mumuca.diet.service.UserService;
 import com.mumuca.diet.util.NutritionalCalculator;
 import jakarta.transaction.Transactional;

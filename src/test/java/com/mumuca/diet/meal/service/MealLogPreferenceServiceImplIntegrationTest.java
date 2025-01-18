@@ -1,5 +1,6 @@
 package com.mumuca.diet.meal.service;
 
+import com.mumuca.diet.auth.model.User;
 import com.mumuca.diet.meal.dto.CreateMealLogPreferenceDTO;
 import com.mumuca.diet.meal.dto.MealLogPreferenceDTO;
 import com.mumuca.diet.meal.dto.UpdateMealLogPreferenceDTO;
@@ -11,7 +12,7 @@ import com.mumuca.diet.meal.model.MealType;
 import com.mumuca.diet.model.*;
 import com.mumuca.diet.repository.GoalRepository;
 import com.mumuca.diet.meal.repository.MealLogPreferenceRepository;
-import com.mumuca.diet.repository.UserRepository;
+import com.mumuca.diet.auth.repository.UserRepository;
 import com.mumuca.diet.meal.service.impl.MealLogPreferenceServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

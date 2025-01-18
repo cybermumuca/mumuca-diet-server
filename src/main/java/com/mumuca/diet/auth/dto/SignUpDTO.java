@@ -1,4 +1,4 @@
-package com.mumuca.diet.dto.auth;
+package com.mumuca.diet.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

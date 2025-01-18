@@ -8,7 +8,7 @@ import com.mumuca.diet.exception.UniqueMealLogPreferenceException;
 import com.mumuca.diet.exception.UserNotRegisteredYetException;
 import com.mumuca.diet.meal.model.MealLogPreference;
 import com.mumuca.diet.meal.model.MealType;
-import com.mumuca.diet.model.User;
+import com.mumuca.diet.auth.model.User;
 import com.mumuca.diet.repository.GoalRepository;
 import com.mumuca.diet.meal.repository.MealLogPreferenceRepository;
 import com.mumuca.diet.meal.service.MealLogPreferenceService;

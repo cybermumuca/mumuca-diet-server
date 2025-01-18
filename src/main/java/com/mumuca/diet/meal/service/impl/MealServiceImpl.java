@@ -12,7 +12,7 @@ import com.mumuca.diet.meal.dto.*;
 import com.mumuca.diet.meal.mapper.MealMapper;
 import com.mumuca.diet.meal.model.Meal;
 import com.mumuca.diet.food.model.NutritionalInformation;
-import com.mumuca.diet.model.User;
+import com.mumuca.diet.auth.model.User;
 import com.mumuca.diet.food.repository.FoodRepository;
 import com.mumuca.diet.meal.repository.MealRepository;
 import com.mumuca.diet.meal.service.MealService;

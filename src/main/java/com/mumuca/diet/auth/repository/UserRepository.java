@@ -1,6 +1,6 @@
-package com.mumuca.diet.repository;
+package com.mumuca.diet.auth.repository;
 
-import com.mumuca.diet.model.User;
+import com.mumuca.diet.auth.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

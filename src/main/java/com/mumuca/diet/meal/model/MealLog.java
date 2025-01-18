@@ -2,7 +2,7 @@ package com.mumuca.diet.meal.model;
 
 import com.mumuca.diet.audit.AbstractAuditEntity;
 import com.mumuca.diet.food.model.Food;
-import com.mumuca.diet.model.User;
+import com.mumuca.diet.auth.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcType;

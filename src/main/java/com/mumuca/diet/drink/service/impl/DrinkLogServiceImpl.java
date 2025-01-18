@@ -6,7 +6,7 @@ import com.mumuca.diet.drink.dto.DrinkLogDTO;
 import com.mumuca.diet.drink.dto.UpdateDrinkLogDTO;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.drink.model.DrinkLog;
-import com.mumuca.diet.model.User;
+import com.mumuca.diet.auth.model.User;
 import com.mumuca.diet.drink.repository.DrinkLogRepository;
 import com.mumuca.diet.drink.service.DrinkLogService;
 import jakarta.transaction.Transactional;

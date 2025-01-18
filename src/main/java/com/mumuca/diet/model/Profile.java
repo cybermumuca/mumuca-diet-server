@@ -1,6 +1,7 @@
 package com.mumuca.diet.model;
 
 import com.mumuca.diet.audit.AbstractAuditEntity;
+import com.mumuca.diet.auth.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

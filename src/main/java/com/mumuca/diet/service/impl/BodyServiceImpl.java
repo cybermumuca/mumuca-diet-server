@@ -5,7 +5,7 @@ import com.mumuca.diet.dto.body.BodyRegistryDTO;
 import com.mumuca.diet.dto.body.BodyRegistryUpdateDTO;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.model.Body;
-import com.mumuca.diet.model.User;
+import com.mumuca.diet.auth.model.User;
 import com.mumuca.diet.repository.BodyRepository;
 import com.mumuca.diet.service.BodyService;
 import lombok.AllArgsConstructor;

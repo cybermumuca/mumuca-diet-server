@@ -1,4 +1,4 @@
-package com.mumuca.diet.dto.auth;
+package com.mumuca.diet.auth.dto;
 
 public record SignInDTO(
         String email,

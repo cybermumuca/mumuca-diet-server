@@ -2,7 +2,7 @@ package com.mumuca.diet.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mumuca.diet.dto.ErrorResponseDTO;
-import com.mumuca.diet.repository.UserRepository;
+import com.mumuca.diet.auth.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,6 +1,7 @@
 package com.mumuca.diet.testutil;
 
 import com.github.javafaker.Faker;
+import com.mumuca.diet.auth.model.User;
 import com.mumuca.diet.food.model.Food;
 import com.mumuca.diet.food.model.NutritionalInformation;
 import com.mumuca.diet.food.model.Portion;

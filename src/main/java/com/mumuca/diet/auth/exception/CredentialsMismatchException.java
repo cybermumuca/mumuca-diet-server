@@ -1,4 +1,4 @@
-package com.mumuca.diet.exception;
+package com.mumuca.diet.auth.exception;
 
 public class CredentialsMismatchException extends RuntimeException {
     public CredentialsMismatchException(String message) {

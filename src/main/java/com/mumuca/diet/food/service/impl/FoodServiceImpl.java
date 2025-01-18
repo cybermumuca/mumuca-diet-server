@@ -13,7 +13,7 @@ import com.mumuca.diet.food.model.NutritionalInformation;
 import com.mumuca.diet.food.model.Portion;
 import com.mumuca.diet.meal.mapper.MealMapper;
 import com.mumuca.diet.meal.repository.MealRepository;
-import com.mumuca.diet.model.User;
+import com.mumuca.diet.auth.model.User;
 import com.mumuca.diet.food.service.FoodService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;

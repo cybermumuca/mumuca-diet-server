@@ -1,16 +1,16 @@
-package com.mumuca.diet.service.impl;
+package com.mumuca.diet.auth.service.impl;
 
-import com.mumuca.diet.dto.auth.SignInDTO;
-import com.mumuca.diet.dto.auth.SignInResponseDTO;
-import com.mumuca.diet.dto.auth.SignUpDTO;
-import com.mumuca.diet.exception.CredentialsMismatchException;
-import com.mumuca.diet.exception.UserAlreadyExistsException;
-import com.mumuca.diet.model.Role;
-import com.mumuca.diet.model.User;
-import com.mumuca.diet.repository.RoleRepository;
-import com.mumuca.diet.repository.UserRepository;
+import com.mumuca.diet.auth.dto.SignInDTO;
+import com.mumuca.diet.auth.dto.SignInResponseDTO;
+import com.mumuca.diet.auth.dto.SignUpDTO;
+import com.mumuca.diet.auth.exception.CredentialsMismatchException;
+import com.mumuca.diet.auth.exception.UserAlreadyExistsException;
+import com.mumuca.diet.auth.model.Role;
+import com.mumuca.diet.auth.model.User;
+import com.mumuca.diet.auth.repository.RoleRepository;
+import com.mumuca.diet.auth.repository.UserRepository;
 import com.mumuca.diet.security.JwtBlacklist;
-import com.mumuca.diet.service.AuthService;
+import com.mumuca.diet.auth.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;

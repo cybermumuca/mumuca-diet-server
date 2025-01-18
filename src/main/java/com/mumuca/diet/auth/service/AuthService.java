@@ -1,8 +1,8 @@
-package com.mumuca.diet.service;
+package com.mumuca.diet.auth.service;
 
-import com.mumuca.diet.dto.auth.SignInDTO;
-import com.mumuca.diet.dto.auth.SignInResponseDTO;
-import com.mumuca.diet.dto.auth.SignUpDTO;
+import com.mumuca.diet.auth.dto.SignInDTO;
+import com.mumuca.diet.auth.dto.SignInResponseDTO;
+import com.mumuca.diet.auth.dto.SignUpDTO;
 
 import java.time.Instant;
 

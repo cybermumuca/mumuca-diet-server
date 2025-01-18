@@ -1,5 +1,6 @@
 package com.mumuca.diet.meal.service.impl;
 
+import com.mumuca.diet.auth.model.User;
 import com.mumuca.diet.food.dto.FoodDTO;
 import com.mumuca.diet.food.dto.NutritionalInformationDTO;
 import com.mumuca.diet.food.dto.PortionDTO;
@@ -8,14 +9,12 @@ import com.mumuca.diet.food.mapper.PortionMapper;
 import com.mumuca.diet.meal.dto.*;
 import com.mumuca.diet.exception.ResourceNotFoundException;
 import com.mumuca.diet.food.model.Food;
-import com.mumuca.diet.food.model.NutritionalInformation;
 import com.mumuca.diet.food.repository.FoodRepository;
 import com.mumuca.diet.meal.mapper.MealLogMapper;
 import com.mumuca.diet.meal.model.Meal;
 import com.mumuca.diet.meal.model.MealLog;
 import com.mumuca.diet.meal.repository.MealLogRepository;
 import com.mumuca.diet.meal.repository.MealRepository;
-import com.mumuca.diet.model.*;
 import com.mumuca.diet.meal.service.MealLogService;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;

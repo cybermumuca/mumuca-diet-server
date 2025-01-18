@@ -1,9 +1,9 @@
-package com.mumuca.diet.controller;
+package com.mumuca.diet.auth.controller;
 
-import com.mumuca.diet.dto.auth.SignInDTO;
-import com.mumuca.diet.dto.auth.SignInResponseDTO;
-import com.mumuca.diet.dto.auth.SignUpDTO;
-import com.mumuca.diet.service.AuthService;
+import com.mumuca.diet.auth.dto.SignInDTO;
+import com.mumuca.diet.auth.dto.SignInResponseDTO;
+import com.mumuca.diet.auth.dto.SignUpDTO;
+import com.mumuca.diet.auth.service.AuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;

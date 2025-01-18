@@ -1,5 +1,7 @@
 package com.mumuca.diet.exception.handler;
 
+import com.mumuca.diet.auth.exception.CredentialsMismatchException;
+import com.mumuca.diet.auth.exception.UserAlreadyExistsException;
 import com.mumuca.diet.dto.ErrorResponseDTO;
 import com.mumuca.diet.exception.*;
 import lombok.extern.slf4j.Slf4j;
