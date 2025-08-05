@@ -2,7 +2,7 @@ package com.mumuca.diet.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mumuca.diet.dto.ErrorResponseDTO;
-import com.mumuca.diet.service.impl.JwtBlacklist;
+import com.mumuca.diet.auth.service.impl.JwtBlacklist;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

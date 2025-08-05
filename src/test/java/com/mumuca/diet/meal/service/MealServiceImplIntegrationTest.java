@@ -113,7 +113,7 @@ public class MealServiceImplIntegrationTest {
 
             assertThat(mealInDatabase.getFoods().size()).isEqualTo(1);
 
-            Food mealFood = foodRepository.findById(mealInDatabase.getFoods().stream().toList().getFirst().getId()).orElseThrow();
+            Food mealFood = foodRepository.findById(mealInDatabase.getFoods().stream().toList().get(0).getId()).orElseThrow();
 
             assertThat(mealFood.getId()).isEqualTo(food.getId());
             assertThat(mealFood.getTitle()).isEqualTo(food.getTitle());
@@ -203,7 +203,7 @@ public class MealServiceImplIntegrationTest {
 
             assertThat(result.foods().size()).isEqualTo(1);
 
-            var mealFood = result.foods().getFirst();
+            var mealFood = result.foods().get(0);
             assertThat(mealFood.id()).isEqualTo(food.getId());
             assertThat(mealFood.brand()).isEqualTo(food.getBrand());
             assertThat(mealFood.title()).isEqualTo(food.getTitle());

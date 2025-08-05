@@ -270,7 +270,7 @@ public class MealLogServiceImplIntegrationTest {
             assertThat(result).isNotNull();
             assertThat(result.size()).isEqualTo(1);
 
-            var mealLogResult = result.getFirst();
+            var mealLogResult = result.get(0);
 
             assertThat(mealLogResult).isNotNull();
             assertThat(mealLogResult.type()).isEqualTo(MealType.LUNCH);
@@ -354,7 +354,7 @@ public class MealLogServiceImplIntegrationTest {
             assertThat(results).isNotNull();
             assertThat(results.size()).isEqualTo(1);
 
-            var mealLogResult = results.getFirst();
+            var mealLogResult = results.get(0);
 
             assertThat(mealLogResult).isNotNull();
             assertThat(mealLogResult.type()).isEqualTo(MealType.LUNCH);

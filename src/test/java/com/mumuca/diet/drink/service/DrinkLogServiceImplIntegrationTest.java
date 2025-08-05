@@ -60,10 +60,10 @@ class DrinkLogServiceImplIntegrationTest {
 
         // Assert
         assertThat(result).hasSize(1);
-        assertThat(result.getFirst().id()).isEqualTo(drinkLog.getId());
-        assertThat(result.getFirst().date()).isEqualTo(LocalDate.of(2025, 1, 1));
-        assertThat(result.getFirst().time()).isEqualTo(LocalTime.of(10, 0));
-        assertThat(result.getFirst().liquidIntake()).isEqualTo(new BigDecimal("500"));
+        assertThat(result.get(0).id()).isEqualTo(drinkLog.getId());
+        assertThat(result.get(0).date()).isEqualTo(LocalDate.of(2025, 1, 1));
+        assertThat(result.get(0).time()).isEqualTo(LocalTime.of(10, 0));
+        assertThat(result.get(0).liquidIntake()).isEqualTo(new BigDecimal("500"));
     }
 
     @Test

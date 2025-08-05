@@ -9,8 +9,13 @@ import com.mumuca.diet.meal.exception.UniqueMealLogPreferenceException;
 import com.mumuca.diet.exception.UserNotRegisteredYetException;
 import com.mumuca.diet.meal.model.MealLogPreference;
 import com.mumuca.diet.meal.model.MealType;
-import com.mumuca.diet.model.*;
-import com.mumuca.diet.repository.GoalRepository;
+import com.mumuca.diet.goal.model.Goal;
+import com.mumuca.diet.model.ActivityLevel;
+import com.mumuca.diet.model.Gender;
+import com.mumuca.diet.model.GoalType;
+import com.mumuca.diet.body.model.Body;
+import com.mumuca.diet.profile.model.Profile;
+import com.mumuca.diet.goal.repository.GoalRepository;
 import com.mumuca.diet.meal.repository.MealLogPreferenceRepository;
 import com.mumuca.diet.auth.repository.UserRepository;
 import com.mumuca.diet.meal.service.impl.MealLogPreferenceServiceImpl;
@@ -84,7 +89,7 @@ public class MealLogPreferenceServiceImplIntegrationTest {
                             tuple(MealType.LUNCH, LocalTime.of(12, 0))
                     );
 
-            var mealLogResult1 = result.getFirst();
+            var mealLogResult1 = result.get(0);
 
             var mealLogPreferenceInDatabase1 = mealLogPreferenceRepository
                     .findById(mealLogResult1.id())
@@ -94,7 +99,7 @@ public class MealLogPreferenceServiceImplIntegrationTest {
             assertThat(mealLogPreferenceInDatabase1.getTime()).isEqualTo(mealLogResult1.time());
             assertThat(mealLogPreferenceInDatabase1.getCaloriesGoal()).isEqualTo(mealLogResult1.caloriesGoal());
 
-            var mealLogResult2 = result.getLast();
+            var mealLogResult2 = result.get(result.size() - 1);
 
             var mealLogPreferenceInDatabase2 = mealLogPreferenceRepository.findById(mealLogResult2.id()).orElseThrow();
 
