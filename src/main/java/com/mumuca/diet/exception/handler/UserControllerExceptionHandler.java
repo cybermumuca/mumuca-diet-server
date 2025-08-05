@@ -1,6 +1,6 @@
 package com.mumuca.diet.exception.handler;
 
-import com.mumuca.diet.controller.UserController;
+import com.mumuca.diet.profile.controller.UserController;
 import com.mumuca.diet.dto.ErrorResponseDTO;
 import com.mumuca.diet.exception.UserAlreadyRegisteredException;
 import org.springframework.core.Ordered;

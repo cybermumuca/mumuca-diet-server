@@ -9,7 +9,7 @@ import com.mumuca.diet.exception.UserNotRegisteredYetException;
 import com.mumuca.diet.meal.model.MealLogPreference;
 import com.mumuca.diet.meal.model.MealType;
 import com.mumuca.diet.auth.model.User;
-import com.mumuca.diet.repository.GoalRepository;
+import com.mumuca.diet.goal.repository.GoalRepository;
 import com.mumuca.diet.meal.repository.MealLogPreferenceRepository;
 import com.mumuca.diet.meal.service.MealLogPreferenceService;
 import lombok.AllArgsConstructor;

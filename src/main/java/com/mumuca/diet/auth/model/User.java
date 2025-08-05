@@ -5,9 +5,9 @@ import com.mumuca.diet.food.model.Food;
 import com.mumuca.diet.meal.model.Meal;
 import com.mumuca.diet.meal.model.MealLog;
 import com.mumuca.diet.meal.model.MealLogPreference;
-import com.mumuca.diet.model.Body;
-import com.mumuca.diet.model.Goal;
-import com.mumuca.diet.model.Profile;
+import com.mumuca.diet.body.model.Body;
+import com.mumuca.diet.goal.model.Goal;
+import com.mumuca.diet.profile.model.Profile;
 import jakarta.persistence.*;
 import lombok.*;
 

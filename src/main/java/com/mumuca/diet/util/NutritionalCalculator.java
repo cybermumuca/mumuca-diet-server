@@ -1,6 +1,6 @@
 package com.mumuca.diet.util;
 
-import com.mumuca.diet.dto.MacronutrientDTO;
+import com.mumuca.diet.calculator.dto.MacronutrientDTO;
 import com.mumuca.diet.model.ActivityLevel;
 import com.mumuca.diet.model.Gender;
 import com.mumuca.diet.model.GoalType;

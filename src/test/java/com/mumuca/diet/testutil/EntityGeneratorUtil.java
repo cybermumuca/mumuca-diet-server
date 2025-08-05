@@ -8,7 +8,12 @@ import com.mumuca.diet.food.model.Portion;
 import com.mumuca.diet.food.model.Unit;
 import com.mumuca.diet.meal.model.Meal;
 import com.mumuca.diet.meal.model.MealType;
-import com.mumuca.diet.model.*;
+import com.mumuca.diet.goal.model.Goal;
+import com.mumuca.diet.model.ActivityLevel;
+import com.mumuca.diet.model.Gender;
+import com.mumuca.diet.model.GoalType;
+import com.mumuca.diet.body.model.Body;
+import com.mumuca.diet.profile.model.Profile;
 
 import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
