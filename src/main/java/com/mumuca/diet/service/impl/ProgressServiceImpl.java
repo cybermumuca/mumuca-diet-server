@@ -56,17 +56,18 @@ public class ProgressServiceImpl implements ProgressService {
                 .findByDateAndUserId(date, userId)
                 .stream()
                 .map(mealLog -> {
-                    try (var virtualThreadExecutor = Executors.newVirtualThreadPerTaskExecutor()) {
+                    var fixedThreadExecutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+                    try {
                         var mealLogId = mealLog.getId();
 
                         var mealLogHasFoodsFuture = CompletableFuture.supplyAsync(
                                 () -> mealLogRepository.existsFoodsByIdAndUserId(mealLogId, userId),
-                                virtualThreadExecutor
+                                fixedThreadExecutor
                         );
 
                         var mealLogHasMealsFuture = CompletableFuture.supplyAsync(
                                 () -> mealLogRepository.existsMealsByIdAndUserId(mealLogId, userId),
-                                virtualThreadExecutor
+                                fixedThreadExecutor
                         );
 
                         CompletableFuture<MealNutritionalInformationDTO> foodsFuture = mealLogHasFoodsFuture
@@ -79,7 +80,7 @@ public class ProgressServiceImpl implements ProgressService {
                                         return mealLogRepository
                                                 .sumFoodsNutritionalInformationByMealLogIdAndUserId(mealLogId, userId)
                                                 .orElseGet(this::getDefaultNutritionalInformation);
-                                    }, virtualThreadExecutor);
+                                    }, fixedThreadExecutor);
                                 });
 
                         CompletableFuture<MealNutritionalInformationDTO> mealsFuture = mealLogHasMealsFuture
@@ -92,7 +93,7 @@ public class ProgressServiceImpl implements ProgressService {
                                         return mealLogRepository
                                                 .sumMealsNutritionalInformationByMealLogIdAndUserId(mealLogId, userId)
                                                 .orElseGet(this::getDefaultNutritionalInformation);
-                                    }, virtualThreadExecutor);
+                                    }, fixedThreadExecutor);
                                 });
 
                         var nutritionalInformationFuture = foodsFuture
@@ -125,6 +126,8 @@ public class ProgressServiceImpl implements ProgressService {
                         }
 
                         throw new RuntimeException("Unexpected error occurred while getting daily progress.", e);
+                    } finally {
+                        fixedThreadExecutor.shutdown();
                     }
                 })
                 .reduce(getDefaultNutritionalInformation(), (dto1, dto2) -> new MealNutritionalInformationDTO(

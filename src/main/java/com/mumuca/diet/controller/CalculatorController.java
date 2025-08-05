@@ -105,8 +105,8 @@ public class CalculatorController {
                 .status(HttpStatus.OK)
                 .body(
                         Map.of(
-                                "idealMinimumWeight", idealWeight.getFirst().floatValue(),
-                                "idealMaximumWeight", idealWeight.getLast().floatValue()
+                                "idealMinimumWeight", idealWeight.get(0).floatValue(),
+                                "idealMaximumWeight", idealWeight.get(idealWeight.size() - 1).floatValue()
                         )
                 );
     }

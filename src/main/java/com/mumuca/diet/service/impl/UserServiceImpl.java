@@ -151,8 +151,8 @@ public class UserServiceImpl implements UserService {
 
         return new DiagnosisDTO(
                 bmi,
-                idealWeight.getFirst().floatValue(),
-                idealWeight.getLast().floatValue(),
+                idealWeight.get(0).floatValue(),
+                idealWeight.get(idealWeight.size() - 1).floatValue(),
                 fatRate
         );
     }

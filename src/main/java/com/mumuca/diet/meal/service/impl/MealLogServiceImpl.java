@@ -198,15 +198,16 @@ public class MealLogServiceImpl implements MealLogService {
             throw new ResourceNotFoundException("Meal Log not found.");
         }
 
-        try (var virtualThreadExecutor = Executors.newVirtualThreadPerTaskExecutor()) {
+        var fixedThreadExecutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        try {
             var mealLogHasFoodsFuture = CompletableFuture.supplyAsync(
                     () -> mealLogRepository.existsFoodsByIdAndUserId(mealLogId, userId),
-                    virtualThreadExecutor
+                    fixedThreadExecutor
             );
 
             var mealLogHasMealsFuture = CompletableFuture.supplyAsync(
                     () -> mealLogRepository.existsMealsByIdAndUserId(mealLogId, userId),
-                    virtualThreadExecutor
+                    fixedThreadExecutor
             );
 
             CompletableFuture<MealNutritionalInformationDTO> foodsFuture = mealLogHasFoodsFuture
@@ -219,7 +220,7 @@ public class MealLogServiceImpl implements MealLogService {
                             return mealLogRepository
                                     .sumFoodsNutritionalInformationByMealLogIdAndUserId(mealLogId, userId)
                                     .orElseGet(this::getDefaultNutritionalInformation);
-                        }, virtualThreadExecutor);
+                        }, fixedThreadExecutor);
                     }
             );
 
@@ -233,7 +234,7 @@ public class MealLogServiceImpl implements MealLogService {
                             return mealLogRepository
                                     .sumMealsNutritionalInformationByMealLogIdAndUserId(mealLogId, userId)
                                     .orElseGet(this::getDefaultNutritionalInformation);
-                        }, virtualThreadExecutor);
+                        }, fixedThreadExecutor);
             });
 
             var nutritionalInformationFuture = foodsFuture
@@ -267,6 +268,8 @@ public class MealLogServiceImpl implements MealLogService {
             return Optional.of(nutritionalInformation);
         } catch (CompletionException e) {
             throw new RuntimeException("Failed to calculate nutritional information for Meal Log with ID: " + mealLogId, e);
+        } finally {
+            fixedThreadExecutor.shutdown();
         }
     }
 
